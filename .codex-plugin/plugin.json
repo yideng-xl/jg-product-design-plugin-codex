@@ -1,0 +1,37 @@
+{
+  "name": "jg-product-design-plugin-codex",
+  "version": "0.1.0",
+  "description": "Product-design skills for B-side PRD discussion, HTML prototype generation, prototype self-check, and ZenTao SR preparation.",
+  "author": {
+    "name": "yideng",
+    "url": "https://github.com/yideng-xl"
+  },
+  "homepage": "https://github.com/yideng-xl/jg-product-design-plugin-codex",
+  "repository": "https://github.com/yideng-xl/jg-product-design-plugin-codex",
+  "license": "Internal use only",
+  "keywords": [
+    "product-design",
+    "prd",
+    "prototype",
+    "zentao",
+    "b-side",
+    "skill"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "JG Product Design Codex",
+    "shortDescription": "PRD, prototype, self-check, and ZenTao workflows.",
+    "longDescription": "A Codex plugin migrated from the original Claude product-design skills. It supports rough-demand to PRD discussion, PRD to HTML prototype work, prototype self-check reports, and PRD scope splitting for ZenTao SR preparation.",
+    "developerName": "yideng",
+    "category": "Productivity",
+    "capabilities": [
+      "Write",
+      "Review"
+    ],
+    "defaultPrompt": [
+      "把这个粗需求梳理成 PRD 思路。",
+      "根据这份 PRD 做 HTML 原型。",
+      "检查这个原型并给整改要求。"
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+/* =============================================================================
+   skill-extras.css —— 非 Figma 组件,来自 prd2prototype skill 的「原型规范」约定
+   说明:这些不是「组件库.fig」里的组件,而是做原型时 skill 建议的辅助约定。
+   与 common.css(纯 Figma 基线)分开存放,等后续「skill 额外内容」那一步再统一处理。
+   依赖 common.css 里的 :root token,需在其之后引用。
+   ============================================================================= */
+
+/* ----- KPI 卡(skill:统计区 .summary-card) ----- */
+.summary-row { display: flex; gap: var(--space-5); flex-wrap: wrap; }
+.summary-card { flex: 1; min-width: 160px; background: var(--bg-card); border-radius: var(--radius-large); box-shadow: var(--shadow-card); padding: var(--space-5); }
+.summary-card .label { font-size: var(--fs-13); color: var(--text-secondary); }
+.summary-card .value { font-size: 28px; font-weight: var(--fw-semibold); color: var(--text-title); margin-top: var(--space-2); font-family: var(--font-mono); }
+.summary-card .value.primary { color: var(--color-primary); }
+.summary-card .value.danger  { color: var(--color-danger); }
+
+/* ----- 对象 chip(skill:命中清单 .dev-tag) ----- */
+.dev-tag { display: inline-flex; align-items: center; gap: 4px; padding: 2px var(--space-3); background: var(--bg-tag); border-radius: var(--radius-base); font-size: var(--fs-12); margin: 2px; }
+
+/* ----- 命中事件列表(skill:详情页溯源 .hit-tasks) ----- */
+.hit-tasks { font-size: var(--fs-13); }
+.hit-tasks .hit-head { color: var(--text-secondary); margin-bottom: var(--space-2); }
+.hit-tasks .hit-item { display: flex; align-items: center; gap: var(--space-2); padding: var(--space-2) 0; color: var(--text-body); }
+.hit-tasks .hit-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--color-warning); }
+.hit-tasks .hit-dot.ok { background: var(--color-success); }
+
+/* ----- 暗色配置片段(skill:详情页内容展示 .snippet) ----- */
+.snippet { background: #2d2d2d; color: #d4d4d4; font-family: var(--font-mono); font-size: var(--fs-12); line-height: 1.6; padding: var(--space-3) 10px; border-radius: var(--radius-base); white-space: pre-wrap; }
+.snippet .bad  { background: #5c2d2d; color: #fff; padding: 1px 4px; border-radius: 2px; }
+.snippet .good { background: #2d5c33; color: #fff; padding: 1px 4px; border-radius: 2px; }
+.snippet-wrap2 { position: relative; }
+.snippet-wrap2 .copy-icon { position: absolute; top: 6px; right: 8px; background: rgba(255,255,255,.1); color: #d4d4d4; padding: 2px 6px; border-radius: 3px; cursor: pointer; font-size: 11px; }
+
+/* ----- 字段录入规格表(skill:有录入页面 .field-spec) ----- */
+.field-spec { width: 100%; border-collapse: collapse; font-size: var(--fs-12); }
+.field-spec th, .field-spec td { border: 1px solid var(--border-color); padding: var(--space-2) var(--space-3); text-align: left; vertical-align: top; }
+.field-spec th { background: var(--bg-table-header); color: var(--text-title); font-weight: var(--fw-medium); }
+
+/* ----- 进度条(skill:辅助,Figma 库无此组件) ----- */
+.progress { height: 8px; border-radius: 4px; background: var(--bg-disabled); overflow: hidden; }
+.progress > .bar { height: 100%; background: var(--color-primary); border-radius: 4px; }
+.progress > .bar.success { background: var(--color-success); }
+.progress > .bar.danger { background: var(--color-danger); }
+
+/* ----- 工具栏布局(skill:多视图切换 .toolbar) ----- */
+.toolbar { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-4) 0; }
+.toolbar .spacer { flex: 1; }
+
+/* ----- 原型设计说明分隔(skill:第 6 步 铁律) ----- */
+.proto-note { margin-top: var(--space-7); padding-top: var(--space-5); border-top: 2px dashed var(--border-color); }
+.proto-note .note-hint { font-size: var(--fs-12); color: var(--text-secondary); margin-bottom: 10px; }

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>通用设计系统 · 组件样例(完整)</title>
+<link rel="stylesheet" href="common.css">
+<style>
+  .page { max-width:1200px; margin:0 auto; padding:var(--space-6); }
+  .demo-block { margin:var(--space-6) 0; }
+  .demo-block > h3 { font-size:var(--fs-16); color:var(--text-title); margin-bottom:var(--space-4); padding-left:var(--space-2); border-left:3px solid var(--color-primary); }
+  .swatch-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:var(--space-3); }
+  .swatch { border:1px solid var(--border-light); border-radius:var(--radius-base); overflow:hidden; font-size:var(--fs-12); }
+  .swatch .c { height:48px; }
+  .swatch .m { padding:var(--space-2) var(--space-3); background:var(--bg-card); }
+  .swatch .m .n { color:var(--text-title); }
+  .swatch .m .h { color:var(--text-secondary); font-family:var(--font-mono); }
+  .grp { display:flex; align-items:center; gap:var(--space-4); flex-wrap:wrap; }
+</style>
+</head>
+<body>
+
+<div class="top-nav">
+  <span class="logo">管理平台</span>
+  <span class="nav-item active">监控总览</span>
+  <span class="nav-item">设备管理</span>
+  <span class="nav-item">配置核查</span>
+  <span class="nav-item">拓扑总览</span>
+  <span class="nav-right">
+    <span class="badge"><span style="cursor:pointer">🔔</span><span class="dot"></span></span>
+    <span>管理员</span>
+    <button class="btn btn-sm" data-theme-toggle style="background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3);color:#fff">切换深色</button>
+  </span>
+</div>
+<div class="breadcrumb"><a>首页</a><span class="sep">/</span><a>设计系统</a><span class="sep">/</span>组件样例</div>
+
+<div class="page">
+  <h1 style="font-size:var(--fs-20);margin-bottom:4px">通用设计系统 · 组件样例(完整)</h1>
+  <p style="color:var(--text-secondary);font-size:var(--fs-13);margin-top:0">取自 Figma组件库 · 全部样式由 <code>common.css</code> 提供 · 状态走 CSS 伪类,移上去/聚焦可见交互</p>
+
+  <!-- 色板 -->
+  <div class="demo-block"><h3>1. 主色与功能色</h3>
+    <div class="swatch-grid">
+      <div class="swatch"><div class="c" style="background:var(--color-primary)"></div><div class="m"><div class="n">主色 主色绿</div><div class="h">#007D7B</div></div></div>
+      <div class="swatch"><div class="c" style="background:var(--color-input-focus)"></div><div class="m"><div class="n">输入聚焦绿</div><div class="h">#0FA081</div></div></div>
+      <div class="swatch"><div class="c" style="background:var(--color-info)"></div><div class="m"><div class="n">信息</div><div class="h">#1890FF</div></div></div>
+      <div class="swatch"><div class="c" style="background:var(--color-success)"></div><div class="m"><div class="n">成功</div><div class="h">#52C41A</div></div></div>
+      <div class="swatch"><div class="c" style="background:var(--color-warning)"></div><div class="m"><div class="n">警告</div><div class="h">#FAAD14</div></div></div>
+      <div class="swatch"><div class="c" style="background:var(--color-danger)"></div><div class="m"><div class="n">危险</div><div class="h">#FF4D4F</div></div></div>
+    </div>
+  </div>
+
+  <!-- 按钮矩阵 -->
+  <div class="demo-block"><h3>2. 按钮(7 类型 × 5 状态 × 图标)</h3>
+    <div class="card" style="overflow-x:auto">
+      <table class="table" style="min-width:680px">
+        <thead><tr><th>类型</th><th>默认</th><th>悬停(移上去)</th><th>禁用</th><th>加载</th><th>带图标 / 纯图标</th></tr></thead>
+        <tbody>
+          <tr><td>Primary 主要</td><td><button class="btn btn-primary">按钮</button></td><td><button class="btn btn-primary">悬停我</button></td><td><button class="btn btn-primary" disabled>按钮</button></td><td><button class="btn btn-primary is-loading">提交中</button></td><td><button class="btn btn-primary">＋ 新建</button> <button class="btn btn-primary btn-icon">＋</button></td></tr>
+          <tr><td>Secondary 次要</td><td><button class="btn">按钮</button></td><td><button class="btn">悬停我</button></td><td><button class="btn" disabled>按钮</button></td><td><button class="btn is-loading">加载中</button></td><td><button class="btn btn-caret">更多</button> <button class="btn btn-icon">⚙</button></td></tr>
+          <tr><td>Danger 危险</td><td><button class="btn btn-danger">删除</button></td><td><button class="btn btn-danger">悬停我</button></td><td><button class="btn btn-danger" disabled>删除</button></td><td><button class="btn btn-danger is-loading">删除中</button></td><td><button class="btn btn-danger">🗑 删除</button></td></tr>
+          <tr><td>text 文字</td><td><button class="btn-text">编辑</button></td><td><button class="btn-text">悬停我</button></td><td><button class="btn-text" disabled>编辑</button></td><td>—</td><td><button class="btn-text">✎ 编辑</button></td></tr>
+          <tr><td>text-danger</td><td><button class="btn-text-danger">删除</button></td><td><button class="btn-text-danger">悬停我</button></td><td><button class="btn-text-danger" disabled>删除</button></td><td>—</td><td><button class="btn-text-danger">🗑 删除</button></td></tr>
+          <tr><td>text-下拉</td><td><button class="btn-text btn-caret">展开</button></td><td><button class="btn-text btn-caret">悬停我</button></td><td><button class="btn-text btn-caret" disabled>展开</button></td><td>—</td><td><button class="btn-text btn-caret">筛选</button></td></tr>
+          <tr><td>text-下拉-次按钮</td><td><button class="btn-text-sub btn-caret">全部</button></td><td><button class="btn-text-sub btn-caret">悬停我</button></td><td><button class="btn-text-sub btn-caret" disabled>全部</button></td><td>—</td><td><button class="btn-text-sub btn-caret">排序</button></td></tr>
+        </tbody>
+      </table>
+      <div class="grp" style="margin-top:var(--space-4)"><span style="color:var(--text-secondary);font-size:var(--fs-12)">按钮组:</span><span class="btn-group"><button class="btn">左</button><button class="btn">中</button><button class="btn">右</button></span> <span style="color:var(--text-secondary);font-size:var(--fs-12)">尺寸:</span><button class="btn btn-primary btn-sm">小</button><button class="btn btn-primary">常规</button><button class="btn btn-primary btn-lg">大</button></div>
+    </div>
+  </div>
+
+  <!-- 输入类 -->
+  <div class="demo-block"><h3>3. 输入框 / 文本域(默认 / 悬停 / 聚焦 / 已输入 / 禁用 / 报错 / 带单位)</h3>
+    <div class="card grp" style="align-items:flex-start">
+      <input class="input" placeholder="默认 请输入">
+      <input class="input" value="已输入内容">
+      <input class="input" placeholder="禁用" disabled>
+      <input class="input is-error" value="校验不通过">
+      <span class="input-wrap"><span class="affix">¥</span><input class="input" placeholder="单位在前"></span>
+      <span class="input-wrap"><input class="input" placeholder="单位在后"><span class="affix">ms</span></span>
+      <textarea class="input" placeholder="多行文本域,最多 300 字"></textarea>
+    </div>
+  </div>
+
+  <!-- 选择类 -->
+  <div class="demo-block"><h3>4. 选择器 / 下拉 / 日期(可点击选择)</h3>
+    <div class="card grp" style="align-items:flex-start">
+      <!-- 单选:点击展开,选项回填后收起 -->
+      <div class="select-box">
+        <div class="select-trigger is-placeholder">请选择厂商<span class="caret">▾</span></div>
+        <div class="select-dropdown dropdown-menu" style="width:160px">
+          <div class="item">厂商甲</div><div class="item">厂商乙</div><div class="item">厂商丙</div>
+        </div>
+      </div>
+      <!-- 多选:点击打标签 -->
+      <div class="select-box" data-multiple>
+        <div class="select-trigger is-placeholder" data-placeholder="选择设备(多选)">选择设备(多选)<span class="caret">▾</span></div>
+        <div class="select-dropdown dropdown-menu" style="width:180px">
+          <div class="item">核心交换机-01</div><div class="item">汇聚路由器-07</div><div class="item">边界防火墙-02</div>
+        </div>
+      </div>
+      <select class="select" disabled><option>原生·禁用</option></select>
+      <span class="datepicker"><span class="ph">选择日期</span><span class="icon">📅</span></span>
+    </div>
+  </div>
+
+  <!-- 勾选/开关 -->
+  <div class="demo-block"><h3>5. 多选 / 单选 / 开关</h3>
+    <div class="card">
+      <div class="grp" style="gap:var(--space-6)">
+        <span class="checkbox checked"><span class="box"></span>已勾选</span>
+        <span class="checkbox"><span class="box"></span>未勾选</span>
+        <span class="checkbox indeterminate"><span class="box"></span>半选</span>
+        <span class="checkbox disabled checked"><span class="box"></span>禁用已选</span>
+      </div>
+      <div class="grp" style="gap:var(--space-6);margin-top:var(--space-4)">
+        <span class="radio checked"><span class="dot"></span>选项一</span>
+        <span class="radio"><span class="dot"></span>选项二</span>
+        <span class="radio disabled"><span class="dot"></span>禁用</span>
+        <span class="radio-group"><span class="opt active">日</span><span class="opt">周</span><span class="opt">月</span></span>
+      </div>
+      <div class="grp" style="gap:var(--space-6);margin-top:var(--space-4)">
+        <span class="switch on"></span>
+        <span class="switch"></span>
+        <span class="switch on disabled"></span>
+        <span class="switch sm on"></span>
+        <span class="switch on"><span class="txt">开</span></span>
+        <span class="switch"><span class="txt">关</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 标签/状态/徽标 -->
+  <div class="demo-block"><h3>6. 标签 Tag(9 色) / 状态 / 徽标</h3>
+    <div class="card grp">
+      <span class="tag tag-blue">蓝</span><span class="tag tag-red">红</span><span class="tag tag-green">绿</span><span class="tag tag-orange">橙</span>
+      <span class="tag tag-purple">紫</span><span class="tag tag-yellow">黄</span><span class="tag tag-pink">粉</span><span class="tag tag-default">默认</span>
+      <span class="tag tag-default">可删除 <span class="x">✕</span></span><span class="tag tag-add">＋ 添加</span>
+    </div>
+    <div class="card grp" style="margin-top:var(--space-4);gap:var(--space-6)">
+      <span class="status status-success">成功</span><span class="status status-warning">警告</span>
+      <span class="status status-error">错误</span><span class="status status-disabled">失效</span>
+      <span class="badge"><button class="btn">通知<span class="count">9</span></button></span>
+      <span class="badge-graph">图形 12</span>
+    </div>
+  </div>
+
+  <!-- 筛选 + 表格 -->
+  <div class="demo-block"><h3>7. 筛选区 + 表格</h3>
+    <div class="section">
+      <div class="section-header">设备配置核查结果</div>
+      <div class="section-body">
+        <div class="filter-bar" style="box-shadow:none;padding:0 0 var(--space-4)">
+          <div class="field"><label>厂商</label><select class="select"><option>全部</option></select></div>
+          <div class="field"><label>状态</label><select class="select"><option>全部</option></select></div>
+          <div class="field"><input class="input" placeholder="搜索设备名 / IP"></div>
+          <button class="btn btn-primary btn-sm">查询</button><button class="btn btn-sm">重置</button>
+        </div>
+        <div class="grp" style="padding:var(--space-3) 0">
+          <button class="btn btn-sm btn-primary">＋ 新建核查</button><button class="btn btn-sm">导出</button>
+          <span style="flex:1"></span>
+          <span class="toggle-tabs"><span class="toggle active">列表</span><span class="toggle">卡片</span></span>
+        </div>
+        <table class="table">
+          <thead><tr><th>设备名</th><th>IP 地址</th><th>厂商</th><th>核查项</th><th class="num">问题数</th><th>状态</th><th>最近核查时间</th><th>操作</th></tr></thead>
+          <tbody>
+            <tr><td><span class="em">核心交换机-01</span></td><td>10.0.1.21</td><td>厂商甲</td><td class="link">ACL 配置</td><td class="num">0</td><td><span class="status status-verified">已验证</span></td><td>2026-05-30 14:22:08</td><td><button class="btn-text">详情</button></td></tr>
+            <tr class="selected"><td><span class="em">汇聚路由器-07</span></td><td>10.0.2.13</td><td>厂商乙</td><td class="link">SNMP 团体名</td><td class="num exception">3</td><td><span class="status status-pending">待处理</span></td><td>2026-05-31 09:10:45</td><td><button class="btn-text">详情</button></td></tr>
+            <tr><td><span class="em">边界防火墙-02</span></td><td>10.0.0.1</td><td>厂商甲</td><td class="link">访问策略</td><td class="num">1</td><td><span class="status status-waiting">待验证</span></td><td>2026-05-31 16:48:30</td><td><button class="btn-text">详情</button></td></tr>
+          </tbody>
+        </table>
+        <div class="grp" style="justify-content:flex-end;padding-top:var(--space-4)">
+          <span class="pagination"><span class="total">共 128 条</span><span class="pg disabled">‹</span><span class="pg active">1</span><span class="pg">2</span><span class="pg">3</span><span class="pg">›</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 导航类 -->
+  <div class="demo-block"><h3>8. 标签页 / 分段控制器 / 步骤条 / 锚点 / 历史页签<span style="font-size:var(--fs-12);color:var(--text-secondary);font-weight:400">(可点击切换)</span></h3>
+    <div class="card">
+      <div style="font-size:var(--fs-12);color:var(--text-secondary);margin-bottom:6px">卡片式标签页 .tab-cards</div>
+      <div class="tab-cards"><span class="tab active">基本信息</span><span class="tab">配置详情</span><span class="tab">核查记录</span><span class="tab disabled">已归档</span></div>
+      <div style="font-size:var(--fs-12);color:var(--text-secondary);margin:var(--space-5) 0 6px">页内下划线 tab .tab-bar</div>
+      <div class="tab-bar" style="padding:0"><span class="tab active">概览</span><span class="tab">设备清单</span><span class="tab">核查结果</span><span class="tab disabled">已归档</span></div>
+      <div class="grp" style="margin-top:var(--space-5);gap:var(--space-6);align-items:flex-start">
+        <div><div style="font-size:var(--fs-12);color:var(--text-secondary);margin-bottom:6px">分段控制器</div><span class="segmented"><span class="seg active">全部</span><span class="seg">在线</span><span class="seg">离线</span></span></div>
+        <div><div style="font-size:var(--fs-12);color:var(--text-secondary);margin-bottom:6px">错误态</div><span class="segmented error"><span class="seg active">异常</span><span class="seg">正常</span></span></div>
+        <div><div style="font-size:var(--fs-12);color:var(--text-secondary);margin-bottom:6px">历史页签</div><span class="history-tabs"><span class="h-tab active">记录-0530 <span class="close">✕</span></span><span class="h-tab">记录-0529 <span class="close">✕</span></span></span></div>
+      </div>
+      <div class="steps" style="margin-top:var(--space-5);max-width:520px">
+        <div class="step done"><span class="idx">✓</span>采集<span class="line"></span></div>
+        <div class="step active"><span class="idx">2</span>核查<span class="line"></span></div>
+        <div class="step"><span class="idx">3</span>处置</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 树 + 反馈 -->
+  <div class="demo-block"><h3>9. 树形 / Alert / Message / Notification / 空状态</h3>
+    <div class="grp" style="align-items:flex-start;gap:var(--space-5)">
+      <div class="card" style="width:240px">
+        <div style="font-size:var(--fs-12);color:var(--text-secondary);margin-bottom:6px">基础树(点箭头展开,点节点选中)</div>
+        <div class="tree">
+          <div class="node open"><span class="arrow">▸</span>站点群<span class="cnt">128</span></div>
+          <div class="children"><div class="node selected"><span class="arrow">▸</span>站点 A<span class="cnt">42</span></div><div class="node"><span class="arrow">▸</span>站点 B<span class="cnt">37</span></div></div>
+        </div>
+        <div style="font-size:var(--fs-12);color:var(--text-secondary);margin:var(--space-4) 0 6px">勾选树(点框勾选)</div>
+        <div class="tree">
+          <div class="node open checked"><span class="arrow">▸</span><span class="tcb"></span>全部设备</div>
+          <div class="children"><div class="node checked"><span class="arrow" style="visibility:hidden">▸</span><span class="tcb"></span>核心交换机</div><div class="node"><span class="arrow" style="visibility:hidden">▸</span><span class="tcb"></span>汇聚路由器</div></div>
+        </div>
+      </div>
+      <div class="card" style="flex:1;display:flex;flex-direction:column;gap:var(--space-3)">
+        <div class="alert alert-info"><span class="a-icon">ⓘ</span><div class="a-body"><div class="a-title">信息提示</div>本次核查覆盖 1284 台设备。</div></div>
+        <div class="alert alert-success"><span class="a-icon">✓</span><div class="a-body">核查已完成,全部通过。</div></div>
+        <div class="alert alert-warning"><span class="a-icon">⚠</span><div class="a-body">3 台设备配置存在风险项。</div></div>
+        <div class="alert alert-error"><span class="a-icon">✕</span><div class="a-body">2 台设备连接失败。</div></div>
+      </div>
+    </div>
+    <div class="grp" style="gap:var(--space-5);margin-top:var(--space-5);align-items:flex-start">
+      <span class="message message-success"><span class="m-icon">✓</span>操作成功</span>
+      <span class="message message-error"><span class="m-icon">✕</span>提交失败,请重试</span>
+      <span class="message message-warning"><span class="m-icon">⚠</span>请先选择设备</span>
+      <div class="notification"><div class="n-title"><span style="color:var(--color-warning)">⚠</span>巡检任务提醒</div><div class="n-desc">今日 12 项巡检待执行,点击查看详情。</div></div>
+      <div class="card" style="width:200px"><div class="empty"><div class="e-icon">🗂</div><div class="e-text">暂无数据</div></div></div>
+    </div>
+    <div class="grp" style="margin-top:var(--space-5)"><button class="btn btn-primary" data-modal-open="m">打开弹窗</button></div>
+  </div>
+
+  <!-- 批量操作 / 工具栏 -->
+  <div class="demo-block"><h3>10. 批量操作 / 导入导出工具栏</h3>
+    <div class="card">
+      <div class="action-bar">
+        <button class="btn btn-sm btn-primary">＋ 新建</button>
+        <button class="btn btn-sm">导入</button>
+        <button class="btn btn-sm">导出</button>
+        <button class="btn btn-sm">上传</button>
+        <button class="btn btn-sm">批量编辑</button>
+        <span class="btn btn-sm btn-primary btn-caret" style="cursor:pointer">批量操作</span>
+        <span style="color:var(--text-secondary);font-size:var(--fs-12)">(图标交给设计,这里用文字占位)</span>
+      </div>
+      <div class="batch-bar" style="margin-top:var(--space-3)">
+        <span class="sel">已选 <b>3</b> 项</span>
+        <span class="clear">清空</span>
+        <span class="spacer"></span>
+        <button class="btn btn-sm">批量导出</button>
+        <button class="btn btn-sm btn-danger">批量删除</button>
+      </div>
+      <div style="margin-top:var(--space-3)"><span style="color:var(--text-secondary);font-size:var(--fs-12)">批量操作下拉:</span></div>
+      <div class="dropdown-menu" style="width:160px;margin-top:6px">
+        <div class="item">批量启用</div><div class="item">批量停用</div><div class="divider"></div><div class="item" style="color:var(--color-danger)">批量删除</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 日历 / TreeSelect / 主题切换 / 导航变体 -->
+  <div class="demo-block"><h3>11. 日历弹层 / 树形选择 / 侧栏收起 / 主题切换 / 气泡箭头</h3>
+    <div class="grp" style="align-items:flex-start;gap:var(--space-5)">
+      <div class="calendar">
+        <div class="cal-head"><span class="nav">‹</span><span>2026 年 6 月</span><span class="nav">›</span></div>
+        <div class="cal-grid">
+          <span class="wd">一</span><span class="wd">二</span><span class="wd">三</span><span class="wd">四</span><span class="wd">五</span><span class="wd">六</span><span class="wd">日</span>
+          <span class="day muted">26</span><span class="day muted">27</span><span class="day muted">28</span><span class="day muted">29</span><span class="day muted">30</span><span class="day muted">31</span><span class="day today">1</span>
+          <span class="day">2</span><span class="day">3</span><span class="day">4</span><span class="day selected">5</span><span class="day">6</span><span class="day">7</span><span class="day">8</span>
+          <span class="day">9</span><span class="day">10</span><span class="day">11</span><span class="day">12</span><span class="day">13</span><span class="day">14</span><span class="day">15</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:var(--fs-12);color:var(--text-secondary);margin-bottom:6px">树形选择(点击展开,选节点回填)</div>
+        <div class="treeselect">
+          <div class="ts-trigger"><span class="ts-text is-placeholder">请选择设备</span><span class="caret">▾</span></div>
+          <div class="ts-panel">
+            <div class="tree">
+              <div class="node open"><span class="arrow">▸</span>站点 A</div>
+              <div class="children"><div class="node" data-label="站点 A / 核心交换机"><span class="arrow" style="visibility:hidden">▸</span>核心交换机</div><div class="node" data-label="站点 A / 汇聚路由器"><span class="arrow" style="visibility:hidden">▸</span>汇聚路由器</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:var(--space-4)">
+        <div><div style="font-size:var(--fs-12);color:var(--text-secondary);margin-bottom:6px">主题切换 蓝/绿</div><span class="brand-switch"><span class="b green active"></span><span class="b blue"></span></span></div>
+        <div><div style="font-size:var(--fs-12);color:var(--text-secondary);margin-bottom:6px">气泡箭头(下/上)</div>
+          <span class="tip-wrap"><span class="tooltip dir-bottom">提示气泡</span></span>
+          <span class="popover dir-top" style="margin-left:24px">白底气泡卡片</span>
+        </div>
+        <div><div style="font-size:var(--fs-12);color:var(--text-secondary);margin-bottom:6px">侧栏收起态</div>
+          <div class="sub-menu collapsed" style="display:inline-block;border:1px solid var(--border-color);border-radius:var(--radius-base)">
+            <div class="menu-item active"><span class="mi-icon">■</span><span class="mi-text">总览</span></div>
+            <div class="menu-item"><span class="mi-icon">▦</span><span class="mi-text">设备</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:var(--space-5)">
+      <div style="font-size:var(--fs-12);color:var(--text-secondary);margin-bottom:6px">顶部导航 渐变变体:</div>
+      <div class="top-nav gradient" style="border-radius:var(--radius-base)"><span class="logo">通用</span><span class="nav-item active">总览</span><span class="nav-item">设备</span></div>
+      <div class="top-nav gradient-dark" style="border-radius:var(--radius-base);margin-top:8px"><span class="logo">通用</span><span class="nav-item active">总览</span><span class="nav-item">设备</span></div>
+    </div>
+  </div>
+
+  <!-- 业务 -->
+  <div class="demo-block"><h3>12. 业务组件:分级标签</h3>
+    <div class="card grp">
+      <span class="level-tag level-1">一级</span><span class="level-tag level-2">二级</span><span class="level-tag level-3">三级</span><span class="level-tag level-4">四级</span><span class="level-tag level-5">五级</span>
+    </div>
+  </div>
+
+  <div class="card" style="font-size:var(--fs-13);color:var(--text-secondary);margin-top:var(--space-6)">
+    全部组件对应「组件库.fig」真实组件,配色取自 <code>组件规格表.md</code>。状态(悬停/聚焦/禁用/加载)走 CSS 伪类。非 Figma 的 skill 约定见 <code>skill-extras.css</code>。
+  </div>
+</div>
+
+<div class="modal-mask" id="m" style="display:none">
+  <div class="modal">
+    <div class="modal-header">确认提交</div>
+    <div class="modal-body">确定要提交该核查任务吗?</div>
+    <div class="modal-footer"><button class="btn" data-modal-close>取消</button><button class="btn btn-primary" data-modal-close>确认</button></div>
+  </div>
+</div>
+
+<script src="common.js"></script>
+</body>
+</html>
