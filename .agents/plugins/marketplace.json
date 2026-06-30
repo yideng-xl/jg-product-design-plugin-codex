@@ -1,0 +1,20 @@
+{
+  "name": "jg-product-design",
+  "interface": {
+    "displayName": "JG Product Design"
+  },
+  "plugins": [
+    {
+      "name": "jg-product-design-plugin-codex",
+      "source": {
+        "source": "local",
+        "path": "."
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
