@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.2 - 2026-07-16
+
+- Disabled `prd2zentao` in the default skill load config.
+
 ## 0.3.1 - 2026-07-16
 
 - Enabled `prd2zentao` in the default skill load config.
