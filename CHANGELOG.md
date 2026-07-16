@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.1 - 2026-07-16
+
+- Enabled `prd2zentao` in the default skill load config.
+
 ## 0.3.0 - 2026-07-16
 
 - Added `skill-load.config.json` to control which bundled skills are exposed to Codex.
