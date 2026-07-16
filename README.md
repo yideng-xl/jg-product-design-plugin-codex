@@ -92,8 +92,6 @@ jg-product-design-plugin-codex/
 │   ├── prd2prototype/
 │   ├── proto-check/
 │   └── prd2zentao/
-├── docs/
-│   └── index.html
 ├── CHANGELOG.md
 └── README.md
 ```

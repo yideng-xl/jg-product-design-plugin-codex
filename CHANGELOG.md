@@ -1,12 +1,17 @@
 # Changelog
 
+## 0.2.1 - 2026-07-16
+
+- Removed the docs deployment files.
+- Changed prototype editor help links to the repository README.
+- Kept `prototype-editor.zip` as the release download entry.
+
 ## 0.2.0 - 2026-07-16
 
 - Synced Claude upstream `1.17.0` changes into the Codex plugin.
 - Updated `prd2prototype` with local editable annotations for需求便签 and原型说明.
 - Added the prototype editor assets: macOS app bundle, Windows `.vbs` launcher, and macOS `.command` fallback.
 - Updated `common.js` and `skill-extras.css` for annotation rendering, edit mode, autosave, and `.proto-tip` click behavior.
-- Added `docs/index.html` as the usage page for prototype annotation guidance and editor download.
 - Updated plugin metadata to version `0.2.0`.
 
 ## 0.1.0 - 2026-06-30

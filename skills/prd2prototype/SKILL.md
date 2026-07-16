@@ -367,7 +367,7 @@ description: Use when the user has approved using this skill to convert a PRD or
 - **固定端口 47821**:不随机、可收藏。再次双击时如果服务已在跑,直接打开控制页,不重复启动。
 - **每个原型自带 URL**:编辑页地址是 `/p/<base64路径>/`,路径写在 URL 里、服务端无全局状态,所以**多个原型标签同时开也互不串**(保存各写各的 `data/annotations.js`)。相对路径发 `save-annotations`/`ping` 天然带上该前缀。
 - **关掉页面 = 停服务**:控制页/编辑页每几秒发心跳;关某个原型标签不连带停(控制页可留着选下一个),所有页面都关掉后心跳超时(~15s)自动退,点控制页「停止」立即停。不用管进程、不弹黑窗。
-- 控制页和编辑条上都有「使用说明」链接 → 插件 GitHub Pages(`https://yideng-xl.github.io/jg-product-design-plugin-codex/`)。只需装 Node.js。
+- 控制页和编辑条上都有「使用说明」链接 → 仓库 README 的「原型编辑器」章节。只需装 Node.js。
 
 **结构约定**(做原型时写进 HTML,别让脚本自动编号):
 
