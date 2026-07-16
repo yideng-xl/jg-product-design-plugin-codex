@@ -1,0 +1,8 @@
+{
+  "skills": {
+    "requirements2prd": true,
+    "prd2prototype": true,
+    "proto-check": true,
+    "prd2zentao": false
+  }
+}

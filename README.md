@@ -13,6 +13,16 @@
 | `proto-check` | 原型评审前做自查，输出产品自查、UI 规范自查和整改要求。 |
 | `prd2zentao` | 根据 PRD 第四章拆禅道研发需求，并生成批量同步材料或控制台脚本。 |
 
+默认加载的 skill：
+
+- `requirements2prd`
+- `prd2prototype`
+- `proto-check`
+
+默认不加载：
+
+- `prd2zentao`
+
 ## 安装到 Codex
 
 首次安装先添加 marketplace：
@@ -44,6 +54,45 @@ codex plugin marketplace upgrade jg-product-design
 然后重启 Codex。
 
 如果插件已经安装过，但新 skill 没生效，进入 **Plugins** 重新安装或刷新一次。
+
+## 配置加载哪些 skill
+
+加载开关在 `skill-load.config.json`。
+
+默认配置：
+
+```json
+{
+  "skills": {
+    "requirements2prd": true,
+    "prd2prototype": true,
+    "proto-check": true,
+    "prd2zentao": false
+  }
+}
+```
+
+应用配置：
+
+```bash
+node scripts/apply-skill-config.mjs
+```
+
+实现方式很简单：启用时使用 `SKILL.md`；禁用时改成 `SKILL.disabled.md`。Codex 只识别 `SKILL.md`，所以禁用后的 skill 不会进入加载列表。
+
+如果要临时启用 `prd2zentao`，把配置改成：
+
+```json
+"prd2zentao": true
+```
+
+再执行：
+
+```bash
+node scripts/apply-skill-config.mjs
+```
+
+改完后提交并推送 GitHub。使用方再执行 marketplace 更新。
 
 ## 原型编辑器
 
@@ -92,6 +141,9 @@ jg-product-design-plugin-codex/
 │   ├── prd2prototype/
 │   ├── proto-check/
 │   └── prd2zentao/
+├── scripts/
+│   └── apply-skill-config.mjs
+├── skill-load.config.json
 ├── CHANGELOG.md
 └── README.md
 ```
