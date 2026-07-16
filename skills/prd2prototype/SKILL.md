@@ -1,6 +1,6 @@
 ---
 name: prd2prototype
-description: Use when the user has approved using this skill to convert a PRD or stable product scope into reviewable HTML prototypes, high-fidelity prototypes, multi-page drill-down flows, product-review mockups, or prototype iterations that must follow the shared component and design-language assets.
+description: Use when the user has approved using this skill to convert a PRD or stable product scope into reviewable HTML prototypes, high-fidelity prototypes, multi-page drill-down flows, editable prototype annotations, product-review mockups, or prototype iterations that must follow the shared component and design-language assets.
 ---
 
 # PRD → 高保真原型 的方法论
@@ -71,11 +71,12 @@ description: Use when the user has approved using this skill to convert a PRD or
 |---|---|
 | `assets/common.css` | **样式基线**:`:root` 全量设计 token(色彩 / 字体 / 间距 / 圆角 / 阴影,含深浅主题)+ 30+ 组件样式,状态走 CSS 伪类 |
 | `assets/common.js` | **交互层**:Select / TreeSelect / Tree / Modal / 标签页 / 分段 / 多选单选开关等"能点"的最小交互,按类名 + `data-*` 自动绑定 |
-| `assets/skill-extras.css` | **原型辅助层**(非 Figma):`.snippet` 配置片段、`.summary-card` KPI 卡、`.field-spec` 字段规格表、`.proto-note` 原型说明分隔等本 skill 约定 |
+| `assets/skill-extras.css` | **原型辅助层**(非 Figma):`.snippet` 配置片段、`.summary-card` KPI 卡、`.field-spec` 字段规格表、`.proto-note` 原型说明分隔、需求便签/原型说明**可编辑覆盖层**样式等本 skill 约定 |
+| `assets/原型编辑器.app`(**自包含单图标**,serve.js/launcher.js/panel.html 在 `Contents/Resources/` 内)+ `原型编辑器.vbs`(Win 入口)+ `原型编辑器.command`(Mac 兜底) | **原型编辑器**(跨平台,需装 Node):Mac 双击 App / Win 双击 `.vbs` → 浏览器开**控制页(壳)** `http://localhost:47821/`(操作说明 + 选原型 + 使用说明 + 停止)→ 选原型 → 页面上改需求便签/原型说明,自动写回该原型的 `data/annotations.js`。**关掉页面服务自动停**(心跳),固定端口可收藏。独立工具,放一处、选谁编谁,不拷进原型(见第 6 步) |
 | `assets/组件规格表.md` | 62 个组件集的变体维度 + 逐变体真实取色(查色用) |
 | `assets/组件样例.html` | 全组件演示页(对照样式 / 交互用) |
 
-**标准动作**:做原型时,把 `assets/common.css`、`assets/common.js`、需要时加 `assets/skill-extras.css` **拷到原型目录**,各页面 `<link>` / `<script>` 引用即可。**禁止页面内硬编码色值**,一律用 token / 类名。
+**标准动作**:做原型时,把 `assets/common.css`、`assets/common.js`、需要时加 `assets/skill-extras.css` **拷到原型目录**,各页面 `<link>` / `<script>` 引用即可。**禁止页面内硬编码色值**,一律用 token / 类名。原型本身**不放** `serve.js` / 启动器——那是独立的「原型编辑器」工具(见第 6 步),要编辑覆盖层时用它选中原型目录即可。
 
 核心 token(主色为主色绿,详见 common.css):
 
@@ -276,7 +277,7 @@ description: Use when the user has approved using this skill to convert a PRD or
 .chg-bang{display:inline-block;margin-left:3px;width:11px;height:11px;line-height:11px;text-align:center;border-radius:50%;background:#1890ff;color:#fff;font-size:9px;font-weight:700;vertical-align:middle;}  /* 蓝底圈+白「!」,在绿/橙/红徽标上都清晰 */
 ```
 - **可点击的徽标必带「!」icon(铁律)**:凡是**带需求说明、能点开**的需求标签/便签,徽标末尾加一个 `<i class="chg-bang">!</i>`(徽标内的小白「!」圈),告诉研发**这个能点**。**静态徽标(proto-note 里不带弹层的)不加「!」**——有「!」=可点开看说明,无「!」=纯标识。如 `<span class="chg-badge chg-edit">v0.X.Y 修改 <i class="chg-bang">!</i></span>`。
-- 触发/关闭复用 common.js 的 `.proto-tip` 点击逻辑(点徽标 toggle `.open`、点外部关闭);弹层文字保持 `user-select:text` 可复制。
+- 触发/关闭逻辑已内建在 `assets/common.js`(点徽标 toggle `.open`、**点弹层内部不关闭**、点外部才关),页面不用再写内联脚本。弹层文字保持 `user-select:text`——**点进弹层是为了选中复制,所以点里面不能关**(否则鼠标一点弹层就消失,复制不了,是踩过的坑)。
 - **两个参考效果合一**:颜色+类型词来自配置核查「规则编辑器」的橙徽标(`v0.3.3 修改`);"点开看可复制说明"来自 V1.18.2「厂站地址记录」的 proto-tip。
 - **原型中 vs 原型说明中(两种载体,同色同措辞)** —— **能否点开由载体(位置)决定,是默认行为,不需要用户特别交代"要能点开"**:
   - ① **原型中**(改动元素旁):**默认就挂可点开的需求标签**——徽标用 `.chg-badge`(三色+类型词)+ 末尾「!」,**点击弹出可复制的需求说明**。因为界面上没地方写长说明,靠弹层补。**只要改动点在原型界面里,就默认做成可点开的,无需用户说明。**
@@ -351,6 +352,57 @@ description: Use when the user has approved using this skill to convert a PRD or
 **为什么不直接给 JS 改文件名(如 check-items.v031.js)**:原型不是工程项目,没有构建工具自动重写引用;手工改文件名会让所有引用方都得跟着改、出错率高;`?v=` 参数法零侵入、改一行就行,完全够用。
 
 **踩坑案例**:某次 v0.3.1 部署后评审同事反馈"总览表没看到 v0.3 删除线对比",查了 git 日志、CI 日志、远端文件都对,最后定位是浏览器缓存了旧的 `data/check-items.js`,无痕模式打开就正常。从此每次升版必带 `?v=x.y.z` 同步。
+
+### 本地可编辑覆盖层(需求标签 / 原型说明 手改回写)
+
+**解决的问题**:改动点旁的「需求标签 / 需求便签」(`.proto-tip` 弹层里的需求说明文字)、以及原型说明里的口径,产品想在页面上直接改,而不是回去抠 HTML;但改完要跟着发布进 GitLab 给评审看,发布后评审同事又不能有编辑入口。做法是把「手改」单独存一份**覆盖层文件** `data/annotations.js`,跟生成层(HTML)分家,渲染时覆盖回来。能力已内建在 `assets/common.js`,不用每个原型另写脚本。
+
+**判据(只认主机名)**:`localhost` / `127.0.0.1` → 可编辑(通过「原型编辑器」打开,有本地服务能写文件),右下角出现「编辑态」开关;**`file://` 直接双击 = 纯看只读**(和原来一样是静态 HTML,不出编辑入口);其它 http 主机(内网域名,评审同事访问)→ 发布只读。不引入任何手动开关常量。
+
+> 为什么 `file://` 也只读:只是本地看看原型时,就该跟原来一样。编辑是**主动**行为,只在你用「原型编辑器」把它跑到 `localhost` 时才开——顺带没了"改完要导出替换"那套,localhost 下直接写盘。
+
+**原型编辑器(独立工具,跨平台,壳是一个控制页)**:自包含成一个 `原型编辑器.app`——`serve.js` / `launcher.js` / `panel.html` 都在它的 `Contents/Resources/` 里,用户目录下**只露一个 App 图标**,不会点错。Mac 双击 `原型编辑器.app`;Windows 双击同目录的 `原型编辑器.vbs`(Win 上 .app 只是普通文件夹,vbs 会钻进去跑);`原型编辑器.command` 作 Mac 兜底(App 因 GUI PATH 找不到 node 时用它)。需装 Node.js。
+
+- **壳 = 控制页**:双击启动器 → 浏览器打开 `http://localhost:47821/`(`panel.html`),上面有操作说明、「选择原型文件夹」按钮、**最近打开 5 条历史**(localStorage,最近在前,点一条快速重开)、「使用说明」链接、「停止」按钮。点选原型 → 服务弹**原生选文件夹**窗 → 选中后在**新标签**进入编辑。
+- **固定端口 47821**:不随机、可收藏。再次双击时如果服务已在跑,直接打开控制页,不重复启动。
+- **每个原型自带 URL**:编辑页地址是 `/p/<base64路径>/`,路径写在 URL 里、服务端无全局状态,所以**多个原型标签同时开也互不串**(保存各写各的 `data/annotations.js`)。相对路径发 `save-annotations`/`ping` 天然带上该前缀。
+- **关掉页面 = 停服务**:控制页/编辑页每几秒发心跳;关某个原型标签不连带停(控制页可留着选下一个),所有页面都关掉后心跳超时(~15s)自动退,点控制页「停止」立即停。不用管进程、不弹黑窗。
+- 控制页和编辑条上都有「使用说明」链接 → 插件 GitHub Pages(`https://yideng-xl.github.io/jg-product-design-plugin-codex/`)。只需装 Node.js。
+
+**结构约定**(做原型时写进 HTML,别让脚本自动编号):
+
+- 可编辑的文本载体带 `data-anno-id="页面前缀.类型-序号"`。前缀区分哪页、类型(`note`=需求便签说明 / `desc`=原型说明段 等)自定、序号区分第几条。
+  - **需求便签**:`data-anno-id` 挂在弹层的 `.pt-pop-item` 上(那段可复制的需求文字)。编辑态会强制把 `.pt-pop` 弹层展开(见 skill-extras.css),不用先点开就能改。
+  - **原型说明段**:挂在那段文字的容器上;整块富文本(含表格等)再加 `data-anno-rich`,存 innerHTML,否则存纯文字。
+- 编号在编辑态左上角以 `#页面前缀.类型-序号` 显示(CSS `::after`),发布态不显示——你要对文件里哪一条、手改文件兜底,都靠它。
+- (可选)要**整条增删**的一组标签(如一排 `.dev-tag`):chip 外层加 `data-anno-item`,容器加 `data-anno-container="页面前缀.tags"`,就能在页面上「+ 加一条 / × 删一条」,落进覆盖层的 additions / removed,重画原型也不丢。
+
+**覆盖层文件**(`data/annotations.js`,挂 `window.__ANNO__`;用 `.js` 不用 `.json`,躲开 file:// 下 fetch 的 CORS。引用须在 `common.js` 之前):
+
+```html
+<script src="data/annotations.js?v=0.3.1"></script>
+<script src="assets/common.js"></script>
+```
+
+```js
+window.__ANNO__ = {
+  overrides: { "gw-list.note-3": "手改后的需求说明文字" },   // 改需求便签 / 原型说明
+  additions: { "gw-list.tags": [ { "id": "gw-list.tags.add-abc", "text": "新加的标签" } ] }, // 可选:整条新增
+  removed:   [ "gw-list.tag-7" ]                            // 可选:删掉的原件
+};
+```
+
+**工作流**:双击「原型编辑器」(Mac `原型编辑器.app` / Win `原型编辑器.vbs`)→ 浏览器打开控制页 → 点「选择原型文件夹」选中要改的原型 → 进入编辑页,右下角开「编辑态」→ 改需求便签 / 原型说明(增删标签用 + / ×)→ **改动实时自动写进该原型的 `data/annotations.js`** → **改完关掉页面,服务自动停** → 照常 `git commit / push`,并按需升 index 里的 `?v=`。
+
+给不懂技术的产品同事:整个过程就是「双击 → 控制页点选原型 → 在网页上改字 → 关页面」,不碰命令行、不弹黑窗(只需机器装了 Node.js)。不会用点控制页/编辑条上的「使用说明」看在线文档。
+
+**三条铁律**:
+
+1. `data-anno-id` 一旦给出,**只增不改不复用**——不能随手改名或让脚本按出现顺序自动编号,否则元素增删导致序号漂移、覆盖错位。新增元素给新号,删了的号也不复用。
+2. `data/annotations.js` 是**产品所有**。生成 / 改原型时,HTML 生成层可以随便重写,但**永不覆写 annotations.js**;渲染时覆盖层盖回生成层,只要 ID 稳定,手改就不丢。
+3. 发布态判据只认 `location.protocol`,不加任何"手动关掉开关"的常量或页面元素。
+
+> 说明:这里的可编辑对象就是本 skill 既有的「需求标签 / 需求便签」(`.proto-tip`,见下文改动标注一节)和原型说明。机制是通用的——任何带 `data-anno-id` 的文本都能纳入覆盖层,不改既有徽标 / 弹层的做法,只是给弹层里的说明文字加了个 `data-anno-id` 让它能在页面上改。
 
 ### 第 7 步:目的地明确 + 不臆造文案(铁律)
 
@@ -852,7 +904,7 @@ function confirmDelete(event) {
 2. **分类**:
    - 视觉微调(列宽 / 配色 / 间距) → 直接改
    - 文案 / 术语 / 字段名 → 直接改,同步更新术语字典
-   - 交互逻辑(跳转 / 状态 / 操作) → 在改之前先用 **向用户提问并等待明确确认** 对齐选项,**不要凭空猜**
+   - 交互逻辑(跳转 / 状态 / 操作) → 在改之前先用 **AskUserQuestion** 对齐选项,**不要凭空猜**
    - 设计基线变化(视图维度 / 数据模型) → 先讨论清楚,可能重做
 3. **改完贴出来给用户验证**。不要等改完一大堆才一次给。
 4. **记录犯过的错**:每次"我没想清楚"或"我以为可以"出现时,记到 memory / skill 的"常犯错"章节。

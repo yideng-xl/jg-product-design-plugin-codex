@@ -9,9 +9,18 @@ This repository is migrated from the original Claude product-design skills. The 
 | Skill | Purpose |
 |---|---|
 | `requirements2prd` | Discuss rough needs, new modules, optimization, refactoring, productization, and PRD material. |
-| `prd2prototype` | Convert stable PRD scope into reviewable HTML prototypes using shared design assets. |
+| `prd2prototype` | Convert stable PRD scope into reviewable HTML prototypes, including editable local annotations. |
 | `proto-check` | Inspect HTML prototypes before review and produce self-check reports plus整改要求. |
 | `prd2zentao` | Split stable PRD product-scope chapters into ZenTao SR preparation material and batch scripts. |
+
+## Prototype Editor
+
+`prd2prototype` now includes a local prototype editor for需求便签 and原型说明.
+
+- Download: <https://github.com/yideng-xl/jg-product-design-plugin-codex/releases/latest/download/prototype-editor.zip>
+- Usage: unzip, then double-click `原型编辑器.app` on macOS or `原型编辑器.vbs` on Windows. Node.js is required.
+- Editable mode only appears on `localhost` or `127.0.0.1`. Published prototype pages stay read-only.
+- Edited text is written back to `data/annotations.js`; generated HTML should not overwrite that file.
 
 ## Working Agreement
 
@@ -46,6 +55,8 @@ jg-product-design-plugin-codex/
 │   ├── prd2prototype/
 │   ├── proto-check/
 │   └── prd2zentao/
+├── docs/
+│   └── index.html
 ├── CHANGELOG.md
 └── README.md
 ```

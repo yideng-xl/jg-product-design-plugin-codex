@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>原型编辑器</title>
+<style>
+  :root { --brand:#007D7B; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif; color: #303133; background: #eff3f8; }
+  .wrap { max-width: 560px; margin: 7vh auto; background: #fff; border-radius: 12px; box-shadow: 0 6px 30px rgba(0,0,0,.08); padding: 32px 36px; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .sub { color: #909399; font-size: 13px; margin: 0 0 20px; }
+  ol { margin: 0 0 22px; padding-left: 20px; color: #565656; font-size: 14px; line-height: 1.9; }
+  ol b { color: #303133; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; border: 0; border-radius: 8px; padding: 11px 20px;
+         font-size: 15px; cursor: pointer; background: var(--brand); color: #fff; }
+  .btn:hover { background: #198A88; }
+  .btn:disabled { background: #b6c2c2; cursor: not-allowed; }
+  .status { margin: 14px 0 0; font-size: 13px; color: #565656; min-height: 20px; }
+  .sec-title { font-size: 13px; color: #909399; margin: 22px 0 10px; }
+  .row { display: flex; align-items: center; justify-content: space-between; gap: 12px;
+         text-decoration: none; color: #303133; font-size: 14px; padding: 11px 14px;
+         border: 1px solid #ebeef5; border-radius: 8px; margin-bottom: 8px; transition: .15s; cursor: pointer; }
+  .row:hover { border-color: var(--brand); background: #f2f8f8; }
+  .row .arrow { color: #c0c4cc; flex: none; }
+  .row:hover .arrow { color: var(--brand); }
+  .row .ri-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+  .row .ri-del { flex: none; color: #c0c4cc; font-size: 18px; line-height: 1; padding: 0 4px; }
+  .row .ri-del:hover { color: #f56c6c; }
+  .recent { margin-top: 8px; }
+  .help { margin-top: 26px; padding-top: 18px; border-top: 1px solid #ebeef5; }
+  .foot { margin-top: 16px; font-size: 13px; color: #909399; text-align: right; }
+  .foot a { color: #909399; text-decoration: none; }
+  .foot a:hover { color: #f56c6c; text-decoration: underline; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>原型编辑器</h1>
+    <p class="sub">改需求便签 / 原型说明,自动写回该原型,不用改代码。</p>
+    <ol>
+      <li>点下面「<b>选择原型文件夹</b>」,选中要改的原型目录(里面有 index.html)。</li>
+      <li>新标签进入原型后,打开右下角「<b>编辑态</b>」,直接在页面上改文字。</li>
+      <li>改完<b>关掉那个标签</b>即可,改动已存进该原型的 data 里;都关掉后服务自动停。</li>
+    </ol>
+    <button class="btn" id="pick">选择原型文件夹并编辑</button>
+    <div class="status" id="status"></div>
+
+    <div class="recent" id="recent" style="display:none">
+      <div class="sec-title">最近 5 个原型(点一条快速继续)</div>
+      <div id="recent-list"></div>
+    </div>
+
+    <div class="help">
+      <div class="sec-title" style="margin-top:0">使用说明</div>
+      <a class="row" href="https://yideng-xl.github.io/jg-product-design-plugin-codex/" target="_blank" rel="noopener">
+        <span class="ri-name">1. 怎么让原型替你标出需求</span><span class="arrow">›</span>
+      </a>
+    </div>
+    <div class="foot"><a href="#" id="stop">停止服务</a></div>
+  </div>
+
+  <script>
+    var st = document.getElementById("status");
+    var pickBtn = document.getElementById("pick");
+    var RECENT_KEY = "proto:recent";
+    var NOSVC = "没连上本地服务。请不要直接双击 panel.html —— 用「原型编辑器」App 打开,地址应是 http://localhost:47821/";
+    var HTTP = location.protocol === "http:";
+
+    function b64url(s) { return btoa(unescape(encodeURIComponent(s))).replace(/\+/g, "-").replace(/\//g, "_"); }
+    function protoUrl(p) { return "p/" + b64url(p) + "/"; }
+    function loadRecent() { try { return JSON.parse(localStorage.getItem(RECENT_KEY) || "[]"); } catch (e) { return []; } }
+    function pushRecent(item) {
+      var list = loadRecent().filter(function (x) { return x.path !== item.path; });
+      list.unshift(item);
+      try { localStorage.setItem(RECENT_KEY, JSON.stringify(list.slice(0, 5))); } catch (e) {}
+      renderRecent();
+    }
+    function removeRecent(p) {
+      var list = loadRecent().filter(function (x) { return x.path !== p; });
+      try { localStorage.setItem(RECENT_KEY, JSON.stringify(list)); } catch (e) {}
+      renderRecent();
+    }
+    function renderRecent() {
+      var list = loadRecent(), box = document.getElementById("recent"), ul = document.getElementById("recent-list");
+      if (!list.length) { box.style.display = "none"; return; }
+      box.style.display = ""; ul.innerHTML = "";
+      list.forEach(function (it) {
+        var a = document.createElement("a");
+        a.className = "row"; a.href = "#"; a.title = it.path;
+        a.innerHTML = '<span class="ri-name"></span><span class="ri-del" title="从历史里删除">×</span>';
+        a.querySelector(".ri-name").textContent = it.name;
+        a.querySelector(".ri-del").addEventListener("click", function (e) {
+          e.preventDefault(); e.stopPropagation(); removeRecent(it.path);
+        });
+        a.addEventListener("click", function (e) {
+          e.preventDefault();
+          if (!HTTP) { st.textContent = NOSVC; return; }
+          window.open(protoUrl(it.path), "_blank");
+          pushRecent(it); // 冒泡到最前
+          st.textContent = "已在新标签打开:" + it.name;
+        });
+        ul.appendChild(a);
+      });
+    }
+
+    if (!HTTP) { st.textContent = NOSVC; pickBtn.disabled = true; }
+    if (HTTP) setInterval(function () { fetch("ping").catch(function () {}); }, 3000);
+    renderRecent();
+
+    pickBtn.addEventListener("click", function () {
+      if (!HTTP) { st.textContent = NOSVC; return; }
+      var w = window.open("about:blank", "_blank"); // 点击手势里先开,避免被拦截
+      st.textContent = "请在弹出的系统窗口里选择文件夹…";
+      fetch("pick", { method: "POST" }).then(function (r) { return r.json(); }).then(function (j) {
+        if (j.ok) {
+          var url = protoUrl(j.path);
+          if (w) w.location = url; else window.open(url, "_blank");
+          pushRecent({ path: j.path, name: j.name });
+          st.textContent = "已在新标签打开:" + j.name + "(可继续在此选下一个)";
+        } else { if (w) w.close(); st.textContent = "没有选择文件夹(或没选中)。"; }
+      }).catch(function () { if (w) w.close(); st.textContent = NOSVC; });
+    });
+
+    document.getElementById("stop").addEventListener("click", function (e) {
+      e.preventDefault();
+      fetch("bye").catch(function () {});
+      document.querySelector(".wrap").innerHTML = "<h1>已停止</h1><p class='sub'>服务已停止,可以关闭本页了。</p>";
+    });
+  </script>
+</body>
+</html>

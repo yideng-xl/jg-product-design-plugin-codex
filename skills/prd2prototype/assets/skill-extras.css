@@ -1,8 +1,8 @@
 /* =============================================================================
-   skill-extras.css —— 非 Figma 组件,来自 prd2prototype skill 的「原型规范」约定
+   skill-extras-Codex.css —— 非 Figma 组件,来自 prd2prototype skill 的「原型规范」约定
    说明:这些不是「组件库.fig」里的组件,而是做原型时 skill 建议的辅助约定。
-   与 common.css(纯 Figma 基线)分开存放,等后续「skill 额外内容」那一步再统一处理。
-   依赖 common.css 里的 :root token,需在其之后引用。
+   与 common-Codex.css(纯 Figma 基线)分开存放,等后续「skill 额外内容」那一步再统一处理。
+   依赖 common-Codex.css 里的 :root token,需在其之后引用。
    ============================================================================= */
 
 /* ----- KPI 卡(skill:统计区 .summary-card) ----- */
@@ -48,3 +48,35 @@
 /* ----- 原型设计说明分隔(skill:第 6 步 铁律) ----- */
 .proto-note { margin-top: var(--space-7); padding-top: var(--space-5); border-top: 2px dashed var(--border-color); }
 .proto-note .note-hint { font-size: var(--fs-12); color: var(--text-secondary); margin-bottom: 10px; }
+
+/* ----- 编辑态 + 覆盖层(skill:需求标签 / 原型说明 手改回写。发布态 body 无 .edit-mode,以下几乎不生效) ----- */
+/* 本地编辑开关条:只有 file:// 下由 common.js 注入;发布态不注入,评审看不到 */
+.anno-bar { position: fixed; right: 16px; bottom: 16px; z-index: 9999; display: flex; align-items: center; gap: 8px;
+            background: #1f2d3d; color: #fff; padding: 8px 12px; border-radius: 8px; font-size: var(--fs-12); box-shadow: 0 2px 12px rgba(0,0,0,.25); }
+.anno-bar .anno-switch { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
+.anno-bar button { display: none; background: #3d6be5; color: #fff; border: 0; border-radius: 4px; padding: 4px 8px; font-size: var(--fs-12); cursor: pointer; }
+.anno-bar .anno-hint { color: #ffce7a; }
+.anno-bar .anno-help { color: #9ecbff; text-decoration: underline; cursor: pointer; margin-left: 2px; }
+body.edit-mode .anno-bar button { display: inline-block; }
+
+/* 可编辑区:描边 + 左上角显示编号(#data-anno-id),仅编辑态可见 */
+body.edit-mode [data-anno-id] { position: relative; outline: 1px dashed #3d6be5; outline-offset: 2px;
+            min-width: 12px; border-radius: 2px; word-break: break-word; white-space: normal; }
+body.edit-mode [data-anno-id]:focus { outline: 2px solid #3d6be5; background: rgba(61,107,229,.06); }
+body.edit-mode [data-anno-id]::after { content: "#" attr(data-anno-id); position: absolute; left: 0; top: -13px;
+            font-size: 10px; line-height: 1; color: var(--text-secondary); background: var(--bg-card, #fff);
+            padding: 0 2px; white-space: nowrap; pointer-events: none; }
+
+/* chip 上的 × 删除、容器上的 + 新增:由 common.js 注入,contenteditable=false */
+body.edit-mode [data-anno-item] { position: relative; }
+.anno-x { margin-left: 4px; color: var(--color-danger); cursor: pointer; font-weight: var(--fw-semibold); user-select: none; }
+.anno-add { margin: 2px 4px; background: #eef2ff; color: #3d6be5; border: 1px dashed #3d6be5;
+            border-radius: var(--radius-base); font-size: var(--fs-12); padding: 1px 8px; cursor: pointer; }
+
+/* 需求便签(.proto-tip)的弹层默认点击才展开;编辑态里强制展开,好让 .pt-pop-item 文字可改。
+   文字一多时:整条便签占块、弹层落到下方、定宽换行,不撑破布局 */
+body.edit-mode .proto-tip { display: block; }
+body.edit-mode .proto-tip .pt-pop { display: block !important; position: static !important;
+            visibility: visible !important; opacity: 1 !important; box-shadow: none;
+            margin: 6px 0 0; width: auto; max-width: 520px; }
+body.edit-mode .pt-pop-item { word-break: break-word; white-space: normal; }
