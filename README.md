@@ -96,23 +96,23 @@ node scripts/apply-skill-config.mjs
 
 ## 原型编辑器
 
-`prd2prototype` 带一个独立的原型编辑器，用来改需求便签和原型说明。
+`prd2prototype` 有一个独立的原型编辑器，用来改需求便签和原型说明。
 
-下载地址：
+**编辑器统一由主插件仓库分发，本仓库不自带、也不自己发布**（避免磁盘上冒出多个 `.app`）。下载地址（主仓库 Release）：
 
 ```text
-https://github.com/yideng-xl/jg-product-design-plugin-codex/releases/latest/download/prototype-editor.zip
+https://github.com/yideng-xl/jg-product-design-skills/releases/latest/download/prototype-editor.zip
 ```
+
+也可从主仓库使用说明页下载：<https://yideng-xl.github.io/jg-product-design-skills/#editor>
 
 用法：
 
-- 下载并解压一次。
-- macOS 双击 `原型编辑器.app`。
-- Windows 双击 `原型编辑器.vbs`。
-- 机器需要安装 Node.js。
+- 下载解压一次，把 `原型编辑器.app` 拖进「应用程序」常驻(只留一份)。
+- macOS 双击 `原型编辑器.app`；Windows 双击 `原型编辑器.vbs`。机器需装 Node.js。
 - 打开控制页后，选择要编辑的原型目录。
 
-编辑器是独立工具，不放进原型目录。每个原型自己的手工修改写入该原型的 `data/annotations.js`。
+编辑器是独立工具，不放进原型目录、也不放进本插件。每个原型自己的手工修改写入该原型的 `data/annotations.js`。
 
 只有 `localhost` / `127.0.0.1` 下会出现编辑态。发布到内网后的原型页面仍是只读。
 

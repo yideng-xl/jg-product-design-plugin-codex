@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.3 - 2026-07-22
+
+- 原型编辑器改由主插件仓库 `jg-product-design-skills` 统一分发:移除本仓库的 `原型编辑器.app` / `.vbs` / `.command` 资产,不再自行发布 `prototype-editor.zip`(避免磁盘上出现多个 `.app` 被 Launchpad 索引)。
+- README / SKILL.md / `common.js` 的编辑器下载与使用说明链接,全部改指向主仓库 Release 与 Pages(`https://yideng-xl.github.io/jg-product-design-skills/#editor`)。
+
 ## 0.3.2 - 2026-07-16
 
 - Disabled `prd2zentao` in the default skill load config.
