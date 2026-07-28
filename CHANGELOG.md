@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.4 - 2026-07-28
+
+- `prd2prototype` 增加本地 Git 版本管理规则：每个产品迭代独立建库，修改前保留基线，用户确认一项后提交一项。
+- 增加原型可编辑接入检查，校验 `annotations.js` 引用顺序、可编辑标识唯一性和需求便签覆盖情况。
+- 原型编辑器继续由 `jg-product-design-skills` 主仓库统一分发，本仓库不新增 `.app` 或编辑器源码。
+
 ## 0.3.3 - 2026-07-22
 
 - 原型编辑器改由主插件仓库 `jg-product-design-skills` 统一分发:移除本仓库的 `原型编辑器.app` / `.vbs` / `.command` 资产,不再自行发布 `prototype-editor.zip`(避免磁盘上出现多个 `.app` 被 Launchpad 索引)。
