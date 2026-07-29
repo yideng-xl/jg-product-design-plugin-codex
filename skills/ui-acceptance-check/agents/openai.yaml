@@ -1,0 +1,4 @@
+interface:
+  display_name: "UI Acceptance Check"
+  short_description: "在实际产品环境中验收UI视觉、交互、页面状态和一致性"
+  default_prompt: "Use $ui-acceptance-check to compare this implemented page with the provided UI design and acceptance standards."

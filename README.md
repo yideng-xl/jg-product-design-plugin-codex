@@ -9,6 +9,7 @@
 | Skill | 用途 |
 |---|---|
 | `requirements2prd` | 粗需求、新模块、既有模块调整、产品化讨论，整理成 PRD 口径。 |
+| `ui-acceptance-check` | 对照 UI 设计、UI 说明和通用规范，在实际产品环境中验收视觉、交互和页面状态。 |
 | `prd2prototype` | 根据稳定的 PRD 范围生成 HTML 原型，含本地可编辑的需求便签和原型说明。 |
 | `proto-check` | 原型评审前做自查，输出产品自查、UI 规范自查和整改要求。 |
 | `prd2zentao` | 根据 PRD 第四章拆禅道研发需求，并生成批量同步材料或控制台脚本。 |
@@ -16,6 +17,7 @@
 默认加载的 skill：
 
 - `requirements2prd`
+- `ui-acceptance-check`
 - `prd2prototype`
 - `proto-check`
 
@@ -65,6 +67,7 @@ codex plugin marketplace upgrade jg-product-design
 {
   "skills": {
     "requirements2prd": true,
+    "ui-acceptance-check": true,
     "prd2prototype": true,
     "proto-check": true,
     "prd2zentao": false
@@ -138,6 +141,7 @@ jg-product-design-plugin-codex/
 │       └── marketplace.json
 ├── skills/
 │   ├── requirements2prd/
+│   ├── ui-acceptance-check/
 │   ├── prd2prototype/
 │   ├── proto-check/
 │   └── prd2zentao/
