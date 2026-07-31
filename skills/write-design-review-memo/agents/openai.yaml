@@ -1,0 +1,4 @@
+interface:
+  display_name: "Design Review Memo"
+  short_description: "根据设计评审逐字稿和会议记录生成可直接上传的内部评审备忘录"
+  default_prompt: "Use $write-design-review-memo to turn these design review notes into an upload-ready memo."

@@ -1,6 +1,7 @@
 {
   "skills": {
     "requirements2prd": true,
+    "write-design-review-memo": true,
     "prd2prototype": true,
     "proto-check": true,
     "ui-acceptance-check": true,

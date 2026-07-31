@@ -1,7 +1,7 @@
 {
   "name": "jg-product-design-plugin-codex",
-  "version": "0.4.0",
-  "description": "Product-design skills for B-side PRD discussion, browser-based UI acceptance, HTML prototype generation, editable prototype annotations, prototype self-check, and ZenTao SR preparation.",
+  "version": "0.5.0",
+  "description": "Product-design skills for B-side PRD discussion, design-review memos, browser-based UI acceptance, HTML prototype generation, editable prototype annotations, prototype self-check, and ZenTao SR preparation.",
   "author": {
     "name": "yideng",
     "url": "https://github.com/yideng-xl"
@@ -12,6 +12,7 @@
   "keywords": [
     "product-design",
     "prd",
+    "design-review",
     "prototype",
     "ui-acceptance",
     "zentao",
@@ -21,8 +22,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "JG Product Design Codex",
-    "shortDescription": "PRD, UI acceptance, editable prototype, self-check, and ZenTao workflows.",
-    "longDescription": "A Codex plugin migrated from the original Claude product-design skills. It supports rough-demand to PRD discussion, browser-based UI acceptance against design inputs and shared standards, PRD to HTML prototype work, editable prototype annotations, prototype self-check reports, and PRD scope splitting for ZenTao SR preparation.",
+    "shortDescription": "PRD, design-review memo, UI acceptance, prototype, and self-check workflows.",
+    "longDescription": "A Codex plugin migrated from the original Claude product-design skills. It supports rough-demand to PRD discussion, upload-ready design-review memos, browser-based UI acceptance against design inputs and shared standards, PRD to HTML prototype work, editable prototype annotations, prototype self-check reports, and PRD scope splitting for ZenTao SR preparation.",
     "developerName": "yideng",
     "category": "Productivity",
     "capabilities": [
@@ -31,6 +32,7 @@
     ],
     "defaultPrompt": [
       "把这个粗需求梳理成 PRD 思路。",
+      "根据这份设计评审逐字稿整理可上传的设计评审备忘录。",
       "对照 UI 设计和规范验收这个已实现页面的视觉与交互。",
       "根据这份 PRD 做 HTML 原型。",
       "检查这个原型并给整改要求。"
