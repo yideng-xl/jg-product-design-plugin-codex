@@ -1,6 +1,6 @@
 ---
 name: prd2prototype
-description: Use when the user has approved using this skill to convert a PRD or stable product scope into reviewable HTML prototypes, high-fidelity prototypes, multi-page drill-down flows, editable prototype annotations, product-review mockups, or prototype iterations that must follow the shared component and design-language assets.
+description: Use when the user has approved using this skill to convert a PRD or stable product scope into reviewable HTML prototypes, iterate an existing prototype, backfill PRD details and the PRD from an approved prototype, or produce the final R&D-facing Word requirements specification after prototype review. Also use for high-fidelity prototypes, multi-page drill-down flows, editable prototype annotations, and prototype iterations that must follow the shared component and design-language assets.
 ---
 
 # PRD → 高保真原型 的方法论
@@ -441,7 +441,7 @@ window.__ANNO__ = {
 1. 某次加了"查看全部"链接没想清楚跳哪,评审被问"是看哪里",才承认是"随手放的"
 2. 某次加了一段"说明:X 字段用于限制 Y 范围,请按贵单位规则配置具体 Z",评审问"这段文字来自哪里,是页面录入的吗",才承认是硬编码
 
-### 第 8 步(关键):回写 PRD + 锁定本轮迭代范围
+### 第 8 步(关键):回写 PRD 细则和 PRD + 锁定本轮迭代范围
 
 > 这一步是工作流的**收尾**,不可省。原型评审通过后,产品经理作为**迭代 owner**,要主动驱动这一步。
 
@@ -449,9 +449,20 @@ window.__ANNO__ = {
 - PRD 是开工前写的,设计阶段一定会浮现"原 PRD 没考虑到"的事(新的状态、新的字段、被砍掉的功能、跨模块的依赖等)
 - 不回写 → PRD 跟原型/最终实现脱节 → 进入开发后,开发对照 PRD 做、QA 对照 PRD 测,**一堆"代码和文档不一致"的扯皮**
 
-**回写要做的三件事**:
+**收尾顺序固定**:
+
+1. 逐页反写 PRD 细则。
+2. 把确认后的产品规则、范围和决策回写 PRD。
+3. 校验 PRD 细则、PRD、原型三者一致。
+4. 生成研发对接版 Word 需求说明书。
+
+Word 是前两份文档的下游交付物。PRD 细则和 PRD 还没完成，或三者仍有冲突时，不要先生成 Word。
+
+**回写要做的四件事**:
 
 #### 8.1 把原型里的"新决策"回填进 PRD
+
+先更新 PRD 细则，再更新 PRD。PRD 细则按原型页面和功能编号记录字段、状态、操作、产品规则、交互、异常、边界、权限和数据来源；PRD 保留背景、目标、范围、业务规则、信息架构、版本规划和产品决策。
 
 逐页过一遍原型,把以下东西更新进 PRD:
 - **新增的字段 / 状态 / 临时标签** → 更新数据模型章节、状态机章节
@@ -529,6 +540,28 @@ window.__ANNO__ = {
 **确认完后**:让对应负责人在 PRD 上签字(电子也行,留个 commit 记录),作为本轮迭代的"开工凭据"。
 
 **踩坑案例**:某项目原型评审完直接进开发,PRD 没回写。开发对照旧 PRD 实现,QA 对照旧 PRD 测,等用户验收时才发现"咦,这跟当时评审的原型不一样啊?" —— 整轮迭代被打回返工。教训:**评审通过 ≠ 工作结束,回写 PRD 才是结束**。
+
+#### 8.4 生成研发对接版 Word 需求说明书
+
+PRD 细则、PRD 和原型一致性校验通过后，读取 [`references/研发需求说明书-word.md`](references/研发需求说明书-word.md)，按其中的固定结构生成 Word。
+
+这份 Word 不依赖个人工作区里的模板文件。优先使用本 skill 自带的生成脚本：
+
+```bash
+python scripts/build_requirements_spec_docx.py input.json output.docx
+python scripts/verify_requirements_spec_docx.py output.docx
+```
+
+生成时遵守以下边界：
+
+- 功能编号、功能名称、前置条件、流程、逻辑、交互和注意事项来自 PRD 细则。
+- 背景、目标、业务规则、权限和非功能需求来自 PRD。
+- 原型只用于核对已确认的页面名称、入口、跳转和展示形态，不把示例数据当产品规则。
+- 每个功能编号单独一张 8 行表格。每张表后保留 1 个可见空行，空行不得带隐藏属性。
+- 全文统一宋体。人员、日期、版本等信息没有明确来源时留空或标记“待确认”。
+- Word 是新增交付物，不修改 PRD 细则和 PRD 源文件。
+
+结构校验通过后，还要用 Word 或兼容渲染器导出 PDF，逐页检查全部页面。只跑脚本、不看渲染结果，不能算完成。
 
 ---
 
@@ -641,13 +674,17 @@ window.__ANNO__ = {
 
 ### G. 评审后的回写(关键 · 第 8 步)
 - [ ] 回写前已分类(进 PRD 的产品规则 / 行为 / 范围 vs"原型为准"的展示约定),并在会话里跟用户对齐分级清单(必改 / 建议改 / 待拍板 / 不改)后再动笔——不直接改 PRD
+- [ ] PRD 细则已按原型页面和功能编号逐项反写，字段、状态、操作、规则、交互、异常、边界、权限和数据来源齐全
 - [ ] 原型评审通过后,PRD 已逐页回写(新增字段 / 新状态 / 砍掉的功能都更新到位)
+- [ ] PRD 细则、PRD、原型已做一致性校验；冲突项已经用户确认，没有自行选口径
 - [ ] 范围下沉 / 重大决策已 grep 全文排查连带矛盾(产品范围 / 版本规划 / 菜单·IA / 散落措辞都捋过,不前后打架)
 - [ ] 本轮迭代范围已锁定:本轮包含 / 本轮不包含,显式列出
 - [ ] **设计需求**已列清单 + 找设计师确认
 - [ ] **技术需求**已列清单 + 找架构 / 后端 / 运维确认
 - [ ] **验收标准**已写,每个功能的"完成的定义"明确
 - [ ] 各方在 PRD 上签字 / 留 commit,作为开工凭据
+- [ ] 研发对接版 Word 已在 PRD 细则和 PRD 之后生成，全文宋体，每个功能编号单独一张 8 行表格
+- [ ] 每张功能表后有且只有 1 个可见空行，无 `w:vanish` 隐藏属性；Word 已逐页渲染检查
 
 ### H. 裁剪到本轮范围(隐藏而非删除)
 - [ ] 非P0 一律用 `display:none` 隐藏,没有真删文件/代码
@@ -939,14 +976,16 @@ function confirmDelete(event) {
 3. **导航页**(把所有原型页串起来,作为评审入口)
 4. **设计规范文档**(可以是本 skill 的"原型规范"章节的项目化版本)
 5. **挂起话题清单**(继承自姐妹 skill `requirements2prd`,继续更新)
-6. **回写后的 PRD 终稿**(对应第 8 步)
-7. **本轮迭代范围定义**(本轮包含 / 不包含 / 设计需求 / 技术需求 / 验收标准)
-8. **各方确认记录**(设计 / 技术 / QA 签字或 commit)
+6. **回写后的 PRD 细则**(按原型页面和功能编号展开)
+7. **回写后的 PRD 终稿**(对应第 8 步)
+8. **研发对接版 Word 需求说明书**(PRD 细则和 PRD 完成后生成)
+9. **本轮迭代范围定义**(本轮包含 / 不包含 / 设计需求 / 技术需求 / 验收标准)
+10. **各方确认记录**(设计 / 技术 / QA 签字或 commit)
 
 ---
 
 ## 与上一步、下一步的衔接
 
 - **上一步**:姐妹 skill **`requirements2prd`**(本 plugin 内的另一个 skill) —— 提供 PRD、术语字典、视图设计基线
-- **关键收尾**:第 8 步 —— 回写 PRD + 锁定本轮迭代 + 拉通设计 / 技术 / QA 确认
-- **下一步**:开发 / 联调 —— 拿着回写后的 PRD 终稿 + 锁定的迭代范围 + 各方确认凭据开工。**common.css 直接拿去用,组件结构 1:1 实现**
+- **关键收尾**:第 8 步 —— 反写 PRD 细则、回写 PRD、生成研发对接版 Word、锁定本轮迭代、拉通设计 / 技术 / QA 确认
+- **下一步**:开发 / 联调 —— 拿着 PRD 细则、PRD 终稿、研发对接版 Word、锁定的迭代范围和各方确认凭据开工。**common.css 直接拿去用,组件结构 1:1 实现**
