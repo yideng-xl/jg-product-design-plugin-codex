@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="JG Product Design Codex 插件市场首次安装与更新操作手册">
+  <title>JG Product Design Codex｜安装与更新手册</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#top">
+        <span class="brand-mark">JG</span>
+        <span>插件操作手册</span>
+      </a>
+      <nav class="topnav" aria-label="页面导航">
+        <a href="#first-install">首次安装</a>
+        <a href="#update">日常更新</a>
+        <a href="#troubleshooting">异常处理</a>
+        <a href="https://github.com/yideng-xl/jg-product-design-plugin-codex">GitHub 仓库</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-inner">
+        <p class="eyebrow">JG PRODUCT DESIGN CODEX</p>
+        <h1>插件市场安装与更新操作手册</h1>
+        <p class="hero-lead">适用于第一次添加 JG Product Design 插件市场，以及后续获取新版插件。按页面顺序操作即可。</p>
+        <div class="hero-actions">
+          <a class="button" href="#first-install">开始首次安装</a>
+          <a class="button secondary" href="#update">查看更新方法</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="layout">
+      <aside class="toc" aria-label="目录">
+        <p class="toc-title">本页目录</p>
+        <a href="#before-start">操作前准备</a>
+        <a href="#first-install">首次安装</a>
+        <a href="#verify">安装后验证</a>
+        <a href="#update">日常更新</a>
+        <a href="#cli">命令行备用方式</a>
+        <a href="#troubleshooting">异常处理</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="before-start">
+          <h2>操作前准备</h2>
+          <p class="section-intro">首次安装只需要准备一个仓库地址。Git 引用固定填写 <code>main</code>，稀疏路径留空。</p>
+
+          <div class="summary-grid">
+            <div class="summary-card">
+              <strong>首次安装</strong>
+              <span>添加市场，再安装插件</span>
+            </div>
+            <div class="summary-card">
+              <strong>日常更新</strong>
+              <span>先升级市场，再刷新插件</span>
+            </div>
+            <div class="summary-card">
+              <strong>生效方式</strong>
+              <span>更新完成后新建任务</span>
+            </div>
+          </div>
+
+          <div class="field-list" aria-label="添加市场填写项">
+            <div class="field-row">
+              <span>来源</span>
+              <code id="repo-url">https://github.com/yideng-xl/jg-product-design-plugin-codex</code>
+              <button class="copy-button" type="button" data-copy="repo-url">复制</button>
+            </div>
+            <div class="field-row">
+              <span>Git 引用</span>
+              <code id="git-ref">main</code>
+              <button class="copy-button" type="button" data-copy="git-ref">复制</button>
+            </div>
+            <div class="field-row">
+              <span>稀疏路径</span>
+              <code>留空</code>
+              <span aria-hidden="true"></span>
+            </div>
+          </div>
+
+          <div class="callout">
+            <strong>市场和插件是两层。</strong>
+            插件市场负责提供版本信息；插件本体才是实际使用的能力。首次安装和日常更新都要确认插件本体已安装或已刷新。
+          </div>
+        </section>
+
+        <section class="section" id="first-install">
+          <h2>首次安装</h2>
+          <p class="section-intro">下面的操作只在第一次使用时执行。已经添加过 JG Product Design 市场的电脑，直接看“日常更新”。</p>
+
+          <article class="step">
+            <div class="step-number">1</div>
+            <div class="step-body">
+              <h3>打开插件设置</h3>
+              <p>进入 Codex 左侧的“插件”，再点击插件页面右上方的齿轮图标。</p>
+              <a class="screenshot" href="assets/01-open-plugin-settings.png" target="_blank" rel="noopener">
+                <img src="assets/01-open-plugin-settings.png" alt="Codex 插件页面，左侧插件入口和右上方设置图标已标出">
+              </a>
+              <p class="caption">点击图片可查看原图。</p>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-number">2</div>
+            <div class="step-body">
+              <h3>选择“添加插件市场”</h3>
+              <p>在设置页进入“插件”→“市场”，点击右上角“添加”，选择“添加插件市场”。</p>
+              <a class="screenshot" href="assets/02-add-marketplace-entry.png" target="_blank" rel="noopener">
+                <img src="assets/02-add-marketplace-entry.png" alt="Codex 插件设置的市场页，添加插件市场入口已标出" loading="lazy">
+              </a>
+              <p class="caption">如果列表里已经有 JG Product Design，不要重复添加。</p>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-number">3</div>
+            <div class="step-body">
+              <h3>填写市场来源</h3>
+              <p>来源填仓库地址，Git 引用填 <code>main</code>，稀疏路径留空。确认后点击“添加市场”。</p>
+              <a class="screenshot" href="assets/03-fill-marketplace-source.png" target="_blank" rel="noopener">
+                <img src="assets/03-fill-marketplace-source.png" alt="添加插件市场窗口，仓库来源和 Git 引用填写区域已标出" loading="lazy">
+              </a>
+              <p class="caption">不要在稀疏路径中填写 <code>plugins/codex</code> 等内容。</p>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-number">4</div>
+            <div class="step-body">
+              <h3>安装插件</h3>
+              <p>返回插件页面，在 JG Product Design 下找到 <strong>JG Product Design Codex</strong>，点击“安装”。安装完成后新建一个 Codex 任务。</p>
+              <div class="callout success">
+                <strong>首次安装完成标准</strong>
+                市场列表中能看到 JG Product Design；插件页面中 JG Product Design Codex 显示为已安装。
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section class="section" id="verify">
+          <h2>安装后验证</h2>
+          <p class="section-intro">安装完成后新建任务，输入下面这句话：</p>
+          <div class="code-block"><code>我们来聊个新需求</code></div>
+          <ul class="checklist">
+            <li>Codex 先建议使用 <code>requirements2prd</code>。</li>
+            <li>得到你的确认后，再进入需求梳理流程。</li>
+            <li>如果旧任务没有变化，以新建任务的结果为准。</li>
+          </ul>
+        </section>
+
+        <section class="section" id="update">
+          <h2>日常更新</h2>
+          <p class="section-intro">仓库发布新版本后，按“升级市场 → 刷新插件 → 新建任务”的顺序操作。</p>
+
+          <article class="step">
+            <div class="step-number">1</div>
+            <div class="step-body">
+              <h3>升级插件市场</h3>
+              <p>进入“设置”→“插件”→“市场”，找到 JG Product Design，点击右侧“升级”。这一步会获取市场中的最新版本信息。</p>
+              <a class="screenshot" href="assets/04-upgrade-marketplace.png" target="_blank" rel="noopener">
+                <img src="assets/04-upgrade-marketplace.png" alt="JG Product Design 插件市场右侧的升级按钮已标出" loading="lazy">
+              </a>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-number">2</div>
+            <div class="step-body">
+              <h3>刷新插件本体</h3>
+              <p>返回插件页面，找到 JG Product Design Codex。页面出现“升级”时点击升级；没有升级入口但新版能力未生效时，重新安装一次。</p>
+              <div class="callout warning">
+                只升级市场不等于插件本体已经更新。市场升级后，仍要确认插件已刷新。
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-number">3</div>
+            <div class="step-body">
+              <h3>新建任务验证</h3>
+              <p>插件刷新完成后新建任务，再验证本次新增或调整的能力。已经打开的旧任务可能仍使用更新前的 skill。</p>
+            </div>
+          </article>
+        </section>
+
+        <section class="section" id="cli">
+          <h2>命令行备用方式</h2>
+          <p class="section-intro">界面中无法完成升级时，可在终端依次执行：</p>
+          <div class="code-block"><code>codex plugin marketplace upgrade jg-product-design
+codex plugin add jg-product-design-plugin-codex@jg-product-design</code></div>
+          <p>执行完成后，新建 Codex 任务验证。</p>
+        </section>
+
+        <section class="section" id="troubleshooting">
+          <h2>异常处理</h2>
+          <p class="section-intro">先根据现象核对下面四项。</p>
+          <div class="troubleshooting">
+            <article class="issue">
+              <h3>提示市场已存在</h3>
+              <p>不要重复添加。回到市场列表，找到 JG Product Design 并点击“升级”。</p>
+            </article>
+            <article class="issue">
+              <h3>添加市场失败</h3>
+              <p>核对仓库地址是否完整、Git 引用是否为 <code>main</code>、稀疏路径是否留空，并确认当前网络能访问 GitHub。</p>
+            </article>
+            <article class="issue">
+              <h3>看不到新版能力</h3>
+              <p>先升级市场，再刷新或重新安装插件，最后新建任务。不要只在原任务中反复测试。</p>
+            </article>
+            <article class="issue">
+              <h3>插件列表里找不到</h3>
+              <p>确认市场列表中已有 JG Product Design。必要时先升级市场，再返回插件页搜索。</p>
+            </article>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    JG Product Design Codex · 操作手册更新于 2026-08-25
+  </footer>
+
+  <script>
+    document.querySelectorAll("[data-copy]").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const target = document.getElementById(button.dataset.copy);
+        if (!target) return;
+        try {
+          await navigator.clipboard.writeText(target.textContent.trim());
+          const original = button.textContent;
+          button.textContent = "已复制";
+          setTimeout(() => { button.textContent = original; }, 1500);
+        } catch (error) {
+          window.prompt("请复制以下内容", target.textContent.trim());
+        }
+      });
+    });
+  </script>
+</body>
+</html>

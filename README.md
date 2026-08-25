@@ -4,6 +4,13 @@
 
 它从原 Claude 版产品设计 skill 迁移而来。Claude 版目录只作为上游来源；Codex 版以本仓库为准。
 
+## 安装与更新手册
+
+- [图文操作手册（GitHub Pages）](https://yideng-xl.github.io/jg-product-design-plugin-codex/)
+- [仓库内 Markdown 版](docs/插件市场安装与更新操作手册.md)
+
+图文手册包含首次添加插件市场、安装插件、日常更新和异常处理。下面保留命令行方式，供维护和故障处理使用。
+
 ## 包含的 skill
 
 | Skill | 用途 |
@@ -37,7 +44,7 @@
 
 共用规则源：`skills/proto-check/assets/日常迭代安全自查表.md`。未改动的登录、会话、TLS、端口等框架能力不在每次迭代重复检查。
 
-## 安装到 Codex
+## 通过命令行安装到 Codex
 
 首次安装先添加 marketplace：
 
@@ -57,7 +64,7 @@ codex plugin marketplace add yideng-xl/jg-product-design-plugin-codex --ref main
 
 预期行为：Codex 先建议使用 `requirements2prd`，等用户确认后再进入流程。
 
-## 更新插件
+## 通过命令行更新插件
 
 维护者更新 GitHub 后，本机执行：
 
