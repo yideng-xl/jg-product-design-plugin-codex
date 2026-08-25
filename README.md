@@ -8,11 +8,11 @@
 
 | Skill | 用途 |
 |---|---|
-| `requirements2prd` | 粗需求、新模块、既有模块调整、产品化讨论，整理成 PRD 口径。 |
+| `requirements2prd` | 粗需求、新模块、既有模块调整、产品化讨论，整理成 PRD 口径；按本轮改动识别安全触发项并形成安全需求。 |
 | `write-design-review-memo` | 根据逐字稿、会议记录和评审材料，整理可直接上传的设计评审备忘录。 |
 | `ui-acceptance-check` | 对照 UI 设计、UI 说明和通用规范，在实际产品环境中验收视觉、交互和页面状态。 |
-| `prd2prototype` | 根据稳定的 PRD 范围生成 HTML 原型，含本地可编辑的需求便签和原型说明。 |
-| `proto-check` | 原型评审前做自查，输出产品自查、UI 规范自查和整改要求。 |
+| `prd2prototype` | 根据稳定的 PRD 范围生成 HTML 原型，把已确认的安全规则映射到页面、交互和原型说明，含本地可编辑的需求便签。 |
+| `proto-check` | 原型评审前做产品、UI 和安全自查，区分原型整改与技术/测试承接。 |
 | `prd2zentao` | 根据 PRD 第四章拆禅道研发需求，并生成批量同步材料或控制台脚本。 |
 
 默认加载的 skill：
@@ -26,6 +26,16 @@
 默认不加载：
 
 - `prd2zentao`
+
+## 安全需求贯通
+
+安全规则在需求阶段进入 PRD，原型阶段负责表达，`proto-check` 只做评审前闸门：
+
+1. `requirements2prd` 按本轮新增/修改内容扫描 14 个 `S-*` 安全触发场景。命中项写入 PRD“附录 D：本轮安全需求”，逐条列出产品规则、check 规则、前端与后端/实际入口执行位置、失败处置及技术/测试承接。
+2. `prd2prototype` 把命中项映射到具体页面、控件、交互和 proto-note。用户可见的限制与错误反馈落到原型；服务端强制、注入防护、越权验证等继续标记为“需技术评审/测试验证”。
+3. `proto-check` 按同一 `S-*` 编号核对遗漏。产品规则缺失进入原型整改，运行防护进入技术/测试承接，不从静态 HTML 推断安全通过。
+
+共用规则源：`skills/proto-check/assets/日常迭代安全自查表.md`。未改动的登录、会话、TLS、端口等框架能力不在每次迭代重复检查。
 
 ## 安装到 Codex
 
@@ -53,9 +63,10 @@ codex plugin marketplace add yideng-xl/jg-product-design-plugin-codex --ref main
 
 ```bash
 codex plugin marketplace upgrade jg-product-design
+codex plugin add jg-product-design-plugin-codex@jg-product-design
 ```
 
-然后重启 Codex。
+然后开一个新会话验证新 skill。已安装插件使用 `codex plugin add` 会按 marketplace 当前版本刷新安装缓存。
 
 如果插件已经安装过，但新 skill 没生效，进入 **Plugins** 重新安装或刷新一次。
 

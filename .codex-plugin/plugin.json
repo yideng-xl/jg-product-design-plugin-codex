@@ -1,7 +1,7 @@
 {
   "name": "jg-product-design-plugin-codex",
-  "version": "0.5.2+codex.20260813054041",
-  "description": "Product-design skills for B-side PRD discussion, design-review memos, browser-based UI acceptance, HTML prototype generation, prototype-to-PRD backfill, R&D Word requirement specifications, editable prototype annotations, prototype self-check, and ZenTao SR preparation.",
+  "version": "0.6.0+codex.20260825034339",
+  "description": "Product-design skills for B-side PRD discussion, security-triggered PRD and prototype design, design-review memos, browser-based UI acceptance, HTML prototype generation, prototype-to-PRD backfill, R&D Word requirement specifications, editable prototype annotations, prototype self-check, and ZenTao SR preparation.",
   "author": {
     "name": "yideng",
     "url": "https://github.com/yideng-xl"
@@ -14,6 +14,7 @@
     "prd",
     "design-review",
     "prototype",
+    "security-by-design",
     "ui-acceptance",
     "zentao",
     "b-side",
@@ -22,8 +23,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "JG Product Design Codex",
-    "shortDescription": "PRD, design-review memo, UI acceptance, prototype, and self-check workflows.",
-    "longDescription": "A Codex plugin migrated from the original Claude product-design skills. It supports rough-demand to PRD discussion, upload-ready design-review memos, browser-based UI acceptance against design inputs and shared standards, PRD to HTML prototype work, prototype-to-PRD detail backfill, self-contained R&D Word requirement specifications, editable prototype annotations, prototype self-check reports, and PRD scope splitting for ZenTao SR preparation.",
+    "shortDescription": "PRD, security-by-design, review, prototype, and acceptance workflows.",
+    "longDescription": "A Codex plugin migrated from the original Claude product-design skills. It supports rough-demand to PRD discussion, iteration-triggered security requirements, security-rule mapping into prototypes, upload-ready design-review memos, browser-based UI acceptance against design inputs and shared standards, prototype-to-PRD detail backfill, self-contained R&D Word requirement specifications, editable prototype annotations, product/UI/security self-check reports, and PRD scope splitting for ZenTao SR preparation.",
     "developerName": "yideng",
     "category": "Productivity",
     "capabilities": [
