@@ -67,6 +67,25 @@
             </div>
           </div>
 
+          <ol class="update-flow" aria-label="插件更新链路">
+            <li>
+              <strong>更新本地源码</strong>
+              <span>只修改维护仓库</span>
+            </li>
+            <li>
+              <strong>推送 GitHub</strong>
+              <span>GitHub 作为发布源</span>
+            </li>
+            <li>
+              <strong>Codex 拉取</strong>
+              <span>升级市场并安装新版</span>
+            </li>
+            <li>
+              <strong>新建任务</strong>
+              <span>验证新版 skill</span>
+            </li>
+          </ol>
+
           <div class="field-list" aria-label="添加市场填写项">
             <div class="field-row">
               <span>来源</span>
@@ -86,8 +105,8 @@
           </div>
 
           <div class="callout">
-            <strong>市场和插件是两层。</strong>
-            插件市场负责提供版本信息；插件本体才是实际使用的能力。首次安装和日常更新都要确认插件本体已安装或已刷新。
+            <strong>截图中的本地路径由 Codex 自动管理。</strong>
+            <code>.codex/.tmp/marketplaces/...</code> 是 Codex 从 GitHub 拉取的市场快照；插件随后自动安装到 Codex 统一插件目录。两处都不是维护仓库，不需要手工复制或修改文件。
           </div>
         </section>
 
@@ -163,7 +182,7 @@
             <div class="step-number">1</div>
             <div class="step-body">
               <h3>升级插件市场</h3>
-              <p>进入“设置”→“插件”→“市场”，找到 JG Product Design，点击右侧“升级”。这一步会获取市场中的最新版本信息。</p>
+              <p>进入“设置”→“插件”→“市场”，找到 JG Product Design，点击右侧“升级”。Codex 会从 GitHub 拉取最新市场内容，不需要手工复制文件。</p>
               <a class="screenshot" href="assets/04-upgrade-marketplace.png" target="_blank" rel="noopener">
                 <img src="assets/04-upgrade-marketplace.png" alt="JG Product Design 插件市场右侧的升级按钮已标出" loading="lazy">
               </a>
@@ -174,7 +193,7 @@
             <div class="step-number">2</div>
             <div class="step-body">
               <h3>刷新插件本体</h3>
-              <p>返回插件页面，找到 JG Product Design Codex。页面出现“升级”时点击升级；没有升级入口但新版能力未生效时，重新安装一次。</p>
+              <p>返回插件页面，找到 JG Product Design Codex。页面出现“升级”时点击升级；没有升级入口但新版能力未生效时，重新安装一次。Codex 会把新版安装到统一插件目录。</p>
               <div class="callout warning">
                 只升级市场不等于插件本体已经更新。市场升级后，仍要确认插件已刷新。
               </div>

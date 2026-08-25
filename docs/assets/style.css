@@ -266,6 +266,46 @@ h1 {
   font-size: 14px;
 }
 
+.update-flow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 24px 0;
+  padding: 0;
+  counter-reset: flow-step;
+  list-style: none;
+}
+
+.update-flow li {
+  position: relative;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: var(--surface-soft);
+  counter-increment: flow-step;
+}
+
+.update-flow li::before {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--brand);
+  content: "0" counter(flow-step);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.update-flow strong {
+  display: block;
+  margin-bottom: 3px;
+  font-size: 15px;
+}
+
+.update-flow span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
 .field-list {
   overflow: hidden;
   margin-top: 24px;
@@ -476,7 +516,8 @@ footer {
   }
 
   .summary-grid,
-  .troubleshooting {
+  .troubleshooting,
+  .update-flow {
     grid-template-columns: 1fr;
   }
 }

@@ -73,7 +73,7 @@ codex plugin marketplace upgrade jg-product-design
 codex plugin add jg-product-design-plugin-codex@jg-product-design
 ```
 
-然后开一个新会话验证新 skill。已安装插件使用 `codex plugin add` 会按 marketplace 当前版本刷新安装缓存。
+然后开一个新会话验证新 skill。已安装插件使用 `codex plugin add` 会按 marketplace 当前版本刷新 Codex 统一插件目录。
 
 如果插件已经安装过，但新 skill 没生效，进入 **Plugins** 重新安装或刷新一次。
 
@@ -145,8 +145,9 @@ https://github.com/yideng-xl/jg-product-design-skills/releases/latest/download/p
 本仓库是 Codex 版 skill 的唯一源码。
 
 - 以后调整 skill，只改本仓库里的文件。
-- 不直接改 Codex 已安装或缓存里的 skill。
-- 改完后提交并推送 GitHub。
+- 本地源码提交并推送 GitHub 后，再由使用方升级 marketplace 和插件。
+- `.codex/.tmp/marketplaces/...` 是 Codex 自动拉取的市场快照。
+- `.codex/plugins/cache/...` 是 Codex 统一插件目录，`cache` 是内部目录名；不直接修改其中的 skill。
 - 使用方通过 `codex plugin marketplace upgrade jg-product-design` 更新。
 
 这样能避免本机改了但 GitHub 没更新，导致同事之间使用的 skill 不一致。
