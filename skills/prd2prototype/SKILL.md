@@ -9,6 +9,12 @@ description: Use when the user has approved using this skill to convert a PRD or
 
 ---
 
+## 开始前:检查插件更新
+
+进入原型工作、读取 PRD 或修改用户文件前,先按共享的[产品设计插件自动更新机制](../../references/skill-auto-update.md)执行。同一个 Codex 任务已经由 `requirements2prd` 或 `proto-check` 检查过时,本 skill 不重复检查。
+
+---
+
 ## 大前提(铁律):站在产品经理视角,用自然语言输出需求说明
 
 > 这是做原型前要先立住的根本立场,**比任何组件 / 规范都靠前**。组件、配色、交互都是工具;能不能把"要做什么、为什么"用人话讲清,才是原型的价值所在。

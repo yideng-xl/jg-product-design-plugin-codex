@@ -55,6 +55,17 @@
 
 `requirements2prd` 负责确认规则需要的产品参数，`prd2prototype` 负责把确认结果落到界面和原型说明，`proto-check` 负责按同一编号检查证据。各 skill 可以保留流程和执行提醒，不复制规则全文。规则升版时先修改上述权威源，再检查 3 个 skill 的引用。
 
+## 自动更新
+
+`requirements2prd`、`prd2prototype`、`proto-check` 在每个新任务开始时共用一次更新检查：
+
+1. 刷新已配置的 `jg-product-design` marketplace。
+2. 比较 marketplace 版本与本地已安装版本。
+3. 有新版本时执行插件安装并复核版本；当前任务停止，提示新建任务加载新版 skill。
+4. 检查失败时继续使用当前版本，不阻塞需求、原型或自查工作。
+
+更新逻辑统一维护在 `scripts/check_update.py`，状态处理统一维护在 `references/skill-auto-update.md`。它只操作 Codex 管理的 marketplace 和插件安装目录，不修改源码仓库、产品材料或用户文件，也不自动提交、推送 GitHub。
+
 ## 通过命令行安装到 Codex
 
 首次安装先添加 marketplace：

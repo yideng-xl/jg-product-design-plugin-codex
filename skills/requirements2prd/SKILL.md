@@ -9,6 +9,12 @@ description: Use when the user has approved using this skill to turn rough produ
 
 ---
 
+## 开始前:检查插件更新
+
+进入需求讨论或读取用户材料前,先按共享的[产品设计插件自动更新机制](../../references/skill-auto-update.md)执行。同一个 Codex 任务已经由 `prd2prototype` 或 `proto-check` 检查过时,本 skill 不重复检查。
+
+---
+
 ## 何时该启用本 skill
 
 **典型触发场景**:

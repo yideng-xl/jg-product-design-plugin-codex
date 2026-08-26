@@ -9,6 +9,12 @@ description: Use when the user has approved using this skill to inspect HTML pro
 
 ---
 
+## 开始前:检查插件更新
+
+读取原型或开始自查前,先按共享的[产品设计插件自动更新机制](../../references/skill-auto-update.md)执行。同一个 Codex 任务已经由 `requirements2prd` 或 `prd2prototype` 检查过时,本 skill 不重复检查。
+
+---
+
 ## 共享规则源(assets,本 skill 自包含)
 
 下表 4 份文件是本插件的规则权威源。`requirements2prd` 和 `prd2prototype` 只按编号读取并承接,不得复制一份规则全文自行维护。规则升版时先改这里,再检查 3 个 skill 的引用和执行口径。
