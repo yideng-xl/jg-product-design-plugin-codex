@@ -1,6 +1,6 @@
 {
   "name": "jg-product-design-plugin-codex",
-  "version": "0.6.0+codex.20260825034339",
+  "version": "0.6.1+codex.20260826065148",
   "description": "Product-design skills for B-side PRD discussion, security-triggered PRD and prototype design, design-review memos, browser-based UI acceptance, HTML prototype generation, prototype-to-PRD backfill, R&D Word requirement specifications, editable prototype annotations, prototype self-check, and ZenTao SR preparation.",
   "author": {
     "name": "yideng",
