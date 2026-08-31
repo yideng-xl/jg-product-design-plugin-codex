@@ -1,7 +1,7 @@
 {
   "name": "jg-product-design-plugin-codex",
-  "version": "0.6.2+codex.20260826084507",
-  "description": "Product-design skills for B-side PRD discussion, security-triggered PRD and prototype design, design-review memos, browser-based UI acceptance, HTML prototype generation, prototype-to-PRD backfill, R&D Word requirement specifications, editable prototype annotations, prototype self-check, and ZenTao SR preparation.",
+  "version": "0.7.0+codex.20260831104500",
+  "description": "Product-design skills for demand management, prototype design and editing, review and weekly meeting minutes, UI acceptance, prototype self-check, and ZenTao SR preparation.",
   "author": {
     "name": "yideng",
     "url": "https://github.com/yideng-xl"
@@ -13,6 +13,7 @@
     "product-design",
     "prd",
     "design-review",
+    "weekly-meeting",
     "prototype",
     "security-by-design",
     "ui-acceptance",
@@ -23,8 +24,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "JG Product Design Codex",
-    "shortDescription": "PRD, security-by-design, review, prototype, and acceptance workflows.",
-    "longDescription": "A Codex plugin migrated from the original Claude product-design skills. It supports rough-demand to PRD discussion, iteration-triggered security requirements, security-rule mapping into prototypes, upload-ready design-review memos, browser-based UI acceptance against design inputs and shared standards, prototype-to-PRD detail backfill, self-contained R&D Word requirement specifications, editable prototype annotations, product/UI/security self-check reports, and PRD scope splitting for ZenTao SR preparation.",
+    "shortDescription": "Demand, prototype, review, meeting, self-check, and acceptance workflows.",
+    "longDescription": "The maintained Codex source for the product-design workflow. It supports rough-demand to PRD discussion, security-triggered requirements, HTML prototype generation and local annotation editing, design-review memos, product weekly meeting host scripts and final minutes, browser-based UI acceptance, prototype self-check, prototype-to-PRD backfill, R&D Word requirement specifications, and ZenTao SR preparation.",
     "developerName": "yideng",
     "category": "Productivity",
     "capabilities": [
@@ -32,12 +33,13 @@
       "Review"
     ],
     "defaultPrompt": [
-      "把这个粗需求梳理成 PRD 思路。",
-      "根据这份设计评审逐字稿整理可上传的设计评审备忘录。",
-      "对照 UI 设计和规范验收这个已实现页面的视觉与交互。",
-      "根据这份 PRD 做 HTML 原型。",
-      "根据评审通过的原型反写 PRD 细则和 PRD，再生成研发对接版 Word 需求说明书。",
-      "检查这个原型并给整改要求。"
+      "\u628a\u8fd9\u4e2a\u7c97\u9700\u6c42\u68b3\u7406\u6210 PRD \u601d\u8def\u3002",
+      "\u6839\u636e\u8fd9\u4efd\u8bbe\u8ba1\u8bc4\u5ba1\u9010\u5b57\u7a3f\u6574\u7406\u53ef\u4e0a\u4f20\u7684\u8bbe\u8ba1\u8bc4\u5ba1\u5907\u5fd8\u5f55\u3002",
+      "\u6839\u636e\u4e0a\u5468\u4f1a\u8bae\u7eaa\u8981\u548c\u672c\u5468\u6210\u5458\u5468\u62a5\u751f\u6210\u4ea7\u54c1\u90e8\u5468\u4f8b\u4f1a\u4e3b\u6301\u7a3f\u3002",
+      "\u5bf9\u7167 UI \u8bbe\u8ba1\u548c\u89c4\u8303\u9a8c\u6536\u8fd9\u4e2a\u5df2\u5b9e\u73b0\u9875\u9762\u7684\u89c6\u89c9\u4e0e\u4ea4\u4e92\u3002",
+      "\u6839\u636e\u8fd9\u4efd PRD \u505a HTML \u539f\u578b\u3002",
+      "\u6839\u636e\u8bc4\u5ba1\u901a\u8fc7\u7684\u539f\u578b\u53cd\u5199 PRD \u7ec6\u5219\u548c PRD\uff0c\u518d\u751f\u6210\u7814\u53d1\u5bf9\u63a5\u7248 Word \u9700\u6c42\u8bf4\u660e\u4e66\u3002",
+      "\u68c0\u67e5\u8fd9\u4e2a\u539f\u578b\u5e76\u7ed9\u6574\u6539\u8981\u6c42\u3002"
     ]
   }
 }

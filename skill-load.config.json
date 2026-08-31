@@ -2,6 +2,7 @@
   "skills": {
     "requirements2prd": true,
     "write-design-review-memo": true,
+    "write-product-weekly-minutes": true,
     "prd2prototype": true,
     "proto-check": true,
     "ui-acceptance-check": true,

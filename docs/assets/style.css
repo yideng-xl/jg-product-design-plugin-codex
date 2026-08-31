@@ -44,6 +44,29 @@ a:hover {
   color: var(--brand-dark);
 }
 
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid rgba(23, 105, 224, 0.35);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 100;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: var(--text);
+  color: #fff;
+  transform: translateY(-160%);
+}
+
+.skip-link:focus {
+  color: #fff;
+  transform: translateY(0);
+}
+
 code {
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 }
@@ -164,6 +187,7 @@ h1 {
   color: #fff;
   font-weight: 650;
   text-decoration: none;
+  touch-action: manipulation;
 }
 
 .button:hover {
@@ -495,6 +519,33 @@ h1 {
   font-size: 14px;
 }
 
+.editor-download {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+  padding: 22px;
+  border: 1px solid #bcd2f4;
+  border-radius: 14px;
+  background: var(--brand-soft);
+}
+
+.editor-download strong,
+.editor-download span {
+  display: block;
+}
+
+.editor-download span {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.editor-download .button {
+  flex: none;
+}
+
 footer {
   padding: 26px 20px 38px;
   color: var(--muted);
@@ -519,6 +570,11 @@ footer {
   .troubleshooting,
   .update-flow {
     grid-template-columns: 1fr;
+  }
+
+  .editor-download {
+    align-items: stretch;
+    flex-direction: column;
   }
 }
 

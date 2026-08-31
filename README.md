@@ -2,7 +2,7 @@
 
 这是给 Codex 用的产品设计插件。
 
-它从原 Claude 版产品设计 skill 迁移而来。Claude 版目录只作为上游来源；Codex 版以本仓库为准。
+本仓库是 Codex 版产品设计 Skill、原型编辑器和 GitHub Pages 的唯一维护源。旧 Claude 仓库不再作为上游来源。
 
 ## 安装与更新手册
 
@@ -11,21 +11,49 @@
 
 图文手册包含首次添加插件市场、安装插件、日常更新和异常处理。下面保留命令行方式，供维护和故障处理使用。
 
-## 包含的 skill
+## 业务流程
+
+插件按工作发生的阶段分为 2 类。
+
+### 一、跟随需求阶段
+
+#### 1. 需求管理流程
 
 | Skill | 用途 |
 |---|---|
-| `requirements2prd` | 粗需求、新模块、既有模块调整、产品化讨论，整理成 PRD 口径；按本轮改动识别安全触发项并形成安全需求。 |
-| `write-design-review-memo` | 根据逐字稿、会议记录和评审材料，整理可直接上传的设计评审备忘录。 |
+| `requirements2prd` | 把粗需求、新模块或既有模块调整梳理成 PRD 口径；按本轮改动识别安全触发项。 |
+| `prd2prototype` | 根据稳定 PRD 生成 HTML 原型，支持需求便签和原型说明本地编辑，并在评审确认后反写 PRD。 |
+| `prd2zentao` | 根据 PRD 第四章拆分禅道研发需求，生成批量同步材料或控制台脚本。默认关闭，需要时再启用。 |
+
+#### 2. 需求自查流程
+
+| Skill | 用途 |
+|---|---|
+| `proto-check` | 设计评审前检查产品规则、UI 和安全表达，区分原型整改项与技术、测试承接项。 |
+
+#### 3. 设计评审记录
+
+| Skill | 用途 |
+|---|---|
+| `write-design-review-memo` | 根据逐字稿、会议记录和评审材料，整理可上传的设计评审备忘录。 |
+
+#### 4. 实现验收
+
+| Skill | 用途 |
+|---|---|
 | `ui-acceptance-check` | 对照 UI 设计、UI 说明和通用规范，在实际产品环境中验收视觉、交互和页面状态。 |
-| `prd2prototype` | 根据稳定的 PRD 范围生成 HTML 原型，把已确认的安全规则映射到页面、交互和原型说明，含本地可编辑的需求便签。 |
-| `proto-check` | 原型评审前做产品、UI 和安全自查，区分原型整改与技术/测试承接。 |
-| `prd2zentao` | 根据 PRD 第四章拆禅道研发需求，并生成批量同步材料或控制台脚本。 |
+
+### 二、日常工作阶段
+
+| Skill | 用途 |
+|---|---|
+| `write-product-weekly-minutes` | 会前读取上周正式纪要和本周全部成员周报，形成主持稿；会后读取最新主持稿和会议逐字稿，形成正式纪要。 |
 
 默认加载的 skill：
 
 - `requirements2prd`
 - `write-design-review-memo`
+- `write-product-weekly-minutes`
 - `ui-acceptance-check`
 - `prd2prototype`
 - `proto-check`
@@ -110,6 +138,7 @@ codex plugin add jg-product-design-plugin-codex@jg-product-design
   "skills": {
     "requirements2prd": true,
     "write-design-review-memo": true,
+    "write-product-weekly-minutes": true,
     "ui-acceptance-check": true,
     "prd2prototype": true,
     "proto-check": true,
@@ -144,13 +173,13 @@ node scripts/apply-skill-config.mjs
 
 `prd2prototype` 有一个独立的原型编辑器，用来改需求便签和原型说明。
 
-**编辑器统一由主插件仓库分发，本仓库不自带、也不自己发布**（避免磁盘上冒出多个 `.app`）。下载地址（主仓库 Release）：
+本仓库负责编辑器源码、打包、Release 下载和使用说明。下载地址：
 
 ```text
-https://github.com/yideng-xl/jg-product-design-skills/releases/latest/download/prototype-editor.zip
+https://github.com/yideng-xl/jg-product-design-plugin-codex/releases/latest/download/prototype-editor.zip
 ```
 
-也可从主仓库使用说明页下载：<https://yideng-xl.github.io/jg-product-design-skills/#editor>
+使用说明：<https://yideng-xl.github.io/jg-product-design-plugin-codex/#editor>
 
 用法：
 
@@ -158,7 +187,7 @@ https://github.com/yideng-xl/jg-product-design-skills/releases/latest/download/p
 - macOS 双击 `原型编辑器.app`；Windows 双击 `原型编辑器.vbs`。机器需装 Node.js。
 - 打开控制页后，选择要编辑的原型目录。
 
-编辑器是独立工具，不放进原型目录、也不放进本插件。每个原型自己的手工修改写入该原型的 `data/annotations.js`。
+编辑器仍是独立工具，不复制到具体原型目录。源码维护在 `skills/prd2prototype/assets/editor/`，发布包由其中的 `pack.sh` 生成。每个原型的手工修改写入该原型的 `data/annotations.js`。
 
 只有 `localhost` / `127.0.0.1` 下会出现编辑态。发布到内网后的原型页面仍是只读。
 
@@ -186,6 +215,7 @@ jg-product-design-plugin-codex/
 ├── skills/
 │   ├── requirements2prd/
 │   ├── write-design-review-memo/
+│   ├── write-product-weekly-minutes/
 │   ├── ui-acceptance-check/
 │   ├── prd2prototype/
 │   ├── proto-check/
@@ -199,6 +229,8 @@ jg-product-design-plugin-codex/
 
 ## 迁移说明
 
+- Codex 仓库已接管产品部周例会 Skill、原型编辑器源码、Release 下载和 GitHub Pages。
+- 仓库内容不再引用旧 Claude 仓库。
 - 已移除 Claude / Cowork 的安装方式。
 - 已把 `AskUserQuestion` 改为 Codex 可执行的用户确认口径。
 - 草稿文件统一使用 `-Codex` 后缀。

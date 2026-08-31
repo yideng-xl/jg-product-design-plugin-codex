@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.7.0 - 2026-08-31
+
+- 新增 `write-product-weekly-minutes`。会前必须读取上周正式纪要和本周全部成员周报，形成主持稿；会后读取最新主持稿和会议逐字稿，形成正式纪要。
+- 根据会议制度和历史人工定稿提炼固定章节、成果与风险取舍、追问归位及待办三要素规则。
+- 将原型编辑器源码、打包脚本和 Release 下载迁入本仓库。本仓库接管编辑器后续维护。
+- README 按“跟随需求阶段”和“日常工作阶段”重组；GitHub Pages 增加原型编辑器下载与使用说明。
+
 ## 0.6.2 - 2026-08-26
 
 - 为 `requirements2prd`、`prd2prototype`、`proto-check` 增加一次性自动更新检查，三个 skill 共用同一脚本和状态处理口径。
@@ -57,12 +64,12 @@
 
 - `prd2prototype` 增加本地 Git 版本管理规则：每个产品迭代独立建库，修改前保留基线，用户确认一项后提交一项。
 - 增加原型可编辑接入检查，校验 `annotations.js` 引用顺序、可编辑标识唯一性和需求便签覆盖情况。
-- 原型编辑器继续由 `jg-product-design-skills` 主仓库统一分发，本仓库不新增 `.app` 或编辑器源码。
+- 当时原型编辑器仍由旧发布源统一分发，本仓库未保存编辑器源码。
 
 ## 0.3.3 - 2026-07-22
 
-- 原型编辑器改由主插件仓库 `jg-product-design-skills` 统一分发:移除本仓库的 `原型编辑器.app` / `.vbs` / `.command` 资产,不再自行发布 `prototype-editor.zip`(避免磁盘上出现多个 `.app` 被 Launchpad 索引)。
-- README / SKILL.md / `common.js` 的编辑器下载与使用说明链接,全部改指向主仓库 Release 与 Pages(`https://yideng-xl.github.io/jg-product-design-skills/#editor`)。
+- 原型编辑器当时改由旧发布源统一分发:移除本仓库的 `.app` / `.vbs` / `.command` 资产,暂不自行发布 `prototype-editor.zip`。
+- README、SKILL.md 和 `common.js` 的编辑器说明当时统一指向旧发布源。
 
 ## 0.3.2 - 2026-07-16
 

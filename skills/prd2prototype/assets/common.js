@@ -248,7 +248,7 @@
   // 注意:不在这里 sendBeacon("bye")——否则关掉一个原型标签会连带停掉整个服务(控制页可能还开着要选下一个)。
   setInterval(function () { fetch("ping").catch(function () {}); }, 3000);
 
-  var HELP_URL = "https://yideng-xl.github.io/jg-product-design-skills/#editor"; // 编辑器统一来自主插件仓库
+  var HELP_URL = "https://yideng-xl.github.io/jg-product-design-plugin-codex/#editor";
   var bar = document.createElement("div");
   bar.id = "anno-bar"; bar.className = "anno-bar";
   bar.innerHTML =

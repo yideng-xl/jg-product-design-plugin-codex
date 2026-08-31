@@ -3,11 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="JG Product Design Codex 插件市场首次安装与更新操作手册">
-  <title>JG Product Design Codex｜安装与更新手册</title>
+  <meta name="description" content="JG Product Design Codex 插件安装、更新和原型编辑器使用手册">
+  <title>JG Product Design Codex｜使用手册</title>
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
+  <a class="skip-link" href="#main-content">跳到正文</a>
   <header class="topbar">
     <div class="topbar-inner">
       <a class="brand" href="#top">
@@ -17,6 +18,7 @@
       <nav class="topnav" aria-label="页面导航">
         <a href="#first-install">首次安装</a>
         <a href="#update">日常更新</a>
+        <a href="#editor">原型编辑器</a>
         <a href="#troubleshooting">异常处理</a>
         <a href="https://github.com/yideng-xl/jg-product-design-plugin-codex">GitHub 仓库</a>
       </nav>
@@ -27,11 +29,12 @@
     <section class="hero">
       <div class="hero-inner">
         <p class="eyebrow">JG PRODUCT DESIGN CODEX</p>
-        <h1>插件市场安装与更新操作手册</h1>
-        <p class="hero-lead">适用于第一次添加 JG Product Design 插件市场，以及后续获取新版插件。按页面顺序操作即可。</p>
+        <h1>插件安装、更新与原型编辑器手册</h1>
+        <p class="hero-lead">这里统一维护 Codex 插件的安装方法，以及原型编辑器的下载和使用说明。</p>
         <div class="hero-actions">
           <a class="button" href="#first-install">开始首次安装</a>
           <a class="button secondary" href="#update">查看更新方法</a>
+          <a class="button secondary" href="#editor">下载原型编辑器</a>
         </div>
       </div>
     </section>
@@ -44,10 +47,11 @@
         <a href="#verify">安装后验证</a>
         <a href="#update">日常更新</a>
         <a href="#cli">命令行备用方式</a>
+        <a href="#editor">原型编辑器</a>
         <a href="#troubleshooting">异常处理</a>
       </aside>
 
-      <div class="content">
+      <div class="content" id="main-content" tabindex="-1">
         <section class="section" id="before-start">
           <h2>操作前准备</h2>
           <p class="section-intro">首次安装只需要准备一个仓库地址。Git 引用固定填写 <code>main</code>，稀疏路径留空。</p>
@@ -217,6 +221,55 @@ codex plugin add jg-product-design-plugin-codex@jg-product-design</code></div>
           <p>执行完成后，新建 Codex 任务验证。</p>
         </section>
 
+        <section class="section" id="editor">
+          <p class="eyebrow">PROTOTYPE EDITOR</p>
+          <h2>原型编辑器</h2>
+          <p class="section-intro">用于在浏览器里直接修改需求便签和原型说明。改动自动写入原型自己的 <code>data/annotations.js</code>。</p>
+
+          <div class="editor-download">
+            <div>
+              <strong>Mac 和 Windows 共用一个压缩包</strong>
+              <span>需要先安装 Node.js。编辑器由本仓库发布和维护。</span>
+            </div>
+            <a class="button" href="https://github.com/yideng-xl/jg-product-design-plugin-codex/releases/latest/download/prototype-editor.zip">下载原型编辑器</a>
+          </div>
+
+          <ol class="update-flow editor-flow" aria-label="原型编辑器使用步骤">
+            <li>
+              <strong>启动编辑器</strong>
+              <span>Mac 打开 App；Windows 双击 VBS</span>
+            </li>
+            <li>
+              <strong>选择原型目录</strong>
+              <span>目录中需要包含 index.html</span>
+            </li>
+            <li>
+              <strong>打开编辑态</strong>
+              <span>在页面右下角打开“编辑态”</span>
+            </li>
+            <li>
+              <strong>修改后关闭</strong>
+              <span>内容自动写回，页面关闭后服务停止</span>
+            </li>
+          </ol>
+
+          <div class="troubleshooting">
+            <article class="issue">
+              <h3>macOS 第一次打不开</h3>
+              <p>右键点击“原型编辑器.app”，选择“打开”。系统确认一次后即可正常双击。</p>
+            </article>
+            <article class="issue">
+              <h3>页面没有“编辑态”</h3>
+              <p>确认页面地址以 <code>localhost:47821</code> 开头。直接双击 HTML 或访问发布站时，页面按只读方式打开。</p>
+            </article>
+          </div>
+
+          <div class="callout">
+            <strong>只保留 1 份编辑器。</strong>
+            macOS 建议把 App 放进“应用程序”。编辑器不要复制到各个原型目录。
+          </div>
+        </section>
+
         <section class="section" id="troubleshooting">
           <h2>异常处理</h2>
           <p class="section-intro">先根据现象核对下面四项。</p>
@@ -244,7 +297,7 @@ codex plugin add jg-product-design-plugin-codex@jg-product-design</code></div>
   </main>
 
   <footer>
-    JG Product Design Codex · 操作手册更新于 2026-08-25
+    JG Product Design Codex · 使用手册更新于 2026-08-31
   </footer>
 
   <script>
