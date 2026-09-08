@@ -1,6 +1,6 @@
 {
   "name": "jg-product-design-plugin-codex",
-  "version": "0.8.0+codex.20260908100716",
+  "version": "0.8.0+codex.20260908101937",
   "description": "Product-design skills for demand management, prototype design and editing, review and weekly meeting minutes, UI acceptance, prototype self-check, delivery map updates, and ZenTao SR preparation.",
   "author": {
     "name": "yideng",
@@ -20,13 +20,14 @@
     "zentao",
     "b-side",
     "skill",
-    "delivery-map"
+    "delivery-map",
+    "product-delivery"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "JG Product Design Codex",
     "shortDescription": "Demand, prototype, review, meetings, acceptance, and delivery maps.",
-    "longDescription": "The maintained Codex source for the product-design workflow. It supports rough-demand to PRD discussion, security-triggered requirements, HTML prototype generation and local annotation editing, design-review memos, product weekly meeting host scripts and final minutes, browser-based UI acceptance, prototype self-check, prototype-to-PRD backfill, R&D Word requirement specifications, and ZenTao SR preparation. Monthly tracking workbooks can update network-management and centralized-control delivery maps with customer mapping checks and preview publishing.",
+    "longDescription": "The maintained Codex source for the product-design workflow. It supports rough-demand to PRD discussion, security-triggered requirements, HTML prototype generation and local annotation editing, design-review memos, product weekly meeting host scripts and final minutes, browser-based UI acceptance, prototype self-check, prototype-to-PRD backfill, R&D Word requirement specifications, and ZenTao SR preparation. Monthly tracking workbooks can update network-management and centralized-control delivery maps with customer mapping checks and preview publishing. A dedicated Jiguan skill joins deployment-site environments and shows deployment scheme, product, operating system, Redis and database versions.",
     "developerName": "yideng",
     "category": "Productivity",
     "capabilities": [

@@ -53,7 +53,10 @@
 
 | Skill | 用途 |
 |---|---|
-| `update-delivery-map` | 根据网管或集管月度进度跟踪表更新交付地图，检查客户映射与覆盖状态，重建 HTML 并按已确认的配置发布。 |
+| `update-delivery-map` | 更新网管交付地图，检查客户映射与覆盖状态，重建 HTML 并按已确认的配置发布。 |
+| `update-jiguan-delivery-map` | 读取集管月度进度和环境清单，更新交付地图，展示部署方案、集管版本、操作系统、Redis 和数据库版本，标明缺项与数据来源。 |
+
+网管与集管分别维护独立 skill，统一归入本阶段。
 
 默认加载的 skill：
 
@@ -61,6 +64,7 @@
 - `write-design-review-memo`
 - `write-product-weekly-minutes`
 - `update-delivery-map`
+- `update-jiguan-delivery-map`
 - `ui-acceptance-check`
 - `prd2prototype`
 - `proto-check`
@@ -147,6 +151,7 @@ codex plugin add jg-product-design-plugin-codex@jg-product-design
     "write-design-review-memo": true,
     "write-product-weekly-minutes": true,
     "update-delivery-map": true,
+    "update-jiguan-delivery-map": true,
     "ui-acceptance-check": true,
     "prd2prototype": true,
     "proto-check": true,
@@ -225,6 +230,7 @@ jg-product-design-plugin-codex/
 │   ├── write-design-review-memo/
 │   ├── write-product-weekly-minutes/
 │   ├── update-delivery-map/
+│   ├── update-jiguan-delivery-map/
 │   ├── ui-acceptance-check/
 │   ├── prd2prototype/
 │   ├── proto-check/

@@ -1,0 +1,4 @@
+interface:
+  display_name: "更新集管交付地图"
+  short_description: "读取集管月度进度与环境清单，更新地图、部署方案和软件版本明细"
+  default_prompt: "使用 $update-jiguan-delivery-map 更新集管交付地图，核对部署方案、集管版本、操作系统、Redis 和数据库版本。"
