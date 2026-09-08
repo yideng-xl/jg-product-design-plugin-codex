@@ -6,6 +6,7 @@
     "prd2prototype": true,
     "proto-check": true,
     "ui-acceptance-check": true,
-    "prd2zentao": false
+    "prd2zentao": false,
+    "update-delivery-map": true
   }
 }
