@@ -58,6 +58,8 @@
 
 网管与集管分别维护独立 skill，统一归入本阶段。
 
+集管地图的“数据源”和“交付版本、中间件等细节”固定指向[集管在线文档](https://365.kdocs.cn/l/cvBe6WVLHm9Q)。每次更新使用用户从该文档提供的最新进度表，保留 5 张覆盖地图；页面不显示本地文件名，也不再读取《集管信息一览表》或生成环境明细。具体步骤见 [集管交付地图 skill](skills/update-jiguan-delivery-map/SKILL.md)。
+
 默认加载的 skill：
 
 - `requirements2prd`
