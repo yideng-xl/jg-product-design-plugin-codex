@@ -1,4 +1,4 @@
 interface:
   display_name: "更新网管交付地图"
-  short_description: "根据网管月度进度跟踪表更新交付地图，核对覆盖状态并发布预览"
-  default_prompt: "使用 $update-delivery-map-wg 根据这份月度进度跟踪表更新网管交付地图。"
+  short_description: "根据最新月度进度表更新网管交付地图，核对项目映射和覆盖状态并发布预览"
+  default_prompt: "使用 $update-delivery-map-wg 根据这份最新月度进度表更新网管交付地图。"

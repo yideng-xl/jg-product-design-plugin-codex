@@ -6,7 +6,7 @@ import unittest
 import openpyxl
 
 ROOT = Path(__file__).resolve().parents[1]
-spec = importlib.util.spec_from_file_location('delivery_inspector', ROOT / 'skills/update-delivery-map-wg/scripts/inspect_tracking.py')
+spec = importlib.util.spec_from_file_location('delivery_inspector', ROOT / 'scripts/delivery-map/inspect_tracking.py')
 inspector = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(inspector)
 
