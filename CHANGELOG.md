@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-09 · 集管 skill 更名
+
+- `update-jiguan-delivery-map` 更名为 `update-delivery-map-jg`，同步目录、加载配置、调用提示和 README 引用。
+
 ## 2026-09-09 · 网管 skill 更名
 
 - 网管入口从 `update-delivery-map` 改为 `update-delivery-map-wg`，同步更新加载配置、调用提示、README 和测试路径。

@@ -8,6 +8,6 @@
     "ui-acceptance-check": true,
     "prd2zentao": false,
     "update-delivery-map-wg": true,
-    "update-jiguan-delivery-map": true
+    "update-delivery-map-jg": true
   }
 }

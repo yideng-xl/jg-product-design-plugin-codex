@@ -1,5 +1,5 @@
 ---
-name: update-jiguan-delivery-map
+name: update-delivery-map-jg
 description: 根据集管月度进度跟踪表更新集管交付地图，核对项目映射与覆盖状态，保留顶部交付版本和中间件详情的在线文档链接，并按用户要求同步内网预览站。网管地图使用对应的独立 skill。
 ---
 

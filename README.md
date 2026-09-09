@@ -54,11 +54,11 @@
 | Skill | 用途 |
 |---|---|
 | `update-delivery-map-wg` | 使用本次提供的网管进度表更新地图，核对客户映射与覆盖状态；页面保留固定数据源链接，不展示本期项目明细。 |
-| `update-jiguan-delivery-map` | 读取集管月度进度，更新交付地图；交付版本、中间件等细节通过顶部在线文档链接查看。 |
+| `update-delivery-map-jg` | 读取集管月度进度，更新交付地图；交付版本、中间件等细节通过顶部在线文档链接查看。 |
 
 网管与集管分别维护独立 skill，统一归入本阶段。
 
-集管地图的“数据源”和“交付版本、中间件等细节”固定指向[集管在线文档](https://365.kdocs.cn/l/cvBe6WVLHm9Q)。每次更新使用用户从该文档提供的最新进度表，保留 5 张覆盖地图；页面不显示本地文件名，也不再读取《集管信息一览表》或生成环境明细。具体步骤见 [集管交付地图 skill](skills/update-jiguan-delivery-map/SKILL.md)。
+集管地图的“数据源”和“交付版本、中间件等细节”固定指向[集管在线文档](https://365.kdocs.cn/l/cvBe6WVLHm9Q)。每次更新使用用户从该文档提供的最新进度表，保留 5 张覆盖地图；页面不显示本地文件名，也不再读取《集管信息一览表》或生成环境明细。具体步骤见 [集管交付地图 skill](skills/update-delivery-map-jg/SKILL.md)。
 
 网管地图的“数据源”固定指向[金山在线进度文档](https://365.kdocs.cn/l/cvBe6WVLHm9Q)。用户每次从这里取得最新表格后提供，地图按本次文件更新；来源链接保持不变，截止月份按导入表填写。页面不自动同步在线内容。
 
@@ -70,7 +70,7 @@
 - `write-design-review-memo`
 - `write-product-weekly-minutes`
 - `update-delivery-map-wg`
-- `update-jiguan-delivery-map`
+- `update-delivery-map-jg`
 - `ui-acceptance-check`
 - `prd2prototype`
 - `proto-check`
@@ -157,7 +157,7 @@ codex plugin add jg-product-design-plugin-codex@jg-product-design
     "write-design-review-memo": true,
     "write-product-weekly-minutes": true,
     "update-delivery-map-wg": true,
-    "update-jiguan-delivery-map": true,
+    "update-delivery-map-jg": true,
     "ui-acceptance-check": true,
     "prd2prototype": true,
     "proto-check": true,
@@ -236,7 +236,7 @@ jg-product-design-plugin-codex/
 │   ├── write-design-review-memo/
 │   ├── write-product-weekly-minutes/
 │   ├── update-delivery-map-wg/
-│   ├── update-jiguan-delivery-map/
+│   ├── update-delivery-map-jg/
 │   ├── ui-acceptance-check/
 │   ├── prd2prototype/
 │   ├── proto-check/
