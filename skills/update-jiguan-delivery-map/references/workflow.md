@@ -18,7 +18,9 @@
 .venv/bin/python update_map.py --date YYYY-MM
 ```
 
-`apply_monthly_update.py` 按“地区 / 客户”合并项目，写出 `progress_source.json` 中的来源文件名。`update_map.py` 转换地理表并调用 `rewrite_html_3maps.py`。地图模板从旧 HTML 提取嵌入式地理数据，重建前保留旧 HTML。
+`apply_monthly_update.py` 按“地区 / 客户”合并项目。`update_map.py` 转换地理表并调用 `rewrite_html_3maps.py`。地图模板从旧 HTML 提取嵌入式地理数据，重建前保留旧 HTML。
+
+页面“数据源”固定指向 `https://365.kdocs.cn/l/cvBe6WVLHm9Q`，不显示本地文件名。每次由用户从该文档提供最新表格，按本次文件更新；不自动抓取在线数据。
 
 用户已取消环境表集成。流程不依赖 `delivery_details.json`、`build_delivery_details.py` 或 `render_delivery_panel.py`。顶部详情链接固定为 `https://365.kdocs.cn/l/cvBe6WVLHm9Q`，除非用户提供新地址。
 
