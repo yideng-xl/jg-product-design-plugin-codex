@@ -53,7 +53,7 @@
 
 | Skill | 用途 |
 |---|---|
-| `update-delivery-map` | 使用本次提供的网管进度表更新地图，核对客户映射与覆盖状态；页面保留固定数据源链接，不展示本期项目明细。 |
+| `update-delivery-map-wg` | 使用本次提供的网管进度表更新地图，核对客户映射与覆盖状态；页面保留固定数据源链接，不展示本期项目明细。 |
 | `update-jiguan-delivery-map` | 读取集管月度进度，更新交付地图；交付版本、中间件等细节通过顶部在线文档链接查看。 |
 
 网管与集管分别维护独立 skill，统一归入本阶段。
@@ -69,7 +69,7 @@
 - `requirements2prd`
 - `write-design-review-memo`
 - `write-product-weekly-minutes`
-- `update-delivery-map`
+- `update-delivery-map-wg`
 - `update-jiguan-delivery-map`
 - `ui-acceptance-check`
 - `prd2prototype`
@@ -156,7 +156,7 @@ codex plugin add jg-product-design-plugin-codex@jg-product-design
     "requirements2prd": true,
     "write-design-review-memo": true,
     "write-product-weekly-minutes": true,
-    "update-delivery-map": true,
+    "update-delivery-map-wg": true,
     "update-jiguan-delivery-map": true,
     "ui-acceptance-check": true,
     "prd2prototype": true,
@@ -235,7 +235,7 @@ jg-product-design-plugin-codex/
 │   ├── requirements2prd/
 │   ├── write-design-review-memo/
 │   ├── write-product-weekly-minutes/
-│   ├── update-delivery-map/
+│   ├── update-delivery-map-wg/
 │   ├── update-jiguan-delivery-map/
 │   ├── ui-acceptance-check/
 │   ├── prd2prototype/

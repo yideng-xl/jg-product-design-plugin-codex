@@ -1,9 +1,9 @@
 ---
-name: update-delivery-map
+name: update-delivery-map-wg
 description: 根据网管月度进度跟踪表更新现有网管交付地图，核对项目映射和覆盖状态，重建离线 HTML，并按已确认的发布配置同步预览站。集管交付地图使用独立的 update-jiguan-delivery-map skill。
 ---
 
-# 更新产品交付地图
+# 更新网管交付地图
 
 本入口处理网管。集管任务转到同阶段的 [update-jiguan-delivery-map](../update-jiguan-delivery-map/SKILL.md)，读取月度进度并保留顶部详情链接；下文保留两条产品线的历史结构对照，供维护参考。
 
