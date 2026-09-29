@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import subprocess
 from pathlib import Path
@@ -28,7 +29,18 @@ def _run(args: list[str], timeout: int = 60) -> subprocess.CompletedProcess[str]
 
 
 def _message(text: str) -> str:
-    return " ".join((text or "").strip().split())[:300]
+    lines = (text or "").splitlines()
+    lines = [line for line in lines if not line.startswith("WARNING: proceeding, even though we could not create PATH aliases:")]
+    return " ".join(" ".join(lines).strip().split())[:300]
+
+
+def _sandbox_network_failure(text: str) -> bool:
+    if os.environ.get("CODEX_SANDBOX_NETWORK_DISABLED") != "1":
+        return False
+    return any(
+        marker in (text or "").lower()
+        for marker in ("could not resolve host", "temporary failure in name resolution", "network access disabled")
+    )
 
 
 def _marketplaces(payload: object) -> list[dict]:
@@ -161,6 +173,11 @@ def check_update(run: RunCommand = _run) -> dict[str, str]:
             60,
         )
         if upgraded.returncode != 0:
+            if _sandbox_network_failure(upgraded.stderr):
+                return {
+                    "status": "needs_network_permission",
+                    "message": "当前任务沙箱无法访问 GitHub，请按系统权限流程在可联网环境重试；不能据此判断本机网络故障。",
+                }
             return {
                 "status": "check_failed",
                 "message": f"自动更新失败，已继续使用当前版本：{_message(upgraded.stderr)}",

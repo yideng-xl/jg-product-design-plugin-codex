@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import os
 import subprocess
 import tempfile
 import unittest
@@ -44,6 +45,47 @@ def plugin_payload(version: str) -> str:
 
 
 class CheckUpdateTests(unittest.TestCase):
+    @patch.dict(os.environ, {"CODEX_SANDBOX_NETWORK_DISABLED": "1"})
+    @patch.object(MODULE.shutil, "which", return_value="/usr/bin/codex")
+    def test_sandbox_dns_failure_requests_network_permission(self, _which):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            write_manifest(root, "0.6.2+codex.current")
+
+            def run(args, timeout):
+                if args[:4] == ["codex", "plugin", "marketplace", "list"]:
+                    return completed(args, stdout=marketplace_payload(root))
+                if args[:3] == ["codex", "plugin", "list"]:
+                    return completed(args, stdout=plugin_payload("0.6.2+codex.current"))
+                if args[0] == "git":
+                    return completed(args, stdout="same-head\n")
+                return completed(args, returncode=1, stderr="fatal: Could not resolve host: github.com")
+
+            result = MODULE.check_update(run)
+            self.assertEqual(result["status"], "needs_network_permission")
+            self.assertIn("任务沙箱", result["message"])
+
+    @patch.dict(os.environ, {"CODEX_SANDBOX_NETWORK_DISABLED": "0"})
+    @patch.object(MODULE.shutil, "which", return_value="/usr/bin/codex")
+    def test_dns_failure_without_sandbox_network_flag_is_not_misclassified(self, _which):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            write_manifest(root, "0.6.2+codex.current")
+
+            def run(args, timeout):
+                if args[:4] == ["codex", "plugin", "marketplace", "list"]:
+                    return completed(args, stdout=marketplace_payload(root))
+                if args[:3] == ["codex", "plugin", "list"]:
+                    return completed(args, stdout=plugin_payload("0.6.2+codex.current"))
+                if args[0] == "git":
+                    return completed(args, stdout="same-head\n")
+                return completed(args, returncode=1, stderr="WARNING: proceeding, even though we could not create PATH aliases: Operation not permitted\nfatal: Could not resolve host: github.com")
+
+            result = MODULE.check_update(run)
+            self.assertEqual(result["status"], "check_failed")
+            self.assertIn("Could not resolve host", result["message"])
+            self.assertNotIn("PATH aliases", result["message"])
+
     @patch.object(MODULE.shutil, "which", return_value="/usr/bin/codex")
     def test_not_configured_does_not_upgrade(self, _which):
         calls = []
