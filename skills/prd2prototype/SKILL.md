@@ -102,58 +102,36 @@ PRD 和 PRD 细则是供研发直接开发、测试据此验收的材料。用�
 
 **踩坑提醒**:**不要漏页**。漏掉一个详情页,下钻链就断了,评审时被卡住。
 
-### 第 2 步:定义设计语言
+### 第 2 步:按产品选择设计资产
 
-> **本 skill 已内置「通用设计系统」基线,不要再从零造 common.css。**
+先读取 [产品资产选择与接入](references/products.md)，确定本轮是集管还是网管，再选布局、组件和页面模板。集管使用 `assets/products/jg/`；网管使用 `assets/products/wg/`；覆盖范围分别查各产品采集清单。不得把 2 套产品的外观混用。
 
-设计语言基线已从 Figma组件库抽取并固化在本 skill 的 `assets/` 目录:
-
-| 文件 | 作用 |
+| 资源 | 用途 |
 |---|---|
-| `assets/common.css` | **样式基线**:`:root` 全量设计 token(色彩 / 字体 / 间距 / 圆角 / 阴影,含深浅主题)+ 30+ 组件样式,状态走 CSS 伪类 |
-| `assets/common.js` | **交互层**:Select / TreeSelect / Tree / Modal / 标签页 / 分段 / 多选单选开关等"能点"的最小交互,按类名 + `data-*` 自动绑定 |
-| `assets/skill-extras.css` | **原型辅助层**(非 Figma):`.snippet` 配置片段、`.summary-card` KPI 卡、`.field-spec` 字段规格表、`.proto-note` 原型说明分隔、需求便签/原型说明**可编辑覆盖层**样式等本 skill 约定 |
-| `assets/editor/` | **原型编辑器源码**(跨平台,需装 Node):从本仓库 Release 下载 `prototype-editor.zip` → Mac 双击 `原型编辑器.app` / Win 双击 `原型编辑器.vbs` → 浏览器打开控制页 `http://localhost:47821/` → 选择原型 → 页面上修改需求便签或原型说明,自动写回该原型的 `data/annotations.js`。关掉页面后服务自动停止。发布包由 `assets/editor/pack.sh` 生成 |
-| `assets/组件规格表.md` | 62 个组件集的变体维度 + 逐变体真实取色(查色用) |
-| `assets/组件样例.html` | 全组件演示页(对照样式 / 交互用) |
+| `assets/products/jg/jg.css`、`jg.js` | 集管的样式与业务页面交互，使用 `jg-` 类名 |
+| `assets/products/jg/index.html`、`templates/` | 集管组件展示和页面模板；先查看对应样例，再组合页面 |
+| `assets/products/wg/wg.css`、`wg.js`、`index.html`、`templates/` | 网管独立组件、交互和页面模板，接口与观测范围见 `references/wg-components.md`、`references/wg-ui-inventory.md` |
+| `assets/common.css`、`assets/组件规格表.md`、`assets/组件样例.html` | Figma 历史基线，仅供明确保留旧样式的页面使用 |
+| `assets/common.js`、`assets/skill-extras.css` | 集管只使用其中的需求便签、原型说明和可编辑覆盖层；业务页面交互由 `jg.js` 负责 |
+| `assets/editor/` | 独立原型编辑器，编辑结果写入原型的 `data/annotations.js`，使用方式见第 6 步 |
 
-**标准动作**:做原型时,把 `assets/common.css`、`assets/common.js`、需要时加 `assets/skill-extras.css` **拷到原型目录**,各页面 `<link>` / `<script>` 引用即可。**禁止页面内硬编码色值**,一律用 token / 类名。原型本身**不放** `serve.js` / 启动器——那是独立的「原型编辑器」工具(见第 6 步),要编辑覆盖层时用它选中原型目录即可。
+**标准动作**：将选定产品包复制到原型目录，保持包内相对引用。集管和网管业务页面均不加载 `common.css`，不套用历史基线的主色、字体或间距。页面用所选包的 token 和类名，避免内联色值。产品选择、资产来源、校准范围写入 `conventions.md`，不放进面向评审的业务说明。
 
-**规范层级与冲突处理**:全局样式规范定义 token 和基础样式,组件规范定义控件结构与交互,场景化规范只组合已有组件。三者冲突时按“全局样式规范 > 组件规范 > 场景化规范”执行。场景需要的新能力先补进共享组件,再由页面引用;不得在单页改写组件视觉或交互形成局部版本。
+现网观测用于确定外观和已有交互形态。权限、字段、状态转换等业务规则仍以用户确认的本轮 PRD 为准；发现冲突在会话中核对，不能把旧系统规则自动复制到新需求。
 
-核心 token(主色为主色绿,详见 common.css):
+**规范层级**：用户本轮确认与当前定稿优先；产品专有资产约束产品外观；组件规范定义结构和交互；场景模板组合组件。通用 Figma 基线只在选定该基线时生效，不得覆盖集管已观测的视觉参数。
 
-| 类型 | 值 |
-|---|---|
-| 主色 / 品牌 | `#007D7B`(hover `#4CA4A3` / pressed `#198A88` / disabled `#80BEBD`) |
-| 输入聚焦边框 | `#0FA081`(Figma 实测,与主色不同) |
-| 信息 / 成功 / 警告 / 危险 | `#1890FF` / `#52C41A` / `#FAAD14` / `#FF4D4F`(各带 8%/20% 浅底) |
-| 文字 标题/正文/次要/禁用 | `#333333` / `#565656` / `#999999` / `#BDBDBD` |
-| 背景 页面/卡片/表头/选中行 | `#EFF3F8` / `#FFFFFF` / `#F8F8F9` / `#E6F2F2` |
-| 描边 | `#DCDFE6` ｜ 圆角 base/large `4px`/`8px` ｜ 控件高 `32px` |
-| 字体 | Alibaba PuHuiTi 2.0 → PingFang SC;字号 12/13/14/16/18 |
+网管选定产品包后还需选主题：`green` 为国网绿，`blue` 为雅致蓝深色主题。保留用户当前主题；显式要求蓝色时使用 `body[data-wg-theme="blue"]`，不要只将绿色主色替换成蓝色。基础样式、居中弹窗与设备新增抽屉已采样，图表、拓扑、日期等未覆盖状态查网管采集清单。
 
-**踩坑案例**:某项目里"已完成-已验证"用了绿色,但默认"新增异常"也用了绿色,被评审人立即纠正"新增异常怎么是绿色呢"。色彩有强烈的语义指向,**用 common.css 里语义化的 status / 功能色类,别每页随手选色**。
+### 第 3 步:复用产品组件
 
-### 第 3 步:共性组件抽取
+先从选定产品包的组件展示和模板中找到对应结构，再填本轮字段和交互。第 2 个页面开始必须复用同类组件，导航、筛选、表格、分页、弹窗不得各写一套。
 
-基线(`assets/common.css`)已内置 fig 里的全部组件,**直接用类名,不要重抽**。常用的:
+缺少组件时先检查现网对应页面或用户提供的设计依据。记录来源、观测日期和状态，再补到该产品包；没有观测依据的组件标为待校准，不写成“实测”。未经授权维护 skill 源仓库时，在当前原型的产品组件扩展文件中实现并记录来源，不改插件安装缓存。
 
-| 分类 | 可用类名(common.css 已提供) |
-|---|---|
-| 通用 | `.btn`(7 类型:默认/`.btn-primary`/`.btn-danger`/`.btn-text`/`.btn-text-danger` 等,状态走 `:hover`/`:disabled`/`.is-loading`)、`.btn-group`、`.status`、`.tag`(9 色) |
-| 导航 | `.top-nav`(含 `.gradient` 变体)、`.page-tabs`(工作区多标签·可关闭,置于顶导与面包屑之间)、`.sub-menu`(含 `.collapsed` 收起)、`.tab-bar` / `.tab-cards`、`.segmented`、`.toggle-tabs`、`.breadcrumb`、`.anchor`、`.history-tabs`、`.filter-bar` |
-| 数据录入 | `.input`(含 `.input-wrap`+`.affix` 带单位、`.is-error`)、`.select` / `.select-box`(自定义可点)、`.checkbox`、`.radio`/`.radio-group`、`.switch`、`.datepicker`+`.calendar`、`.dropdown-menu`、`.treeselect` |
-| 数据展示 | `.table`(`.link`/`.exception` 单元)、`.badge`、`.avatar`、`.pagination`、`.steps`、`.tree`(含勾选树)、`.tooltip`、`.popover` |
-| 反馈 | `.alert`(4 类)、`.message`、`.notification`、`.modal-mask`+`.modal`、`.drawer-mask`+`.drawer`(右侧抽屉,**仅用于"管理当前页记录的下一级"(父→子下钻,如 业务地址→其 VLAN、记录→其终端);普通功能层的新增/编辑/详情仍用居中 `.modal`,不要滥用抽屉**;JS 用 `data-drawer-open`/`data-drawer-close` 或 `openDrawer/closeDrawer`)、`.empty` |
-| 容器/业务 | `.card`、`.section`+`.section-header`、`.level-tag`(分级) |
-| 原型辅助(skill-extras.css) | `.snippet`+`.snippet-wrap2`(配置片段)、`.summary-card`(KPI 卡)、`.field-spec`(字段规格表)、`.proto-note`(原型说明分隔)、`.hit-tasks`、`.dev-tag` |
+集管扩展使用 `jg-` 前缀与集管 token，网管使用 `wg-` 前缀与网管 token。按各自观测记录补组件，不改 `common.css` 让另一产品一起变化。完整接入规则见 [产品资产选择与接入](references/products.md)。
 
-> 交互(开合 / 选中 / 弹窗)引 `assets/common.js`,按 `data-*` 约定即可,详见 `assets/组件样例.html`。
-
-**规则**:**做第 2 个页面时不许重写组件,只能复用**。如果基线里**确实缺**某组件,**改 common.css**(让所有页面都升级),并对照 `assets/组件规格表.md` 取真实色值,不要凭感觉造色。
-
-**踩坑案例**:某项目里"当前状态 / 推荐操作"在两个详情页里用了完全不同的结构,被评审人两次提醒"风格要统一"才改齐。**根源是第 3 步偷懒了**。
+集管弹层按已观测的具体场景选型：工单新增、网关运行详情使用右侧全高抽屉；资产管理新增使用居中弹窗。不能把“新增/详情一律居中”套到这些页面。未观测场景先复用同类已确认形态；其他产品维持其已确认规则，不从集管反推。
 
 ### 第 4 步:页面分层级,从主线开始
 
@@ -214,8 +192,8 @@ PRD 和 PRD 细则是供研发直接开发、测试据此验收的材料。用�
 </div>
 
 <!-- 原型设计说明 -->
-<div style="margin-top:32px; padding-top:16px; border-top: 2px dashed #dcdfe6;">
-  <div style="font-size:12px; color:#909399; margin-bottom:10px;">— 以下为原型设计说明，不在实际产品页面中显示 —</div>
+<div class="proto-note">
+  <div>以下为原型设计说明，不在实际产品页面中显示</div>
   <div class="card">...</div>
 </div>
 ```
@@ -394,7 +372,7 @@ PRD 和 PRD 细则是供研发直接开发、测试据此验收的材料。用�
 <!-- 工程修订号示例 -->
 <script src="data/check-items.js?v=0.3.1"></script>
 <script src="data/command-review.js?v=0.3.1"></script>
-<link rel="stylesheet" href="common.css?v=0.3.1">
+<link rel="stylesheet" href="assets/products/jg/jg.css?v=0.3.1">
 ```
 
 **为什么不直接给 JS 改文件名(如 check-items.v031.js)**:原型不是工程项目,没有构建工具自动重写引用;手工改文件名会让所有引用方都得跟着改、出错率高;`?v=` 参数法零侵入、改一行就行,完全够用。
@@ -643,11 +621,12 @@ python scripts/verify_requirements_spec_docx.py output.docx
 ## 检查清单(每加一个页面 / 一个组件,逐项打勾)
 
 ### A. 设计规范
-- [ ] 引了 `assets/common.css`(+ 需要时 `skill-extras.css`),用其 token / 类名,**没硬编码色值**
-- [ ] 状态徽章用了规范化的 `.status` 类;按钮用 `.btn` 体系,没自造样式
-- [ ] 需要交互(下拉/树/弹窗/标签页切换)时引了 `assets/common.js`,按 `data-*` 约定写
-- [ ] 配置片段用了 `.snippet` + `.snippet-wrap2`(skill-extras,不要造新轮子)
-- [ ] 缺组件时改的是 common.css(全局升级),且对照 `assets/组件规格表.md` 取真实色值
+- [ ] 已按 `references/products.md` 选择产品包，集管使用 `jg.css` / `jg.js`，网管使用 `wg.css` / `wg.js`，未覆盖状态分别记录
+- [ ] 导航、按钮、表格、分页、弹窗均复用所选包；页面未硬编码色值、未混入另一产品的类名和 token
+- [ ] 集管和网管业务区未加载 `common.css`，`common.js` 与 `skill-extras.css` 仅用于原型说明覆盖层，未影响 `jg-` / `wg-` 组件
+- [ ] 新组件补在对应产品包或本原型的产品扩展文件；已记录观测来源，未将推测写成实测
+- [ ] 同一视口下对照现网或可追溯截图检查布局、字体、密度、交互状态；未观测状态明确列在内部校准记录
+- [ ] `data/annotations.js` 的已有用户修改已保留，覆盖层引用顺序与可编辑检查通过
 
 ### A2. UI 规范符合(七大易用原则 · 生成时即遵守)
 
@@ -742,85 +721,13 @@ python scripts/verify_requirements_spec_docx.py output.docx
 
 ## 原型规范(实战版)
 
-### 配色(通用设计系统 · 取自 Figma,已固化在 assets/common.css)
+### 产品视觉与组件
 
-| 语义 | 色值 | CSS 变量 |
-|---|---|---|
-| 主色 / 品牌(主色绿) | #007D7B | `--color-primary` |
-| 主色 hover / pressed / disabled | #4CA4A3 / #198A88 / #80BEBD | `--color-primary-hover` 等 |
-| 输入聚焦边框 | #0FA081 | `--color-input-focus` |
-| 链接(链接蓝) | #418CFD | `--color-link` |
-| 信息 | #1890FF | `--color-info` |
-| 成功 / 完成 | #52C41A | `--color-success` |
-| 警告 / 回退 | #FAAD14 | `--color-warning` |
-| 危险 / 失败 | #FF4D4F | `--color-danger` |
-| 标题 / 正文 / 次要 / 禁用文字 | #333333 / #565656 / #999999 / #BDBDBD | `--text-title` 等 |
-| 页面背景 / 卡片 / 表头 / 选中行 | #EFF3F8 / #FFFFFF / #F8F8F9 / #E6F2F2 | `--bg-page` 等 |
-| 边框 / 分割线 | #DCDFE6 | `--border-color` |
+配色、字体、尺寸、图标、表格密度和控件状态均从选定产品包读取，入口见 [产品资产选择与接入](references/products.md)。集管主色、布局与表格采用现网观测对应的资产，不沿用历史 Figma 色值表。
 
-> 功能色均带 8% 浅底 + 20% 描边的 Tag 变体;Tag 另有紫 #A063EE / 黄 #FCD853 / 粉 #FF66C1。**取色一律用变量,不要写死。**
+状态色表达须跨页一致，含义以本轮确认规则为准。现网未出现的状态不能仅凭颜色猜测业务含义。图标使用产品包已有的矢量或字体资源，不用 emoji 代替产品图标。
 
-### 字号
-
-| 用途 | 字号 |
-|---|---|
-| 表格内文字 | 13px |
-| 表头 / section 标题 | 14px |
-| 一级标题 | 18-20px |
-| 次要说明 | 12px |
-| 标签 / 徽章 | 11-12px |
-| 代码块 | 12px(等宽字体) |
-
-### 状态色与图标
-
-| 状态 | 图标 | 类名 |
-|---|---|---|
-| 待处理 | 🔴 | status-pending |
-| 待验证 | 🟡 | status-waiting |
-| 已验证 | 🟢 | status-verified |
-| 已忽略 | ⚫ | status-ignored |
-| 失败 | ✗ | status-failed |
-| 临时标签:回退 | - | tag tag-warn(橙底) |
-| 临时标签:处理失败 | - | tag tag-danger(红底) |
-
-### 暗色代码 / 配置块
-
-```css
-.snippet { background: #2d2d2d; color: #d4d4d4; font-family: 'Consolas', monospace;
-           font-size: 12px; line-height: 1.6; padding: 8px 10px; border-radius: 3px;
-           white-space: pre-wrap; }
-.snippet .bad { background: #5c2d2d; color: #fff; padding: 1px 4px; border-radius: 2px; }
-.snippet .good { background: #2d5c33; color: #fff; padding: 1px 4px; border-radius: 2px; }
-```
-
-复制图标固定在右上角:
-
-```css
-.snippet-wrap2 { position: relative; }
-.snippet-wrap2 .copy-icon { position: absolute; top: 6px; right: 8px;
-                            background: rgba(255,255,255,0.1); color: #d4d4d4;
-                            padding: 2px 6px; border-radius: 3px; cursor: pointer;
-                            font-size: 11px; }
-```
-
-### 对象 chip(可勾选 + 可跳详情)
-
-```html
-<span class="dev-tag">
-  <input type="checkbox" checked>
-  <a href="...详情.html">对象名 / 标识</a>
-</span>
-```
-
-### 命中事件列表
-
-```html
-<div class="hit-tasks">
-  <div class="hit-head">在 <strong>8</strong> 次事件中命中:</div>
-  <a class="hit-item"><span class="hit-dot"></span>事件 X - YYYY-MM-DD HH:MM</a>
-  <a class="hit-item"><span class="hit-dot ok"></span>验证事件 - YYYY-MM-DD HH:MM ✓</a>
-</div>
-```
+配置片段、对象标签、事件列表等组合组件按本轮需求复用或补充到所选产品包。集管业务内容使用 `jg-` 样式，网管使用 `wg-` 样式；`skill-extras.css` 的字段规格表、需求便签和原型说明样式只用于说明区域。
 
 ### 操作按钮的二次确认
 
@@ -839,8 +746,8 @@ function confirmDelete(event) {
 ```
 
 ```html
-<a href="#" class="btn-link" style="color:#f56c6c;" onclick="confirmDelete(event)">删除</a>
-<button class="btn btn-danger" onclick="confirmDelete()">批量删除</button>
+<!-- 按所选产品包使用删除按钮类名；集管示例的结构以 jg 模板为准 -->
+<button type="button" onclick="confirmDelete()">批量删除</button>
 ```
 
 **其他状态变更(停用 / 启用切换 / 取消 / 恢复等):** 一个确认弹窗即可,文案点明"将要做什么"。除非业务上影响面确实复杂且评审认可,否则不必堆影响清单、也不必双重确认 —— **先用最朴素的一步确认,别过度设计**。
@@ -906,7 +813,7 @@ function confirmDelete(event) {
 - **列表多选框约定**:**记录类 / 查阅类列表默认不带前置多选框**;只有列表上确有批量操作(如批量删除任务)时才加多选列
 - **不允许目的地不明的链接**:href="#" / onclick="alert" / 无目的地按钮一律不允许
 - **统一中文术语**:切换标签(代替 toggle-tab)/ 弹窗(modal)/ 标签(chip)/ 鼠标悬停(hover)等
-- **共用 common.css 的类名约定**(导航 / 表格 / 按钮 / 卡片 / 状态等)
+- **产品包与类名约定**(集管 `jg-`；网管 `wg-`；附来源与校准范围，禁止跨产品混用)
 - **设计原则**:产品 UI 主体与"原型设计说明区"必须用分隔线明确隔开
 - **时间格式**:统一 `YYYY-MM-DD HH:MM:SS`;纯日期 / 定时时段除外
 - **详情入口**:详情都进只读模式(与编辑复用页面,`mode=view` 区分),只读态隐藏保存 / 执行 / 删除
@@ -973,7 +880,7 @@ function confirmDelete(event) {
 ## 常犯的错(避坑)
 
 ### 错 1:没建设计语言就开始画
-每个页面颜色 / 间距 / 字号自己选,最后视觉碎片化。**common.css 是第 0 步**。
+每个页面颜色 / 间距 / 字号自己选,最后视觉碎片化。**选择产品包是第 0 步**。
 
 ### 错 2:没抽共性组件
 做了 5 个页面才发现重复代码到处都是,改一处要改 5 个文件。**共性组件在第 2 个页面就抽**。
@@ -1018,7 +925,7 @@ function confirmDelete(event) {
 完成本 skill 后,你应该有:
 
 1. **HTML 原型集合**(每个页面一个文件)
-2. **共享样式表**(common.css)
+2. **所选产品的共享样式与交互文件**(集管 `jg.css` / `jg.js`；网管 `wg.css` / `wg.js`)
 3. **导航页**(把所有原型页串起来,作为评审入口)
 4. **设计规范文档**(可以是本 skill 的"原型规范"章节的项目化版本)
 5. **回写后的 PRD 细则**(按原型页面和功能编号展开)
@@ -1035,4 +942,4 @@ function confirmDelete(event) {
 - **上一步**:姐妹 skill **`requirements2prd`**(本 plugin 内的另一个 skill) —— 提供 PRD、术语字典、视图设计基线
 - **评审前闸门**:姐妹 skill **`proto-check`** —— 按产品、UI 和日常安全三套规则检查;安全项仍按同一 S-* 编号核对
 - **关键收尾**:第 8 步 —— 反写 PRD 细则、回写 PRD、生成研发对接版 Word、锁定本轮迭代、拉通设计 / 技术 / QA 确认
-- **下一步**:安全闸门通过、原型评审完成并回写后进入开发 / 联调 —— 拿着 PRD 细则、PRD 终稿、研发对接版 Word、锁定的迭代范围、安全承接清单和各方确认凭据开工。**common.css 直接拿去用,组件结构 1:1 实现**
+- **下一步**:安全闸门通过、原型评审完成并回写后进入开发 / 联调 —— 拿着 PRD 细则、PRD 终稿、研发对接版 Word、锁定的迭代范围、安全承接清单和各方确认凭据开工。**所选产品包提供视觉和结构参考，研发实现仍按已确认规则验证**
