@@ -1,0 +1,12 @@
+const {test}=require('node:test');
+const assert=require('node:assert/strict');
+const PM=require('../docs/demo/project-board/assets/domain.js');
+const fresh=()=>({projects:[{id:'p',name:'项目 A',due:'2026-11-10'}],tasks:[{id:'a',project:'p',name:'前置任务',status:'进行中',checks:[{text:'验收',done:false}]},{id:'b',project:'p',name:'后续任务',status:'待开始',dependency:'a',checks:[{text:'结果',done:false}]}]});
+test('依赖任务完成前不允许开始，完成后允许',()=>{const d=fresh();assert.equal(PM.transition(d,d.tasks[1],'start','manager'),'前置任务尚未完成');assert.equal(d.tasks[1].status,'待开始');d.tasks[0].status='已完成';assert.equal(PM.transition(d,d.tasks[1],'start','manager'),'');assert.equal(d.tasks[1].status,'进行中');});
+test('访客不可变更状态或编辑',()=>{const d=fresh();for(const a of ['start','submit','complete','reject','check','edit'])assert.equal(PM.reason(d,d.tasks[0],a,'viewer'),'访客只有查看权限');});
+test('验收未完成不得完成；退回必须有原因并清空勾选',()=>{const d=fresh(),t=d.tasks[0];t.status='待验收';assert.ok(PM.transition(d,t,'complete','manager'));t.checks[0].done=true;assert.ok(PM.transition(d,t,'reject','manager','  '));assert.equal(t.status,'待验收');assert.equal(PM.transition(d,t,'reject','manager','补充结果'),'');assert.equal(t.status,'进行中');assert.equal(t.checks[0].done,false);});
+test('完成后不可重复完成或编辑',()=>{const d=fresh(),t=d.tasks[0];t.status='待验收';t.checks[0].done=true;assert.equal(PM.transition(d,t,'complete','manager'),'');assert.ok(PM.transition(d,t,'complete','manager'));assert.ok(PM.reason(d,t,'edit','manager'));});
+test('汇总状态与完成进度统一，逾期只标记未完成项目',()=>{const d=fresh(),p=d.projects[0];assert.equal(PM.summary(d,p,'2026-11-11').overdue,true);d.tasks.forEach(t=>t.status='已完成');const s=PM.summary(d,p,'2026-11-11');assert.equal(s.progress,100);assert.equal(s.status,'已完成');assert.equal(s.overdue,false);d.tasks=[];assert.equal(PM.summary(d,p).progress,0);assert.equal(PM.summary(d,p).status,'待启动');});
+test('项目名称去空格查重，拒绝过去日期与空目标',()=>{const d=fresh();const e=PM.projectErrors(d,{name:' 项目 A ',owner:'成员 A',due:'2026-10-26',goal:'   '},'2026-10-27');assert.ok(e.name&&e.due&&e.goal);});
+test('任务日期不得超出项目，依赖必须来自当前项目',()=>{const d=fresh();const e=PM.taskErrors(d,d.projects[0],{name:'任务 C',owner:'成员 B',priority:'P1',due:'2026-11-11',dependency:'outside',acceptance:'结果可见'},'','2026-10-27');assert.ok(e.due&&e.dependency);});
+test('更新自身名称不误报重复，其他同项目同名仍拒绝',()=>{const d=fresh(),f={name:'前置任务',owner:'成员 A',priority:'P1',due:'2026-11-01'};assert.deepEqual(PM.taskErrors(d,d.projects[0],f,'a','2026-10-27'),{});assert.ok(PM.taskErrors(d,d.projects[0],f,'b','2026-10-27').name);});

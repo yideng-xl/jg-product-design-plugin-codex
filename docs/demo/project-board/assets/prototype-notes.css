@@ -1,0 +1,37 @@
+/* 说明层独立样式，不复用产品主题色。 */
+body[data-prototype-notes]{margin:0!important;min-width:0!important;overflow:hidden!important;height:100vh!important;display:block!important}
+#pn-shell{display:grid;grid-template-columns:minmax(0,1fr) 380px;height:100vh;width:100%;overflow:hidden}
+#pn-product{position:relative;contain:layout;overflow:auto;min-width:0;height:100%;background:var(--bg,#f5f6f8)}
+#pn-shell.pn-collapsed{grid-template-columns:minmax(0,1fr)}
+#pn-shell.pn-collapsed #pn-rail{display:none}
+#pn-rail{position:relative;z-index:100001;display:flex;flex-direction:column;min-width:0;height:100%;background:#fffbeb;border-left:1px dashed #e7bd66;color:#4b3820;font:13px/1.65 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
+#pn-rail button,#pn-restore,#pn-mark-toolbar button,.pn-global-heading button{font:inherit;cursor:pointer;background:#fffaf0;color:#775017;border:1px solid #e9cf99;border-radius:5px;padding:4px 9px}
+.pn-heading{flex:none;padding:15px 16px 10px;border-bottom:1px solid #efddb3}
+.pn-heading>strong{font-size:16px}.pn-heading>#pn-toggle{float:right}.pn-actions{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+#pn-status{display:block;margin-top:8px;color:#806a44;overflow-wrap:anywhere}
+#pn-cards{overflow:auto;flex:1;padding:14px;min-height:0}
+.pn-card{padding:12px;margin-bottom:12px;background:#fff;border:1px solid #ead6ac;border-radius:8px;box-shadow:0 2px 7px #7b531008;overflow-wrap:anywhere}
+.pn-card.pn-selected{border-color:#d49a28;background:#fff9e9;box-shadow:0 0 0 2px #edc46b35}
+.pn-card-label{font-size:12px;color:#946724;font-weight:600;margin-bottom:8px}
+.pn-note-title{font-weight:600;font-size:14px;margin-bottom:7px;white-space:pre-wrap}.pn-note-body{min-height:28px;white-space:pre-wrap}
+.pn-card .pn-note-content{display:block!important;position:static!important;margin:0!important;max-width:100%;font-size:13px;line-height:1.75;color:#4b3820}
+.pn-card [data-anno-rich]{overflow:auto}.pn-card table{min-width:640px}
+.pn-card .pn-locate,.pn-card .pn-delete{margin-top:10px;font-size:12px;background:transparent;border:0;padding:0}.pn-card .pn-delete{float:right;color:#a34a32}
+.pn-missing{display:block;color:#a16c22;margin-top:6px}
+body[data-prototype-notes] [contenteditable]:focus{outline:2px solid #dfac46;outline-offset:3px;border-radius:2px;background:#fffef9}
+body.pn-editable [data-anno-id]{cursor:text}
+#pn-restore{position:fixed;right:12px;top:12px;z-index:100005;background:#fffbeb}
+#pn-connections{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:100002}
+#pn-mark-toolbar{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:100010;background:#fffdf4;border:1px solid #e6c16e;box-shadow:0 4px 20px #0002;border-radius:8px;padding:10px;display:flex;align-items:center;gap:8px;font:13px/1.5 sans-serif;color:#5a421b}
+#pn-mark-toolbar .chosen{background:#eab543;color:#352300}#pn-mark-hint{white-space:nowrap}
+#pn-mark-hover{position:fixed;pointer-events:none;z-index:100009;border:2px dashed #d69720;background:#ecc35625;box-sizing:border-box}
+#pn-markers{position:fixed;inset:0;pointer-events:none;z-index:100003}
+#pn-markers .manual-area{position:absolute;border:1px dashed #dba336;box-sizing:border-box;pointer-events:none;border-radius:3px}
+#pn-markers .manual-area.selected{border:2px solid #d99c27;background:#efc56e10}
+#pn-markers .manual-pin{position:absolute;right:-9px;top:-10px;min-width:21px;height:21px;padding:0 4px;border-radius:12px;border:1px solid #fff;background:#d79b27;color:white;font:11px/19px sans-serif;pointer-events:auto;cursor:pointer;box-shadow:0 1px 3px #0002}
+#pn-product.mark-selecting,#pn-product.mark-selecting *{cursor:crosshair!important;user-select:none!important}
+#pn-product .proto-note{margin:20px 16px;padding:0!important;border:1px solid #e8ce99!important;background:#fffbeb!important;border-radius:8px;color:#554126}
+.pn-global-heading{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #efddb3;color:#795a25;font-size:14px}
+.pn-global-body{padding:14px 16px;overflow:auto}
+#pn-rail [hidden],#pn-mark-toolbar[hidden],#pn-mark-hover[hidden],#pn-restore[hidden],.pn-global-body[hidden]{display:none!important}
+@media(max-width:900px){#pn-shell{grid-template-columns:minmax(0,1fr) 310px}#pn-mark-toolbar{max-width:95%;flex-wrap:wrap}#pn-mark-hint{white-space:normal}}
