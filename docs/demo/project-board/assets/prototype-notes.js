@@ -23,7 +23,7 @@
     });
     const shell = document.createElement('div'); shell.id = 'pn-shell';
     const product = document.createElement('main'); product.id = 'pn-product';
-    [...document.body.children].forEach(el => { if (!['SCRIPT', 'LINK', 'STYLE'].includes(el.tagName)) product.append(el); });
+    [...document.body.children].forEach(el => { if (!el.classList.contains('site-header') && !['SCRIPT', 'LINK', 'STYLE'].includes(el.tagName)) product.append(el); });
     const rail = document.createElement('aside'); rail.id = 'pn-rail'; rail.setAttribute('aria-label', '原型说明');
     rail.innerHTML = '<header class="pn-heading"><strong>原型说明</strong><button type="button" id="pn-toggle">收起说明</button><div class="pn-actions"><button type="button" id="pn-add" hidden>＋ 添加说明</button><button type="button" id="pn-save" hidden>保存</button><button type="button" id="pn-undo" hidden>撤销删除</button></div><small id="pn-status" role="status">只读展示</small></header><div id="pn-cards"></div>';
     shell.append(product, rail); document.body.append(shell);
