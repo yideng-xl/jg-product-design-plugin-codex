@@ -186,6 +186,8 @@
    ============================================================================= */
 (function () {
   "use strict";
+  // 新说明面板独立管理覆盖层，避免两个编辑器重复绑定及保存。
+  if (document.body.hasAttribute("data-prototype-notes")) return;
   var HOST = location.hostname;
   // 只有通过本地编辑器(localhost 服务)打开才可编辑;file:// 直接双击 = 纯看,内网域名 = 发布,都只读
   var EDITABLE = HOST === "localhost" || HOST === "127.0.0.1" || HOST === "::1";
@@ -297,7 +299,7 @@
     x.addEventListener("click", function (e) {
       e.preventDefault(); e.stopPropagation();
       var a = item.querySelector("[data-anno-id]"), id = a && a.getAttribute("data-anno-id");
-      if (a && !a.hasAttribute("data-anno-added") && id) removedSet[id] = 1; // 原件删除记 removed
+      if (a && id) removedSet[id] = 1; // 原件删除记 removed
       item.remove(); persist();
     });
     item.appendChild(x);
@@ -326,7 +328,7 @@
         var box = el.closest("[data-anno-container]"); if (!box) return;
         var cid = box.getAttribute("data-anno-container");
         (ad[cid] = ad[cid] || []).push({ id: id, text: cur });
-      } else if (defaults[id] !== undefined && cur !== defaults[id]) {
+      } else if (defaults[id] !== undefined) {
         ov[id] = cur;
       }
     });

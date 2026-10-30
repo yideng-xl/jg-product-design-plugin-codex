@@ -14,6 +14,10 @@ const path = require("path");
 const { URL } = require("url");
 const { execFile } = require("child_process");
 
+const crypto = require('crypto');
+const notesStore = require('./notes-store');
+const { BUILD_ID } = require('./launcher');
+const noteSessions = new Map();
 const ROOT = __dirname;                 // 编辑器工具目录(panel.html 在这)
 const PORT = process.env.PORT || 47821;
 const IDLE_MS = Number(process.env.IDLE_MS) || 15000;
@@ -50,30 +54,37 @@ function pickFolder(cb) {
   }
 }
 
-function saveToDir(req, res, dir) {
-  let body = "";
-  req.on("data", function (c) { body += c; if (body.length > 5e6) req.destroy(); });
-  req.on("end", function () {
+function json(res, status, value) {
+  res.writeHead(status, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+  res.end(JSON.stringify(value));
+}
+function sameOrigin(req) {
+  const host = req.headers.host || '';
+  if (!/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(host)) return false;
+  if (req.headers['sec-fetch-site'] === 'cross-site') return false;
+  return !req.headers.origin || req.headers.origin === 'http://' + host;
+}
+function saveToDir(req, res, dir, modern) {
+  if (!sameOrigin(req)) return json(res, 403, { ok: false, error: '仅允许本地同源保存' });
+  let body = '';
+  req.on('data', c => { body += c; if (Buffer.byteLength(body) > 5e6) req.destroy(); });
+  req.on('end', () => {
     try {
-      const data = JSON.parse(body || "{}");
-      const target = path.join(dir, "data", "annotations.js");
-      const out =
-        "/* annotations.js —— 原型手改覆盖层(本地编辑器自动写)。\n" +
-        "   产品所有,生成 / 改原型时不覆写本文件。 */\n" +
-        "window.__ANNO__ = " + JSON.stringify(data, null, 2) + ";\n";
-      fs.mkdirSync(path.dirname(target), { recursive: true });
-      fs.writeFileSync(target, out);
-      res.writeHead(200, { "Content-Type": "application/json" }); res.end('{"ok":true}');
-      console.log("  ✓ 已写 " + target + "  " + new Date().toLocaleTimeString());
-    } catch (e) {
-      res.writeHead(400, { "Content-Type": "application/json" }); res.end(JSON.stringify({ ok: false, error: String(e) }));
-    }
+      const data = JSON.parse(body || '{}');
+      if (modern && (!data.token || data.token !== noteSessions.get(dir))) return json(res, 403, { ok: false, error: '编辑会话无效，请刷新页面' });
+      const result = modern ? notesStore.save(dir, data) : notesStore.saveLegacy(dir, data);
+      lastPing = Date.now();
+      json(res, 200, result);
+    } catch (e) { json(res, e.status || 400, { ok: false, error: e.message }); }
   });
 }
 
 http.createServer(function (req, res) {
   const u = new URL(req.url, "http://localhost");
   const pn = u.pathname.replace(/\/+$/, "");
+  if (!sameOrigin(req)) return json(res, 403, { ok: false, error: "仅允许本地同源访问" });
+
+  if (req.method === "GET" && pn === "/editor-info") return json(res, 200, { app: "prototype-editor", build: BUILD_ID, notes: true });
 
   if (pn.endsWith("/ping")) { lastPing = Date.now(); res.writeHead(200); res.end("ok"); return; }
   if (pn.endsWith("/bye")) { res.writeHead(200); res.end("bye"); setTimeout(function () { process.exit(0); }, 100); return; }
@@ -97,6 +108,14 @@ http.createServer(function (req, res) {
     try { base = path.resolve(Buffer.from(decodeURIComponent(token).replace(/-/g, "+").replace(/_/g, "/"), "base64").toString("utf8")); }
     catch (e) { res.writeHead(400); res.end("bad token"); return; }
     var subClean = sub.replace(/\/+$/, "");
+    if (req.method === 'GET' && subClean.endsWith('/notes-session')) {
+      try {
+        if (!noteSessions.has(base)) noteSessions.set(base, crypto.randomBytes(32).toString('hex'));
+        lastPing = Date.now();
+        return json(res, 200, { editable: true, token: noteSessions.get(base), revision: notesStore.read(base).revision });
+      } catch (e) { return json(res, e.status || 400, { ok: false, error: e.message }); }
+    }
+    if (req.method === 'POST' && subClean.endsWith('/save-notes')) return saveToDir(req, res, base, true);
     if (req.method === "POST" && subClean.endsWith("/save-annotations")) { return saveToDir(req, res, base); }
     var rel = decodeURIComponent(sub);
     if (rel === "" || rel.endsWith("/")) rel += "index.html";
@@ -111,7 +130,7 @@ http.createServer(function (req, res) {
   const fp = path.normalize(path.join(ROOT, p));
   if (fp !== ROOT && fp.indexOf(ROOT + path.sep) !== 0) { res.writeHead(403); res.end("forbidden"); return; }
   sendFile(fp, res);
-}).listen(PORT, function () {
+}).listen(PORT, "127.0.0.1", function () {
   console.log("原型编辑器服务:http://localhost:" + PORT + "/   (关掉控制页/编辑页即停)");
   var checkMs = Math.max(500, Math.min(3000, Math.floor(IDLE_MS / 2)));
   setInterval(function () {

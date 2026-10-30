@@ -20,7 +20,7 @@ mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$HERE/Info.plist" "$APP/Contents/Info.plist"
 cp "$HERE/app-exec.sh" "$APP/Contents/MacOS/原型编辑器"
 chmod +x "$APP/Contents/MacOS/原型编辑器"
-cp "$HERE/serve.js" "$HERE/launcher.js" "$HERE/panel.html" "$HERE/AppIcon.icns" "$APP/Contents/Resources/"
+cp "$HERE/serve.js" "$HERE/notes-store.js" "$HERE/launcher.js" "$HERE/panel.html" "$HERE/AppIcon.icns" "$APP/Contents/Resources/"
 
 cp "$HERE/原型编辑器.vbs" "$HERE/原型编辑器.command" "$HERE/使用说明.txt" "$STAGE/"
 chmod +x "$STAGE/原型编辑器.command"

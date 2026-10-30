@@ -57,6 +57,19 @@ for (const file of htmlFiles) {
     }
   }
 
+  if (/<body\b[^>]*\bdata-prototype-notes(?:[\s=>])/i.test(html)) {
+    const order = ['data/annotations.js', 'prototype-mark.js', 'prototype-notes.js'].map(name => html.indexOf(name));
+    if (order.some(n => n < 0) || order[0] > order[1] || order[1] > order[2]) problems.push(`${rel}: 新说明布局加载顺序应为 annotations.js、prototype-mark.js、prototype-notes.js`);
+    if (!html.includes('prototype-notes.css')) problems.push(`${rel}: 新说明布局缺少 prototype-notes.css`);
+    if (!/<body\b[^>]*\bdata-page=["'][^"']+["']/i.test(html)) problems.push(`${rel}: 新说明布局缺少稳定 data-page`);
+    for (const match of html.matchAll(/<[^>]*\bdata-note-target=["'][^"']*["'][^>]*>/gi)) {
+      if (!/\bdata-anno-id=["'][^"']+["']/i.test(match[0])) problems.push(`${rel}: 局部说明 data-note-target 必须同时具有稳定 data-anno-id`);
+    }
+    for (const asset of ['prototype-notes.css','prototype-mark.js','prototype-notes.js']) {
+      if (!fs.existsSync(path.join(root,'assets',asset))) problems.push(`${rel}: 缺少 assets/${asset}`);
+    }
+  }
+
   for (const match of html.matchAll(/<[^>]*\bdata-anno-id=["']([^"']+)["'][^>]*>/gi)) {
     const id = match[1];
     const position = `${rel}:${lineOf(html, match.index)}`;
