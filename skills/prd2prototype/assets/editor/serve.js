@@ -5,7 +5,7 @@
      1) 在 /  提供「控制页」panel.html(壳):操作说明 + 选原型 + 使用说明 + 停止。
      2) POST /pick  弹原生选文件夹窗(Mac osascript / Win PowerShell),记住所选原型目录。
      3) /proto/*  把所选原型目录当根来服务;POST /proto/save-annotations 写该原型 data/annotations.js。
-   另有 GET /ping(心跳)、/bye(关页面即停):没有页面心跳超过 IDLE_MS 就自动退出。
+   另有 GET /ping(兼容心跳)、/bye(主动停止)。服务不依赖页面心跳存活。
    端口默认 47821(不常用),launcher 会自动挑空闲端口;只在 localhost 可写文件。
    ============================================================================= */
 const http = require("http");
@@ -20,8 +20,6 @@ const { BUILD_ID } = require('./launcher');
 const noteSessions = new Map();
 const ROOT = __dirname;                 // 编辑器工具目录(panel.html 在这)
 const PORT = process.env.PORT || 47821;
-const IDLE_MS = Number(process.env.IDLE_MS) || 15000;
-let lastPing = Date.now();
 // 无全局「当前原型」状态:每个原型走 /p/<base64路径>/,路径写在 URL 里,多标签互不干扰。
 
 const MIME = {
@@ -73,7 +71,7 @@ function saveToDir(req, res, dir, modern) {
       const data = JSON.parse(body || '{}');
       if (modern && (!data.token || data.token !== noteSessions.get(dir))) return json(res, 403, { ok: false, error: '编辑会话无效，请刷新页面' });
       const result = modern ? notesStore.save(dir, data) : notesStore.saveLegacy(dir, data);
-      lastPing = Date.now();
+
       json(res, 200, result);
     } catch (e) { json(res, e.status || 400, { ok: false, error: e.message }); }
   });
@@ -86,7 +84,7 @@ http.createServer(function (req, res) {
 
   if (req.method === "GET" && pn === "/editor-info") return json(res, 200, { app: "prototype-editor", build: BUILD_ID, notes: true });
 
-  if (pn.endsWith("/ping")) { lastPing = Date.now(); res.writeHead(200); res.end("ok"); return; }
+  if (pn.endsWith("/ping")) { res.writeHead(200); res.end("ok"); return; }
   if (pn.endsWith("/bye")) { res.writeHead(200); res.end("bye"); setTimeout(function () { process.exit(0); }, 100); return; }
 
   if (req.method === "POST" && pn === "/pick") {
@@ -111,7 +109,7 @@ http.createServer(function (req, res) {
     if (req.method === 'GET' && subClean.endsWith('/notes-session')) {
       try {
         if (!noteSessions.has(base)) noteSessions.set(base, crypto.randomBytes(32).toString('hex'));
-        lastPing = Date.now();
+
         return json(res, 200, { editable: true, token: noteSessions.get(base), revision: notesStore.read(base).revision });
       } catch (e) { return json(res, e.status || 400, { ok: false, error: e.message }); }
     }
@@ -131,9 +129,5 @@ http.createServer(function (req, res) {
   if (fp !== ROOT && fp.indexOf(ROOT + path.sep) !== 0) { res.writeHead(403); res.end("forbidden"); return; }
   sendFile(fp, res);
 }).listen(PORT, "127.0.0.1", function () {
-  console.log("原型编辑器服务:http://localhost:" + PORT + "/   (关掉控制页/编辑页即停)");
-  var checkMs = Math.max(500, Math.min(3000, Math.floor(IDLE_MS / 2)));
-  setInterval(function () {
-    if (Date.now() - lastPing > IDLE_MS) { console.log("无页面心跳,自动停止。"); process.exit(0); }
-  }, checkMs).unref();
+  console.log("原型编辑器服务:http://localhost:" + PORT + "/   (在控制页点击停止服务后退出)");
 });
