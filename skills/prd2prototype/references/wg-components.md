@@ -1,6 +1,6 @@
-# 网管组件接口
+# 产品 B 组件接口
 
-网管业务页面只使用 `assets/products/wg/wg.css`、`wg.js` 和 `wg-` 类名。已观测外观与演示交互的边界见 [采集清单](wg-ui-inventory.md)，接入说明层见 [产品资产选择](products.md)。以下接口以包内实际代码为准。
+产品 B 业务页面只使用 `assets/products/wg/wg.css`、`wg.js` 和 `wg-` 类名。已观测外观与演示交互的边界见 [采集清单](wg-ui-inventory.md)，接入说明层见 [产品资产选择](products.md)。以下接口以包内实际代码为准。
 
 ## 页面与模板
 
@@ -60,7 +60,7 @@
 
 ## 主题与新增接口
 
-主题样式通过 `body.wg-app[data-wg-theme="blue"]` 启用雅致蓝深色；`data-wg-theme="green"` 为国网绿。保持 `wg-` 组件结构，只切主题属性。示例 URL 可用 `?theme=blue` / `?theme=green` 指定主题；本地保存仅影响原型查看，不修改现网设置。
+主题样式通过 `body.wg-app[data-wg-theme="blue"]` 启用蓝色深色主题深色；`data-wg-theme="green"` 为绿色主题。保持 `wg-` 组件结构，只切主题属性。示例 URL 可用 `?theme=blue` / `?theme=green` 指定主题；本地保存仅影响原型查看，不修改现网设置。
 
 主题初始化顺序为 URL 显式参数、localStorage 的 `wg-prototype-theme`、默认 green。模板在 head 中设置根元素主题以避免初始闪白，再同步 body。切换按钮使用 `data-wg-theme-option="blue"` / `"green"`，或调用 `WG.setTheme(value, updateURL=true)`；它同步根元素与 body、按钮状态、本地存储和同源 HTML 链接的主题参数。
 

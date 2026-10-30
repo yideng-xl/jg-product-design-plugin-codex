@@ -1,7 +1,7 @@
 {
   "observedOn": "2026-10-16",
   "systemVersion": "V1.24.1",
-  "scope": "集管界面只读测量；不含业务数据",
+  "scope": "产品 A 界面只读测量；不含业务数据",
   "states": [
     {
       "name": "运维工单管理",

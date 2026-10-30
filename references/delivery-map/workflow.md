@@ -1,6 +1,6 @@
 # 交付地图共用更新流程
 
-集管和网管执行同一流程。先按 [产品差异配置](products.md) 选择产品，操作范围限定在用户本次指定的产品。
+产品 A 和产品 B 执行同一流程。先按 [产品差异配置](products.md) 选择产品，操作范围限定在用户本次指定的产品。
 
 ## 确定输入
 
@@ -15,7 +15,7 @@
 使用具备 `openpyxl` 的 Python，执行共用只读检查脚本：
 
 ```bash
-<python> <插件根目录>/scripts/delivery-map/inspect_tracking.py '<月度表.xlsx>' --product '<集管或网管>' --sheet '<实际工作表>' --backbone '<按调度体系.xlsx>'
+<python> <插件根目录>/scripts/delivery-map/inspect_tracking.py '<月度表.xlsx>' --product '<产品 A 或产品 B>' --sheet '<实际工作表>' --backbone '<按调度体系.xlsx>' --backbone-sheet '<本地配置中的实际骨架工作表>'
 ```
 
 检查表头、缺列、空客户、重复项目、新客户、未出现的历史客户和多行映射。输出仅用于本地核对，不作为地图页面内容。工具成功退出后仍须检查未映射项目与历史保留记录。

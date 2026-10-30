@@ -1,4 +1,4 @@
 interface:
-  display_name: "更新集管交付地图"
-  short_description: "根据最新月度进度表更新集管交付地图，核对项目映射和覆盖状态并发布预览"
-  default_prompt: "使用 $update-delivery-map-jg 根据这份最新月度进度表更新集管交付地图。"
+  display_name: "更新产品 A 交付地图"
+  short_description: "根据最新月度进度表更新产品 A 交付地图，核对项目映射和覆盖状态并发布预览"
+  default_prompt: "使用 $update-delivery-map-jg 根据这份最新月度进度表更新产品 A 交付地图。"

@@ -3,6 +3,11 @@ name: write-product-weekly-minutes
 description: Use when the user asks to prepare 产品部周例会、周例会主持稿或周例会纪要，including generating a pre-meeting host script from last week's minutes and current member reports, or producing final minutes from the meeting transcript.
 ---
 
+## 内部产品对应
+
+执行前读取 [产品身份与公开边界](../../references/product-identity.md)，先从工作区本地配置解析产品，再选素材、主题、权限链接与真实文件名。
+
+
 # 产品部周例会主持稿与纪要
 
 按同一套标准完成两次交付：会前根据上周会议纪要和本周成员周报形成主持稿；会后根据主持稿和会议录音逐字稿形成正式纪要。

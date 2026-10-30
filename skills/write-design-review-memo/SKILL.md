@@ -3,6 +3,11 @@ name: write-design-review-memo
 description: Use when the user asks to turn a 设计评审 transcript, recording notes, review comments, or meeting record into a 设计评审备忘录, 设计评审会议纪要, 产研评审 memo, or upload-ready internal review document.
 ---
 
+## 内部产品对应
+
+执行前读取 [产品身份与公开边界](../../references/product-identity.md)，先从工作区本地配置解析产品，再选素材、主题、权限链接与真实文件名。
+
+
 # 设计评审备忘录
 
 把会议事实压缩成可上传、可跟踪的备忘录。只记录有依据的基本信息、共识、待办、结论和必要复盘。
@@ -103,12 +108,10 @@ description: Use when the user asks to turn a 设计评审 transcript, recording
 
 ## 文件与文字要求
 
-- 主题和文件名统一使用产品全名，不使用“网管”“集管”等简称，也不使用具体需求名称代替产品名称；
-- 两个产品的固定全名：
-  - 网管：`网络一体化监视及运维管理系统`
-  - 集管：`便携式运维网关集中管控应用`
+- 主题和文件名统一使用产品全名，不使用“产品 B”“产品 A”等简称，也不使用具体需求名称代替产品名称；
+- 内部产品全名从本地配置的 `products.wg.full_name` 或 `products.jg.full_name` 读取，公开别名不得代替内部交付材料的真实全名。
 - 名称格式：`YYYY-MM-DD-产品全名（版本号）设计评审`。日期、产品全名、版本号和“设计评审”之间不增加其他文字；版本号使用全角括号；
-- 示例：`2026-08-13-网络一体化监视及运维管理系统（V1.21.0）设计评审`；
+- 示例：`2026-08-13-产品 B（V1.21.0）设计评审`；
 - Markdown 草稿文件名：`YYYY-MM-DD-产品全名（版本号）设计评审-Codex.md`；用户确认定稿后去掉 `-Codex`；
 - 备忘录正文标题与定稿文件名一致，不带 `-Codex`；
 - 默认放在对应产品迭代目录；

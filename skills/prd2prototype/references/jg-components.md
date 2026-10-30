@@ -1,4 +1,4 @@
-# 集管包 HTML 接口
+# 产品 A 包 HTML 接口
 body.jg-app（默认1440最小宽）；示例可加 jg-fluid。
 布局：.jg-header > .jg-brand + .jg-topnav > a/button.jg-nav-item[aria-current=page]；.jg-layout > aside.jg-sidebar + main.jg-main；.jg-breadcrumb；.jg-content 白底；.jg-toolbar/.jg-spacer。
 按钮 .jg-btn[.jg-primary/.jg-danger/.jg-text]；输入 .jg-input；表单 .jg-form > .jg-field > label + .jg-control；.jg-required；.jg-check/.jg-radio 包原生 input；.jg-switch 原生 checkbox。

@@ -55,8 +55,8 @@
 
 | 产品 | Skill | 调用示例 |
 |---|---|---|
-| 集管 | `update-delivery-map-jg` | 使用 `$update-delivery-map-jg` 更新集管交付地图。 |
-| 网管 | `update-delivery-map-wg` | 使用 `$update-delivery-map-wg` 更新网管交付地图。 |
+| 产品 A | `update-delivery-map-jg` | 使用 `$update-delivery-map-jg` 更新产品 A 交付地图。 |
+| 产品 B | `update-delivery-map-wg` | 使用 `$update-delivery-map-wg` 更新产品 B 交付地图。 |
 
 两个入口共用更新流程，分别使用对应产品的配置和数据源。使用时提供最新进度表及其统计月份。
 

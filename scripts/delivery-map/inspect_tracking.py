@@ -16,7 +16,7 @@ def clean(value):
     return str(value).strip() if value is not None else ''
 
 
-def inspect(path, product, backbone=None, sheet=None):
+def inspect(path, product, backbone=None, sheet=None, backbone_sheets=None):
     wb = openpyxl.load_workbook(path, data_only=True, read_only=True)
     ws = wb[sheet] if sheet else wb.active
     headers = [clean(v) for v in next(ws.values)]
@@ -26,7 +26,7 @@ def inspect(path, product, backbone=None, sheet=None):
         errors.append({'duplicate_headers': duplicates})
     region = '区域' if '区域' in headers else '地区'
     fields = [region, '客户', *FIELDS]
-    if product == '集管':
+    if product == '产品 A':
         fields.insert(4, '标杆项目')
     missing = [h for h in fields if h not in headers]
     result = {'source': str(Path(path).resolve()), 'sheet': ws.title,
@@ -70,7 +70,7 @@ def inspect(path, product, backbone=None, sheet=None):
     if backbone:
         bw = openpyxl.load_workbook(backbone, data_only=True, read_only=True)
         locations = defaultdict(list)
-        expected = ['国网三级调度'] + (['超高压'] if product == '集管' else [])
+        expected = backbone_sheets or (['调度骨架'] + (['超高压'] if product == '产品 A' else []))
         for sn in expected:
             if sn not in bw.sheetnames:
                 errors.append({'missing_backbone_sheet': sn})
@@ -95,12 +95,13 @@ def inspect(path, product, backbone=None, sheet=None):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('tracking', type=Path)
-    parser.add_argument('--product', required=True, choices=['网管', '集管'])
+    parser.add_argument('--product', required=True, choices=['产品 B', '产品 A'])
     parser.add_argument('--backbone', type=Path)
     parser.add_argument('--sheet')
+    parser.add_argument('--backbone-sheet', action='append', help='Actual sheet name from local product configuration; repeat for multiple sheets')
     args = parser.parse_args()
     try:
-        result = inspect(args.tracking, args.product, args.backbone, args.sheet)
+        result = inspect(args.tracking, args.product, args.backbone, args.sheet, args.backbone_sheet)
     except (OSError, ValueError, KeyError) as exc:
         print(json.dumps({'errors': [str(exc)]}, ensure_ascii=False))
         return 2

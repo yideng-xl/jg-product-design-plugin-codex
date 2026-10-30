@@ -1,4 +1,4 @@
-/* 网管独立组件包。2026-10-20 采集：56px 顶栏、#007D7B 主色、
+/* 产品 B 独立组件包。2026-10-20 采集：56px 顶栏、#007D7B 主色、
    32px 控件、40px 列表、26px 厂站树、720px 主站弹窗。
    拓扑树另有32px变体。日期与流程画布细节为原型演示补充，待对应状态校准。 */
 body.wg-app{
@@ -91,7 +91,7 @@ textarea.wg-input{height:80px;line-height:21px;padding:5px 11px;resize:vertical}
 @media(max-width:1000px){.wg-header{gap:12px;padding:0 12px}.wg-brand{font-size:16px}.wg-topnav{overflow-x:auto}.wg-header-right{display:none}.wg-mega-menu{left:12px;right:12px;overflow:auto}.wg-tree-layout{grid-template-columns:200px minmax(0,1fr)}.wg-form-columns{grid-template-columns:1fr}.wg-detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(prefers-reduced-motion:reduce){.wg-app *{transition:none!important;animation:none!important}}
 
-/* 日期范围演示面板：复用日历结构，尺寸待网管对应弹层校准。 */
+/* 日期范围演示面板：复用日历结构，尺寸待产品 B 对应弹层校准。 */
 .wg-date-picker{display:inline-block;position:relative;color:var(--wg-secondary)}
 .wg-date-trigger{min-width:350px;height:32px;padding:0 10px;display:flex;align-items:center;gap:12px;border:1px solid var(--wg-border);border-radius:4px;background:var(--wg-surface);color:var(--wg-secondary);font-size:14px;white-space:nowrap}
 .wg-date-trigger::before{content:"";width:14px;height:14px;border:1px solid #a8abb2;border-radius:2px;background:linear-gradient(to bottom,transparent 3px,#a8abb2 3px,#a8abb2 4px,transparent 4px);flex:none}
@@ -136,7 +136,7 @@ textarea.wg-input{height:80px;line-height:21px;padding:5px 11px;resize:vertical}
 .wg-columns-popover .wg-columns label{min-height:28px}
 .wg-columns-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:12px;padding-top:10px;border-top:1px solid var(--wg-border-light)}
 .wg-columns-footer .wg-btn{padding:4px 8px;height:26px;font-size:12px!important}
-/* 网管 DOM 中提取的空态插图。 */
+/* 产品 B DOM 中提取的空态插图。 */
 .wg-empty::before,.wg-table-empty::before{content:"";display:block;width:180px;height:130px;margin:0 auto 12px;background:url('empty.png') center/contain no-repeat}
 .wg-table .wg-table-empty{padding:24px 12px;height:220px}
 .wg-empty-hint{display:block;margin-top:6px;color:var(--wg-placeholder);font-size:12px}
@@ -150,7 +150,7 @@ textarea.wg-input{height:80px;line-height:21px;padding:5px 11px;resize:vertical}
 .wg-list-page .wg-toolbar,.wg-list-page .wg-search,.wg-list-page .wg-pagination{flex:none}
 .wg-list-page .wg-main>p{flex:none;margin:6px 0 0}
 
-/* 雅致蓝是深色主题，2026-10-21 现网颜色和弹层测量。
+/* 蓝色深色主题，2026-10-21 现网颜色和弹层测量。
    surface 表示面板底色；white/on-primary 保持白色文字，禁止混用。
    未单独采样的日期/流程组件沿同一主题 token 表达，尺寸与行为不据此认定为实测。 */
 :is(body.wg-app[data-wg-theme="blue"],html[data-wg-theme="blue"] body.wg-app){

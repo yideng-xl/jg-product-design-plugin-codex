@@ -110,14 +110,14 @@ description: Use when the user has approved using this skill to split a stable P
 当当前 Codex 环境具备可用的浏览器或 Chrome 控制能力,且禅道站点未被组织策略拦截时,可在已登录禅道的标签页里执行 `fetch` 脚本。链路由 Codex 读取结果并核对。
 
 **模式 B — 控制台粘贴脚本由用户手动跑(内网禅道,实战常用)**
-内网 http 禅道(如 `dev.jugeng.com`)上,浏览器自动导航或跨域执行往往会被**组织策略拦截**,报 `This site is blocked by your organization's policy`。这是真实的访问策略,**绝不绕过**(不用 curl/wget/bash/Python 等任何替代手段去碰它)。此时退化为:
+内网 http 禅道(如 `tracker.example.invalid`)上,浏览器自动导航或跨域执行往往会被**组织策略拦截**,报 `This site is blocked by your organization's policy`。这是真实的访问策略,**绝不绕过**(不用 curl/wget/bash/Python 等任何替代手段去碰它)。此时退化为:
 
 1. Codex 生成一份**自包含的批量 upsert 控制台脚本**(模板见下方「API 速查 · 批量脚本模板」),写到 PRD 同目录,文件名带 `-控制台粘贴` 后缀。
 2. 用户在自己**已登录禅道的标签页**里 `F12 → Console`,整段粘贴执行。
 3. 用户把 `console.table` 结果(标题 / 动作 / 结果 / 信息四列)截图或贴文字回传给 Codex。
 4. Codex 据此核对每条是否 `success`,失败项读「信息」列定位。
 
-> 经验:`dev.jugeng.com` 上模式 A 的 navigate 被策略挡死,模式 B 一次跑通 6/6。内网禅道默认走模式 B,别在被拦的 navigate 上反复试。
+> 经验:`tracker.example.invalid` 上模式 A 的 navigate 被策略挡死,模式 B 一次跑通 6/6。内网禅道默认走模式 B,别在被拦的 navigate 上反复试。
 
 端点与固定参数见下方「API 速查」。
 
@@ -314,7 +314,7 @@ URL 里那串 `branch=all&moduleID=0&story=0&...&storyType=story` 必须带全,�
 PRD 会迭代,重跑同步如果只 create 不 upsert,会建出一堆同名需求。按 title 先查后建/改。
 
 ### 错 9:内网禅道 navigate 被组织策略拦,还在自动导航上反复试
-内网 http 禅道(如 `dev.jugeng.com`)上,浏览器自动导航或跨域执行可能被 `blocked by your organization's policy` 挡住。这是真实访问策略,**不绕过**(不用 curl/bash/Python 等替代手段),也别反复重试导航。直接切模式 B:生成控制台粘贴脚本,交用户在自己已登录的标签里跑、回传结果(见第 5 步)。
+内网 http 禅道(如 `tracker.example.invalid`)上,浏览器自动导航或跨域执行可能被 `blocked by your organization's policy` 挡住。这是真实访问策略,**不绕过**(不用 curl/bash/Python 等替代手段),也别反复重试导航。直接切模式 B:生成控制台粘贴脚本,交用户在自己已登录的标签里跑、回传结果(见第 5 步)。
 
 ### 错 10:title 不归一化,全角/半角括号差异导致 upsert 漏判重复
 草稿里写全角括号 `(…)`、禅道里存半角 `(…)`,直接字符串比对会判成两条 → 重跑建重复。比对前用 `norm()` 抹平括号与空白(见第 6 步)。
