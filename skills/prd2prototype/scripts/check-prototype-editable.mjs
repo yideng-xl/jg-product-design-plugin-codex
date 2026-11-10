@@ -2,6 +2,8 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import { createRequire } from "node:module";
+const {read: readAnnotations} = createRequire(import.meta.url)("../assets/editor/notes-store.js");
 
 const target = process.argv[2];
 if (!target) {
@@ -39,6 +41,25 @@ if (!fs.existsSync(annoFile)) {
 }
 
 const ids = new Map();
+let annotation = {};
+try { annotation = readAnnotations(root).value; } catch (error) { problems.push('说明覆盖层无法读取：' + error.message); }
+const numbering = annotation.noteNumbering;
+const numbered = numbering != null;
+if (numbered && (!Number.isSafeInteger(numbering.rightMax) || numbering.rightMax < 0 || !Number.isSafeInteger(numbering.wideMax) || numbering.wideMax < 0)) problems.push('说明编号上限无效');
+const codes = new Map();
+function registerCode(code, prefix, position, generated = false) {
+  const n = typeof code === 'string' && code.startsWith(prefix) ? Number(code.slice(prefix.length)) : 0;
+  if (!Number.isSafeInteger(n) || n < 1 || code !== prefix + String(n).padStart(prefix === 'R-' ? 3 : 2, '0')) {
+    problems.push(position + ': 说明编号无效，应使用 ' + (prefix === 'R-' ? 'R-001' : 'WR-01'));
+    return;
+  }
+  if (codes.has(code)) problems.push(position + ': 说明编号 ' + code + ' 与 ' + codes.get(code) + ' 重复');
+  else codes.set(code, position);
+  if (generated && numbered && n > numbering[prefix === 'R-' ? 'rightMax' : 'wideMax']) problems.push(position + ': 说明编号超过已登记的上限');
+}
+if (numbered) for (const [pageKey, notes] of Object.entries(annotation.notes || {})) {
+  if (Array.isArray(notes)) for (const note of notes) registerCode(note.code, 'R-', 'annotations.js/' + pageKey + '/' + note.id);
+}
 const htmlFiles = walk(root);
 let wiredPages = 0;
 
@@ -68,6 +89,14 @@ for (const file of htmlFiles) {
     for (const asset of ['prototype-notes.css','prototype-mark.js','prototype-notes.js']) {
       if (!fs.existsSync(path.join(root,'assets',asset))) problems.push(`${rel}: 缺少 assets/${asset}`);
     }
+  }
+
+  const hasNotesLayout = /<body\b[^>]*\bdata-prototype-notes(?:[\s=>])/i.test(html);
+  for (const match of html.matchAll(/<[^>]*\b(?:data-anno-id|data-note-code)=["'][^"']*["'][^>]*>/gi)) {
+    const tag = match[0];
+    const code = /\bdata-note-code=["']([^"']*)["']/i.exec(tag)?.[1];
+    const right = /\bdata-note-target=/i.test(tag);
+    if (code !== undefined || numbered && hasNotesLayout) registerCode(code, right ? 'R-' : 'WR-', rel + ':' + lineOf(html, match.index), true);
   }
 
   for (const match of html.matchAll(/<[^>]*\bdata-anno-id=["']([^"']+)["'][^>]*>/gi)) {

@@ -112,7 +112,7 @@ window.createPrototypeMarker = function ({ getScene, onCreate, onSelect }) {
         if (right-left<2 || bottom-top<2) continue;
         const box=document.createElement('div');box.className='manual-area'+(note.id===active?' selected':'');
         Object.assign(box.style,{left:left+'px',top:top+'px',width:(right-left)+'px',height:(bottom-top)+'px'});
-        const pin=document.createElement('button');pin.className='manual-pin';pin.textContent=note.number;pin.setAttribute('aria-label','定位手工说明 '+note.number);pin.onclick=()=>onSelect(note.id);
+        const pin=document.createElement('button');pin.className='manual-pin';pin.textContent=note.code||note.number;pin.setAttribute('aria-label','定位原型说明 '+(note.code||note.number));pin.onclick=()=>onSelect(note.id);
         box.append(pin);layer.append(box);
       }
     }

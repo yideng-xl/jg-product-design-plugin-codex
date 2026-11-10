@@ -35,7 +35,11 @@
     const empty = document.createElement('p'); empty.className = 'pn-empty'; cards.append(empty);
     let session = null, pending = {}, saving = false, blocked = false, timer, version = 0, savedVersion = 0, active = '', lastDeleted = null;
     const manual = structuredClone(Array.isArray(overlay.notes?.[pageKey]) ? overlay.notes[pageKey] : []);
-    const base = all('[data-anno-id][data-note-target]', product).map((el, i) => ({id:el.dataset.annoId, number:i+1, target:{selector:el.dataset.noteTarget}, scene:el.dataset.noteWhen || '', el}));
+    const base = all('[data-anno-id][data-note-target]', product).map((el, i) => ({id:el.dataset.annoId, number:i+1, code:el.dataset.noteCode || '', target:{selector:el.dataset.noteTarget}, scene:el.dataset.noteWhen || '', el}));
+    const numbered = Number.isSafeInteger(overlay.noteNumbering?.rightMax) && overlay.noteNumbering.rightMax >= 0;
+    const codeNumber = n => /^R-\d{3,}$/.test(n.code || '') ? Number(n.code.slice(2)) : 0;
+    const nextRight = () => Math.max(overlay.noteNumbering.rightMax, ...base.map(codeNumber), ...Object.values(overlay.notes || {}).flat().map(codeNumber), ...manual.map(codeNumber)) + 1;
+    const displayCode = note => note.code || note.number;
     const entries = [...base];
     const content = el => el.hasAttribute('data-anno-rich') ? el.innerHTML : el.innerText;
     function status(text) { $('#pn-status').textContent = text; }
@@ -60,10 +64,10 @@
     }
     function makeCard(note) {
       const card = document.createElement('article'); card.className = 'pn-card'; card.dataset.noteId = note.id;
-      const label = document.createElement('div'); label.className = 'pn-card-label'; label.textContent = note.number + ' · ' + (note.el ? '功能说明' : note.target?.rect ? '手工说明 · 区域' : '手工说明 · 控件'); card.append(label);
+      const label = document.createElement('div'); label.className = 'pn-card-label'; label.textContent = displayCode(note) + ' · ' + (note.el ? note.el.dataset.noteTitle || '功能说明' : note.target?.rect ? '手工说明 · 区域' : '手工说明 · 控件'); card.append(label);
       if (note.el) { note.el.classList.add('pn-note-content'); card.append(note.el); }
       else {
-        for (const field of ['title','body']) { const el = document.createElement('div'); el.className = 'pn-note-' + field; el.setAttribute('aria-label','说明 '+note.number+(field === 'title' ? ' 标题' : ' 正文')); el.textContent = note[field] || ''; card.append(el); if (session) { el.setAttribute('role','textbox'); editable(el, () => { note[field] = el.innerText; version++; }); } }
+        for (const field of ['title','body']) { const el = document.createElement('div'); el.className = 'pn-note-' + field; el.setAttribute('aria-label','说明 '+displayCode(note)+(field === 'title' ? ' 标题' : ' 正文')); el.textContent = note[field] || ''; card.append(el); if (session) { el.setAttribute('role','textbox'); editable(el, () => { note[field] = el.innerText; version++; }); } }
       }
       const locate = document.createElement('button'); locate.type = 'button'; locate.textContent = '↗ 定位页面元素'; locate.className = 'pn-locate'; locate.onclick = () => select(note.id, true); card.append(locate);
       if (!note.el && session) { const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'pn-delete'; remove.textContent = '删除说明'; remove.onclick = () => { note.deleted = true; lastDeleted = note; version++; $('#pn-undo').hidden = false; rebuildManual(); schedule(); }; card.append(remove); }
@@ -103,7 +107,8 @@
     }
     const marker = window.createPrototypeMarker({getScene:scene, onCreate(target) {
       if (!session) return;
-      const note = {id:'manual-'+crypto.randomUUID(), number:Math.max(base.length,...manual.map(n => n.number || 0))+1, title:'补充说明',body:'',target,scene:scene()}; manual.push(note); version++; active = note.id; toggle(false); rebuildManual(); schedule(); note.card.scrollIntoView({block:'nearest'}); $('.pn-note-body',note.card).focus();
+      const number = numbered ? nextRight() : Math.max(base.length,...manual.map(n => n.number || 0))+1;
+      const note = {id:'manual-'+crypto.randomUUID(), number, ...(numbered ? {code:'R-'+String(number).padStart(3,'0')} : {}), title:'补充说明',body:'',target,scene:scene()}; manual.push(note); version++; active = note.id; toggle(false); rebuildManual(); schedule(); note.card.scrollIntoView({block:'nearest'}); $('.pn-note-body',note.card).focus();
     }, onSelect(id) { toggle(false); select(id); entries.find(n => n.id === id)?.card.scrollIntoView({block:'nearest',behavior:'smooth'}); }});
     $('#pn-add').onclick = () => marker.begin(); $('#pn-save').onclick = save;
     $('#pn-undo').onclick = () => { if (!lastDeleted) return; lastDeleted.deleted = false; version++; active = lastDeleted.id; lastDeleted = null; $('#pn-undo').hidden = true; rebuildManual(); schedule(); };
@@ -113,6 +118,10 @@
       const title = document.createElement('strong'); title.textContent = '原型设计说明';
       const button = document.createElement('button'); button.type = 'button';
       const body = document.createElement('div'); body.className = 'pn-global-body'; while (box.firstChild) body.append(box.firstChild);
+      all('[data-anno-id][data-note-code^="WR-"]',body).forEach(el => {
+        const label = document.createElement('span'); label.className = 'pn-note-code'; label.textContent = el.dataset.noteCode;
+        el.before(label);
+      });
       const update = hidden => { body.hidden = hidden; button.textContent = hidden ? '展开说明' : '隐藏说明'; button.setAttribute('aria-expanded',String(!hidden)); writePref(':global:'+i,hidden ? '0':'1'); requestDraw(); };
       button.onclick = () => update(!body.hidden); header.append(title,button); box.append(header,body); update(readPref(':global:'+i) === '0');
     });

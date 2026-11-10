@@ -62,3 +62,20 @@ test('HTTP 编辑会话、无 token 拒绝、来源校验、409 及落盘', asyn
     assert.notEqual(newest.revision,session.revision);
   } finally { child.kill(); fs.rmSync(dir,{recursive:true,force:true}); }
 });
+
+test('说明编号跨页递增，保留已删除编号并拒绝重号', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'prototype-note-codes-'));
+  try {
+    fs.mkdirSync(path.join(dir, 'data'));
+    fs.writeFileSync(path.join(dir,'data/annotations.js'), 'window.__ANNO__ = {overrides:{}, notes:{}, noteNumbering:{rightMax:9, wideMax:12}};');
+    const save = (pageKey, notes) => store.save(dir, {revision:store.read(dir).revision,pageKey,overrides:{},notes});
+    assert.throws(() => save('org', [{id:'a',code:'R-009'}]), e => e.status === 409);
+    save('org', [{id:'a',code:'R-010'}]);
+    save('org', [{id:'a',code:'R-010',deleted:true}]);
+    assert.throws(() => save('users', [{id:'b',code:'R-010'}]), e => e.status === 409);
+    assert.throws(() => save('org', []), /保留已删除说明/);
+    assert.throws(() => save('org', [{id:'a',code:'R-012'}]), /已有说明编号不能改动/);
+    save('users', [{id:'b',code:'R-011'}]);
+    assert.equal(store.read(dir).value.notes.users[0].code,'R-011');
+  } finally { fs.rmSync(dir,{recursive:true,force:true}); }
+});

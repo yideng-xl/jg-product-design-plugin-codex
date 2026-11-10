@@ -35,3 +35,5 @@ body.pn-editable [data-anno-id]{cursor:text}
 .pn-global-body{padding:14px 16px;overflow:auto}
 #pn-rail [hidden],#pn-mark-toolbar[hidden],#pn-mark-hover[hidden],#pn-restore[hidden],.pn-global-body[hidden]{display:none!important}
 @media(max-width:900px){#pn-shell{grid-template-columns:minmax(0,1fr) 310px}#pn-mark-toolbar{max-width:95%;flex-wrap:wrap}#pn-mark-hint{white-space:normal}}
+
+.pn-note-code{display:inline-block;margin:0 0 6px;padding:2px 7px;border:1px solid #e9cf99;border-radius:4px;background:#fffaf0;color:#775017;font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}

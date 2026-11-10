@@ -79,4 +79,4 @@
 
 新建原型默认接入 [prototype-notes.md](prototype-notes.md)。这一辅助层同时适用于产品 A 和产品 B，不覆盖各自业务组件样式。`body[data-prototype-notes]` 启用后，`common.js` 保留业务辅助交互并跳过旧编辑 IIFE；覆盖和编辑由 `prototype-notes.js` 统一处理。
 
-在既有资源之后加载 `prototype-notes.css`，并在覆盖文件、产品脚本和 `common.js` 之后加载 `prototype-mark.js`、`prototype-notes.js`。全局说明与宽字段表保留页底浅黄框，局部说明进入右侧。旧原型升级仅移动原说明节点，保留 `data-anno-id`、富文本和全部手改内容。
+在既有资源之后加载 `prototype-notes.css`，并在覆盖文件、产品脚本和 `common.js` 之后加载 `prototype-mark.js`、`prototype-notes.js`。整页范围、数据口径和迁移等整体说明保留在页底。功能、字段、按钮、交互与事件说明放右侧。旧原型升级仅移动原说明节点，保留 `data-anno-id`、富文本和全部手改内容。

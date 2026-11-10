@@ -55,11 +55,27 @@ function save(dir, data) {
   if (data.revision !== snapshot.revision) fail('说明已被其他页面修改，请刷新后重试', 409);
   const current = snapshot.value;
   const notes = { ...(object(current.notes) ? current.notes : {}), [data.pageKey]: data.notes };
-  const allIds = new Set();
+  const allIds = new Set(), codes = new Set();
+  const rightMax = current.noteNumbering?.rightMax;
+  const numbered = Number.isSafeInteger(rightMax) && rightMax >= 0;
+  const previousCodes = new Map(Object.values(current.notes || {}).filter(Array.isArray).flat().filter(object).map(row => [row.id, row.code]));
+  const highestExisting = numbered ? Math.max(rightMax, ...[...previousCodes.values()].map(code => Number(code?.slice(2)) || 0)) : 0;
   for (const rows of Object.values(notes)) {
     if (!Array.isArray(rows)) continue;
-    for (const row of rows) { if (!object(row) || !row.id) continue; if (allIds.has(row.id)) fail('说明 ID 与其他页面重复'); allIds.add(row.id); }
+    for (const row of rows) {
+      if (!object(row) || !row.id) continue;
+      if (allIds.has(row.id)) fail('说明 ID 与其他页面重复');
+      allIds.add(row.id);
+      if (!numbered) continue;
+      const n = typeof row.code === 'string' && /^R-\d{3,}$/.test(row.code) ? Number(row.code.slice(2)) : 0;
+      if (!Number.isSafeInteger(n) || n < 1 || row.code !== 'R-' + String(n).padStart(3, '0')) fail('右侧说明编号无效');
+      if (codes.has(row.code)) fail('说明编号与其他说明重复，请重新打开后合并', 409);
+      if (previousCodes.has(row.id) && previousCodes.get(row.id) !== row.code) fail('已有说明编号不能改动');
+      if (!previousCodes.has(row.id) && n <= highestExisting) fail('说明编号已保留，请重新打开后合并', 409);
+      codes.add(row.code);
+    }
   }
+  if (numbered && [...previousCodes.keys()].some(id => !allIds.has(id))) fail('请保留已删除说明的编号');
   return write(snapshot, { ...current, overrides: { ...(current.overrides || {}), ...data.overrides }, notes });
 }
 function saveLegacy(dir, data) {
