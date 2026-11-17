@@ -1,6 +1,6 @@
 {
   "name": "jg-product-design-plugin-codex",
-  "version": "0.9.2+codex.20261117000300",
+  "version": "0.9.3+codex.20261117000400",
   "description": "Product-design skills for demand management, prototype design and editing, review and weekly meeting minutes, UI acceptance, prototype self-check, delivery map updates, and ZenTao SR preparation. Includes Tableau data processing, refreshable Excel extracts, live database connections, and evidence-based analysis. Includes technical bid preparation and review.",
   "author": {
     "name": "yideng",
