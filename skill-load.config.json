@@ -8,6 +8,7 @@
     "ui-acceptance-check": true,
     "prd2zentao": false,
     "update-delivery-map-wg": true,
-    "update-delivery-map-jg": true
+    "update-delivery-map-jg": true,
+    "tablau-data-processing": true
   }
 }

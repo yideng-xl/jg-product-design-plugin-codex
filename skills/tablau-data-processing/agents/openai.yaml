@@ -1,0 +1,4 @@
+interface:
+  display_name: "tablau数据处理流程"
+  short_description: "规范 Excel 提取与数据库实时连接，分离原始数据和计算逻辑，建立可刷新、可核验的分析工作簿"
+  default_prompt: "使用 $tablau-data-processing 按数据源类型配置 Tableau 工作簿，分离原始数据和计算逻辑，核验更新、分析口径与分享文件。"

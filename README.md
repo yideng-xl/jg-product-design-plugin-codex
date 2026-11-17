@@ -13,7 +13,7 @@
 
 ## 业务流程
 
-插件按工作发生的阶段分为 3 类。
+插件按工作发生的阶段分为 4 类。
 
 ### 一、跟随需求阶段
 
@@ -60,6 +60,16 @@
 
 两个入口共用更新流程，分别使用对应产品的配置和数据源。使用时提供最新进度表及其统计月份。
 
+### 四、数据分析阶段
+
+| Skill | 用途 |
+|---|---|
+| `tablau-data-processing`（tablau数据处理流程） | Excel 原始数据与计算分层、内置提取和 TWBX 分享、数据库实时连接，以及统计、关联、偏差和业务风险核验。 |
+
+调用示例：使用 `$tablau-data-processing` 配置这个 Tableau 工作簿，Excel 更新后在 Tableau 刷新重算，并核验同事独立打开和更新。
+
+规范基础版 v1.0：[数据规范](skills/tablau-data-processing/references/data-standard.md)、[工作表分析方法](skills/tablau-data-processing/references/worksheet-methods.md)、[更新与交付核验](skills/tablau-data-processing/references/refresh-and-delivery.md)。
+
 默认加载的 skill：
 
 - `requirements2prd`
@@ -70,6 +80,7 @@
 - `ui-acceptance-check`
 - `prd2prototype`
 - `proto-check`
+- `tablau-data-processing`
 
 默认不加载：
 
@@ -157,6 +168,7 @@ codex plugin add jg-product-design-plugin-codex@jg-product-design
     "ui-acceptance-check": true,
     "prd2prototype": true,
     "proto-check": true,
+    "tablau-data-processing": true,
     "prd2zentao": false
   }
 }
