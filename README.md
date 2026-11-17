@@ -13,7 +13,7 @@
 
 ## 业务流程
 
-插件按工作发生的阶段分为 4 类。
+插件按工作发生的阶段分为 5 类。
 
 ### 一、跟随需求阶段
 
@@ -70,6 +70,16 @@
 
 规范基础版 v1.0：[数据规范](skills/tablau-data-processing/references/data-standard.md)、[工作表分析方法](skills/tablau-data-processing/references/worksheet-methods.md)、[更新与交付核验](skills/tablau-data-processing/references/refresh-and-delivery.md)。
 
+### 五、技术投标阶段
+
+| Skill | 用途 |
+|---|---|
+| `write-technical-bid` | 按目标框架复用已确认正文，编写逐项应答，核对承诺、佐证、Word 编号与版式；一个包含多个项目时并列列全客户地区和项目名称。 |
+
+调用示例：使用 `$write-technical-bid`，根据目标框架、技术规范、评分细则及参考定稿编制技术标书。
+
+该 skill 仅包含通用要求，项目资料在任务中读取，不随插件分发。
+
 默认加载的 skill：
 
 - `requirements2prd`
@@ -81,6 +91,7 @@
 - `prd2prototype`
 - `proto-check`
 - `tablau-data-processing`
+- `write-technical-bid`
 
 默认不加载：
 
@@ -169,6 +180,7 @@ codex plugin add jg-product-design-plugin-codex@jg-product-design
     "prd2prototype": true,
     "proto-check": true,
     "tablau-data-processing": true,
+    "write-technical-bid": true,
     "prd2zentao": false
   }
 }
@@ -248,6 +260,8 @@ jg-product-design-plugin-codex/
 │   ├── ui-acceptance-check/
 │   ├── prd2prototype/
 │   ├── proto-check/
+│   ├── tablau-data-processing/
+│   ├── write-technical-bid/
 │   └── prd2zentao/
 ├── scripts/
 │   └── apply-skill-config.mjs

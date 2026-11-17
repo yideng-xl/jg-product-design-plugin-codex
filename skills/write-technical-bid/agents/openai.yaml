@@ -1,0 +1,4 @@
+interface:
+  display_name: "技术标书编写与复核"
+  short_description: "按目标框架迁移技术正文、编写逐项应答，并核对承诺、证据、编号和版式"
+  default_prompt: "使用 $write-technical-bid，按目标编写框架、技术规范和评分细则编制技术标书，复用已确认参考稿并标出待确认承诺。"

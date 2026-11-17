@@ -9,6 +9,7 @@
     "prd2zentao": false,
     "update-delivery-map-wg": true,
     "update-delivery-map-jg": true,
-    "tablau-data-processing": true
+    "tablau-data-processing": true,
+    "write-technical-bid": true
   }
 }
