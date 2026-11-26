@@ -75,12 +75,17 @@
 | Skill | 用途 |
 |---|---|
 | `write-technical-bid` | 按目标框架复用已确认正文，编写逐项应答，核对承诺、佐证、Word 编号与版式；一个包含多个项目时并列列全客户地区和项目名称。 |
+| `review-technical-bid` | 只读双裁判独立审核：Grok 红队检查响应漏洞、事实偷换与门禁假绿，Gemini 独立验收核对招标真源、OOXML、Word/PDF 渲染及负对照，仅裁决「通过」或「未通过」。 |
 
 调用示例：使用 `$write-technical-bid`，根据目标框架、技术规范、评分细则及参考定稿编制技术标书。
 
+审核示例：使用 `$review-technical-bid`，对照正式招标材料、工作稿和门禁证据独立审核，按标准模板出具裁判报告，不修改稿件。
+
+两者职责分离：`write-technical-bid` 负责编制和整改，`review-technical-bid` 负责只读审核，不调用修复、不改 DOCX、不放宽阈值。编写者不能兼任同一产物的独立终裁，不自审；双裁判须分别实际独立核验，不能由一个执行者模拟两份结论。审核覆盖保证值前置门、初稿盲测、修复复审和发布前对比，自动修复与人工复审均最多 3 轮；机器门禁和独立审核均通过，才可声称本批次终验通过。
+
 以每个标的的技术文件框架为底稿，默认只填写“技术编写”，逐项目表格不得合并。初稿应答统一红字黄底；通用规范按模块集中应答。目标模块与定稿不同时重组内容并保持口径一致，同时检查同级列表缩进。
 
-该 skill 仅包含通用要求，项目资料在任务中读取，不随插件分发。
+这两个 Skill 仅包含通用要求，项目资料在任务中读取，不随插件分发。
 
 默认加载的 skill：
 
@@ -94,6 +99,7 @@
 - `proto-check`
 - `tablau-data-processing`
 - `write-technical-bid`
+- `review-technical-bid`
 
 默认不加载：
 
@@ -264,6 +270,7 @@ jg-product-design-plugin-codex/
 │   ├── proto-check/
 │   ├── tablau-data-processing/
 │   ├── write-technical-bid/
+│   ├── review-technical-bid/
 │   └── prd2zentao/
 ├── scripts/
 │   └── apply-skill-config.mjs
