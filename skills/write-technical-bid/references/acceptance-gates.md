@@ -36,7 +36,7 @@ python scripts/bid_gate.py run working.docx --config migration.json --output acc
 需要分步定位时：
 
 ```text
-python scripts/bid_gate.py repair working.docx --output clean.docx --report repair.json
+python scripts/bid_gate.py repair working.docx --output clean.docx --config migration.json --report repair.json
 python scripts/bid_images.py clean.docx --output candidate.docx --policy image-policy.json --report images.json --assets-dir figures
 python /absolute/path/render_docx.py candidate.docx --output_dir render --emit_pdf --dpi 100
 python scripts/bid_gate.py audit candidate.docx --config migration.json --pdf render/candidate.pdf --images images.json --report gate.json
@@ -57,3 +57,19 @@ operating_terminals采用弱化默认满足时，设备结构响应必须写默�
 仅系统页面截图可做去菜单裁剪；总体介绍仅按名单保留，具体功能模块仅留主体用于功能对应。合同、检测报告、制度凭证扫描件严禁裁剪，必须完整呈现，避免客户误解隐瞒信息；document_type属于此三类或证书时，分类为界面即阻断。右抽屉裁切左缘必须等于对话框左缘，不向左保留灰色菜单；中央弹窗允许保留不含菜单的灰底上下文。残留检测同时检查绿色导航和灰色侧栏/右抽屉分割特征。非绿色顶栏界面必须通过image_policy明确分类与裁剪矩形，不能默认判作非界面。
 
 图前空白按同页上一个文字、表格或图片对象底边起算；上一张图片的高度不计为空白。分类、分割、几何检测不冒充OCR，仍须查看裁图。
+
+
+## 标题、列表与字体门禁
+
+当轮 `formatting` 必填，缺失即停止 run 预检。由目标框架实际使用的段落直接格式核定 `font`、`size_half_points` 及 `spacing`（before、after、line、lineRule）；不要只读 Normal 样式默认值。`required_headings` 为本轮应独立成章的精确标题与 level，项目标题仅存本次配置。`max_list_items` 默认50，超过阈值须拆分真实分组，不能按输出值抬高阈值。
+
+`bid_format.normalize(document, profile)` 在最终保存前执行，`repair --config` 同样调用。统一正文与标题的 rFonts 四个槽位、sz/szCs 和 spacing；保留应答颜色、高亮、下划线、书签与 REF 域。表格和图片保留各自版式，不能为了正文一致将表内小字或图片单倍行距改坏。独立章节精确匹配后赋予对应 Heading，不按“加粗”猜测所有段落的语义。
+
+标题使用标准 Heading1–Heading9 样式ID，大纲级别与同一多级 numId 一致，样式 numPr、段落 numPr、编号级别 pStyle 互相对应。新 abstractNum 必须有唯一八位十六进制 nsid，避免 Word 将迁入的编号定义合并；按 OOXML 属性顺序保存。多级章节使用 hybridMultilevel，省略显式 lvlRestart，采用上级标题触发的标准重启；兼容模式中显式重启值可能使中间级别变成空编号，heading_restart_compatibility 将其阻断。各节一级列表及每个上级条目下的子列表分别分配 numId 和 startOverride=1，同组允许穿插说明、表格或图片，不与下一节继续滚号。
+
+硬失败包括 missing_format_profile、heading_numbering_binding、missing_independent_heading、multiple_chapter_number_instances、numbering_identity_missing/collision、list_cross_section_continuation、list_restart_missing、list_ordinal_overflow、font_size_drift 和 paragraph_spacing_drift。修复后重跑全部内容、图片与渲染门禁，刷新 REF 缓存；不得把章节号改成手写文字规避绑定检查。
+
+最终另以 Microsoft Word 打开交付副本：导航窗格逐级显示真实章节号，新增独立章节可导航；抽查相邻章节及跨页小列表从1/a重起、同组增删后顺延；刷新交叉引用后章节号不能为0或报错。Word 与其他渲染器不一致时按 Word 实际结果继续修复，记录两者的页数和检查范围，不把 XML 合规等同于 Word 显示正确。
+
+
+普通叙述正文统一首行缩进2字符。迁入补充材料后逐段清洗 w:ind：写入 firstLineChars=200，并按本段字号写入2字符对应的 firstLine twip 兼容值，清除 hanging/hangingChars；不得用行首空格、全角空格或 Tab 模拟缩进。`bid_format.normalize_body_indents` 可在已验收稿上单独修复缩进，保留已核验的编号定义与图片，完整 normalize 也会调用它。`bid_gate.py audit` 将缺失、悬挂冲突、兼容值不一致或手打空白判为 body_first_line_indent_drift 并阻断终验。范围为正文中的普通叙述段；Heading、自动列表、规范原条款编号、居中/右对齐图表题、图片段、表格单元格和模板项目信息栏分别遵循自身版式，不套用正文缩进。修复后重新做全量渲染及图片布局审计，不能只核对用户指出的一节。

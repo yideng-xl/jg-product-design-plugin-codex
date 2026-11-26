@@ -169,7 +169,7 @@ def normalize_cell_widths(table):
             cursor+=tc.grid_span
 
 
-def repair(input_path, output_path, report_path=None):
+def repair(input_path, output_path, report_path=None, formatting=None):
     if Path(input_path).resolve() == Path(output_path).resolve():
         raise ValueError('输入与输出必须不同，禁止覆盖原稿')
     d = Document(input_path);changes = []
@@ -261,14 +261,24 @@ def repair(input_path, output_path, report_path=None):
             p.paragraph_format.tab_stops.clear_all()
             p.paragraph_format.tab_stops.add_tab_stop(Pt(24))
             if len(p.text) < 70:p.paragraph_format.keep_with_next = True
+    format_report=None
+    if formatting:
+        from bid_format import normalize
+        format_report=normalize(d,formatting)
     output = Path(output_path);output.parent.mkdir(parents=True, exist_ok=True);d.save(output)
     result = {'changes': changes, 'input_sha256': digest(input_path), 'output_sha256': digest(output)}
+    if format_report:result['formatting']=format_report
     if report_path:write_json(report_path, result)
     return result
 
 
 def audit_docx(input_path, config):
     d = Document(input_path);errors = []
+    from bid_format import audit as audit_format, ordinary_body, heading_level
+    errors.extend(audit_format(d,config.get('formatting')))
+    format_metrics={'heading_paragraphs_checked':sum(bool(heading_level(p)) for p in d.paragraphs),
+                    'ordinary_body_paragraphs_checked':sum(ordinary_body(d,p) for p in d.paragraphs),
+                    'required_body_first_line_characters':2}
     from lxml import etree
     chunks=[]
     for part in d.part.package.parts:
@@ -386,7 +396,7 @@ def audit_docx(input_path, config):
                 while e is not None and e.tag == qn('w:p') and not text(e).strip():e=e.getnext()
                 if e is not None and e.tag == qn('w:tbl'):found = True
         if not found:errors.append({'code': 'missing_scoring_index', 'title':title})
-    return {'blacklist': black, 'errors': errors, 'docx_sha256': digest(input_path)}
+    return {'blacklist': black, 'errors': errors, 'formatting':format_metrics, 'docx_sha256': digest(input_path)}
 
 
 def audit_render(pdf_path, figures=None, expected_tables=None):
@@ -504,12 +514,12 @@ def run(args):
     config=json.loads(Path(args.config).read_text());work=Path(args.work_dir);work.mkdir(parents=True,exist_ok=True)
     source=Path(args.input)
     preflight=audit_docx(source,config)
-    blocked=[e for e in preflight['errors'] if e['code']=='bom_preflight']
+    blocked=[e for e in preflight['errors'] if e['code'] in {'bom_preflight','missing_format_profile'}]
     if blocked:
-        write_json(work/'gate.json',{'status':'failed','stage':'hardware_preflight','errors':blocked,'blacklist':preflight['blacklist']})
+        write_json(work/'gate.json',{'status':'failed','stage':'input_preflight','errors':blocked,'blacklist':preflight['blacklist']})
         return 2
     # The candidate remains reviewable even when a semantic preflight blocks final acceptance.
-    repair(source,work/'clean.docx',work/'repair.json')
+    repair(source,work/'clean.docx',work/'repair.json',config.get('formatting'))
     apply(work/'clean.docx',work/'candidate.docx',work/'images.json',config.get('image_policy',{}),work/'figures')
     for attempt in range(1,args.max_attempts+1):
         render_dir=work/f'render-{attempt}'
@@ -524,7 +534,7 @@ def run(args):
             return 0
         fixable={'blank_page','title_table_split','single_character_header_wrap','nonfirst_header','table_keep_next','ghost_column','table_grid_mismatch','cell_width_mismatch','row_omission_width_mismatch'}
         if not all(e['code'] in fixable for e in result['errors']) or attempt==args.max_attempts:break
-        repair(work/'candidate.docx',work/'retry.docx',work/f'repair-{attempt}.json')
+        repair(work/'candidate.docx',work/'retry.docx',work/f'repair-{attempt}.json',config.get('formatting'))
         shutil.move(work/'retry.docx',work/'candidate.docx')
         manifest=json.loads((work/'images.json').read_text());manifest['docx_sha256']=digest(work/'candidate.docx');write_json(work/'images.json',manifest)
     # Never promote a failing candidate to the requested deliverable or lower thresholds to get green.
@@ -539,7 +549,9 @@ def main():
         if mode=='audit':s.add_argument('--pdf');s.add_argument('--images')
         if mode=='run':s.add_argument('--work-dir',required=True);s.add_argument('--renderer',required=True);s.add_argument('--max-attempts',type=int,choices=[1,2,3],default=3)
     a=p.parse_args()
-    if a.mode=='repair':repair(a.input,a.output,a.report);return 0
+    if a.mode=='repair':
+        config=json.loads(Path(a.config).read_text()) if a.config else {}
+        repair(a.input,a.output,a.report,config.get('formatting'));return 0
     if a.mode=='run':return run(a)
     result=audit(a.input,json.loads(Path(a.config).read_text()),a.report,a.pdf,a.images)
     print(json.dumps({'status':result['status'],'errors':result['errors']},ensure_ascii=False));return 2 if result['errors'] else 0

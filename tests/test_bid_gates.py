@@ -16,6 +16,7 @@ SCRIPTS = Path(__file__).resolve().parents[1]/'skills/write-technical-bid/script
 sys.path.insert(0,str(SCRIPTS))
 import bid_gate
 import bid_images
+import bid_format
 
 
 class BidGates(unittest.TestCase):
@@ -187,6 +188,122 @@ class BidGates(unittest.TestCase):
         c.drawString(80,630,'模块');c.drawString(250,630,'内容');c.showPage();c.save()
         codes={e['code'] for e in bid_gate.audit_render(a,expected_tables={'元件名称','参数'})['errors']}
         self.assertIn('single_character_header_wrap',codes)
+
+
+    def format_fixture(self):
+        profile={'font':'宋体','size_half_points':24,
+                 'spacing':{'before':0,'after':0,'line':360,'lineRule':'auto'},
+                 'max_list_items':50,'required_headings':[{'text':'独立能力甲','level':2}]}
+        d=Document();d.add_heading('方案甲',1)
+        for name in ['条目甲','条目乙']:d.add_paragraph(name,'List Number')
+        d.add_heading('方案乙',1)
+        for name in ['条目丙','条目丁']:d.add_paragraph(name,'List Number')
+        d.add_paragraph('独立能力甲').runs[0].bold=True
+        p=d.add_paragraph('应答标记');p.runs[0].font.color.rgb=__import__('docx').shared.RGBColor(255,0,0)
+        return d,profile
+
+    def test_heading_navigation_has_mutual_style_number_links(self):
+        d,profile=self.format_fixture();report=bid_format.normalize(d,profile)
+        self.assertEqual(bid_format.audit(d,profile),[])
+        capability=next(p for p in d.paragraphs if p.text=='独立能力甲')
+        self.assertEqual(capability.style.style_id,'Heading2')
+        self.assertEqual(bid_format.num_info(d,capability)['level'],1)
+        self.assertEqual(report['headings'][-1]['number'],'2.1')
+        info=bid_format.num_info(d,capability)
+        self.assertIsNone(info['definition'].find(qn('w:lvlRestart')))
+        bid_format.put(info['definition'],'lvlRestart',{'val':1})
+        self.assertIn('heading_restart_compatibility',{e['code'] for e in bid_format.audit(d,profile)})
+        info['definition'].remove(info['definition'].find(qn('w:lvlRestart')))
+        info['definition'].find(qn('w:pStyle')).set(qn('w:val'),'Normal')
+        self.assertIn('heading_numbering_binding',{e['code'] for e in bid_format.audit(d,profile)})
+
+    def test_lists_restart_per_section_with_explicit_overrides(self):
+        d,profile=self.format_fixture();bid_format.normalize(d,profile)
+        ps=[p for p in d.paragraphs if p.text.startswith('条目')]
+        ids=[bid_format.num_info(d,p)['id'] for p in ps]
+        self.assertEqual(ids[0],ids[1]);self.assertEqual(ids[2],ids[3]);self.assertNotEqual(ids[0],ids[2])
+        bid_format.bind(ps[2],ids[0],0)
+        self.assertIn('list_cross_section_continuation',{e['code'] for e in bid_format.audit(d,profile)})
+        num=bid_format.num_info(d,ps[0])['num'];num.remove(num.find(qn('w:lvlOverride')))
+        self.assertIn('list_restart_missing',{e['code'] for e in bid_format.audit(d,profile)})
+
+    def test_long_rolling_lists_are_blocked(self):
+        d,profile=self.format_fixture();bid_format.normalize(d,profile)
+        nid=bid_format.num_info(d,d.paragraphs[1])['id']
+        for i in range(51):bid_format.bind(d.add_paragraph('条目'+str(i)),nid,0)
+        self.assertIn('list_ordinal_overflow',{e['code'] for e in bid_format.audit(d,profile)})
+
+    def test_nested_lists_restart_under_each_new_parent(self):
+        d,profile=self.format_fixture()
+        root=d.part.numbering_part.element
+        an=OxmlElement('w:abstractNum');an.set(qn('w:abstractNumId'),'999')
+        lvl=bid_format.put(an,'lvl',{'ilvl':0})
+        for tag,value in [('start',1),('numFmt','decimal'),('lvlText','%1)')]:bid_format.put(lvl,tag,{'val':value})
+        root.append(an);nid,_=bid_format.add_number(root,999)
+        d.add_heading('方案丙',1)
+        groups=[]
+        for parent in ['父条目甲','父条目乙']:
+            d.add_paragraph(parent,'List Number');children=[]
+            for text in ['子条目甲','子条目乙']:
+                p=d.add_paragraph(text);bid_format.bind(p,nid,0);children.append(p)
+            groups.append(children)
+        bid_format.normalize(d,profile)
+        ids=[[bid_format.num_info(d,p)['id'] for p in children] for children in groups]
+        self.assertEqual(ids[0][0],ids[0][1]);self.assertNotEqual(ids[0][0],ids[1][0])
+        self.assertEqual(bid_format.audit(d,profile),[])
+        d.add_paragraph('158) 累计序号')
+        self.assertIn('list_ordinal_overflow',{e['code'] for e in bid_format.audit(d,profile)})
+
+    def test_numbering_identity_and_font_spacing_drift_block(self):
+        d,profile=self.format_fixture();bid_format.normalize(d,profile)
+        self.assertEqual(d.paragraphs[-1].runs[0].font.color.rgb,__import__('docx').shared.RGBColor(255,0,0))
+        p=d.paragraphs[-1];bid_format.put(p._p.get_or_add_pPr(),'spacing',{'line':240})
+        bid_format.put(p.runs[0]._r.get_or_add_rPr(),'sz',{'val':20})
+        info=bid_format.num_info(d,d.paragraphs[0]);root=d.part.numbering_part.element
+        abstract=root.xpath('./w:abstractNum[@w:abstractNumId="'+info['abstract']+'"]')[0]
+        abstract.remove(abstract.find(qn('w:nsid')))
+        codes={e['code'] for e in bid_format.audit(d,profile)}
+        self.assertTrue({'paragraph_spacing_drift','font_size_drift','numbering_identity_missing'}<=codes)
+        bid_format.normalize(d,profile)
+        self.assertEqual(bid_format.audit(d,profile),[])
+
+    def test_narrative_body_requires_two_character_first_line_indent(self):
+        d,profile=self.format_fixture();p=d.add_paragraph('\t\u3000供应链可靠性的说明正文。')
+        p.paragraph_format.left_indent=__import__('docx').shared.Pt(6)
+        bid_format.put(p._p.get_or_add_pPr(),'ind',{'left':120,'hanging':240,'hangingChars':100})
+        bid_format.normalize(d,profile)
+        ind=p._p.pPr.find(qn('w:ind'))
+        self.assertEqual(bid_format.val(p._p.pPr,'./'+qn('w:widowControl')),'1')
+        self.assertEqual(p.text,'供应链可靠性的说明正文。')
+        self.assertEqual(ind.get(qn('w:firstLineChars')),'200')
+        self.assertEqual(ind.get(qn('w:firstLine')),'480')
+        self.assertEqual(ind.get(qn('w:left')),'120')
+        self.assertIsNone(ind.get(qn('w:hanging')))
+        self.assertEqual(bid_format.audit(d,profile),[])
+        ind.attrib.pop(qn('w:firstLineChars'))
+        self.assertIn('body_first_line_indent_drift',{e['code'] for e in bid_format.audit(d,profile)})
+        self.assertEqual(len(bid_format.normalize_body_indents(d,profile)),1)
+        self.assertEqual(bid_format.audit(d,profile),[])
+
+    def test_body_indent_preserves_lists_captions_tables_and_images(self):
+        d,profile=self.format_fixture();d.add_paragraph('项目名称：示例工程')
+        caption=d.add_paragraph('图 1 功能结构');caption.alignment=__import__('docx').enum.text.WD_ALIGN_PARAGRAPH.CENTER
+        clause=d.add_paragraph('1.2 原规范条款')
+        table=d.add_table(rows=1,cols=1);table.cell(0,0).text='表格文字'
+        picture=d.add_paragraph();b=BytesIO();Image.new('RGB',(30,20),'blue').save(b,format='PNG')
+        picture.add_run().add_picture(BytesIO(b.getvalue()),width=Inches(1))
+        bid_format.normalize(d,profile)
+        for p in [d.paragraphs[0],d.paragraphs[1],caption,clause,picture,table.cell(0,0).paragraphs[0]]:
+            self.assertFalse(bid_format.ordinary_body(d,p))
+            self.assertFalse(p._p.xpath('./w:pPr/w:ind[@w:firstLineChars="200"]'))
+        self.assertEqual(bid_format.audit(d,profile),[])
+
+    def test_format_profile_is_required_for_final_acceptance(self):
+        self.assertEqual(bid_format.audit(Document(),None),[{'code':'missing_format_profile'}])
+        d=Document();p=self.root/'without-profile.docx';d.save(p)
+        result=bid_gate.audit_docx(p,{'require_format_audit':False})
+        self.assertIn('missing_format_profile',{e['code'] for e in result['errors']})
+        self.assertEqual(result['formatting']['required_body_first_line_characters'],2)
 
 
 if __name__=='__main__':unittest.main()
