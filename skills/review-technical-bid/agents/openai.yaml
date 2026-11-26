@@ -1,0 +1,4 @@
+interface:
+  display_name: "标书独立只读审核"
+  short_description: "双裁判职责核对真源、响应、OOXML、渲染与负对照，仅裁决通过或未通过"
+  default_prompt: "使用 $review-technical-bid 独立只读审核这份技术标书，先冻结输入和轮次，对照真源复测门禁并检查 Word/PDF，按模板给出通过或未通过与可复核证据，不修改稿件。"

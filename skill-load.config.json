@@ -10,6 +10,7 @@
     "update-delivery-map-wg": true,
     "update-delivery-map-jg": true,
     "tablau-data-processing": true,
-    "write-technical-bid": true
+    "write-technical-bid": true,
+    "review-technical-bid": true
   }
 }
